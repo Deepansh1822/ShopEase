@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head}"></head>
+<body class="bg-light">
+    <nav th:replace="~{layout :: nav}"></nav>
+
+    <div class="content-wrapper bg-light pt-0">
+        <!-- Feedback Header -->
+        <section class="py-5 bg-dark text-white text-center position-relative overflow-hidden"
+            style="background: linear-gradient(135deg, #111 0%, #000 100%);">
+            <div class="container py-5 text-center position-relative z-1">
+                <span class="badge bg-accent text-white rounded-pill px-3 py-2 mb-3 fw-bold text-uppercase tracking-wider">Customer Voice</span>
+                <h1 class="display-3 fw-bold mb-3">We Value Your Voice</h1>
+                <p class="lead text-white-50 mx-auto" style="max-width: 600px;">Your insights help us curate better products and deliver the ultimate shopping experience.</p>
+            </div>
+            <!-- Decorative blobs -->
+            <div class="position-absolute rounded-circle bg-primary opacity-20" 
+                style="width: 400px; height: 400px; bottom: -100px; left: -100px; filter: blur(70px);"></div>
+            <div class="position-absolute rounded-circle bg-accent opacity-15" 
+                style="width: 300px; height: 300px; top: -50px; right: -50px; filter: blur(50px);"></div>
+        </section>
+
+        <div class="container py-5 mt-5 position-relative z-2">
+            
+            <!-- Success Alert -->
+            <div th:if="${feedbackSuccess}" class="alert alert-success shadow-lg border-0 text-center rounded-pill mb-5 mx-auto py-3 fw-bold" style="max-width: 600px;">
+                <i class="fas fa-check-circle me-2"></i> <span th:text="${feedbackSuccess}">Success!</span>
+            </div>
+
+            <!-- Feedback Submission Form -->
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden mx-auto bg-white mb-5" style="max-width: 800px;">
+                <div class="row g-0">
+                    <div class="col-md-5 bg-gradient p-5 d-flex flex-column justify-content-center text-dark" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-right: 1px solid rgba(0,0,0,0.05);">
+                        <div class="bg-accent bg-opacity-10 text-accent rounded-circle d-inline-flex justify-content-center align-items-center mb-4" style="width: 60px; height: 60px;">
+                            <i class="fas fa-bullhorn fa-2x"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">Share Your Experience</h4>
+                        <p class="text-muted small mb-0">Help our community grow by rating your overall satisfaction with our product curation and delivery services.</p>
+                    </div>
+                    <div class="col-md-7 p-5">
+                        <form th:action="@{/submit-feedback}" method="post">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-muted">Full Name</label>
+                                    <input type="text" class="form-control bg-light border-0 px-3 py-2 rounded-3" name="name" placeholder="John Doe" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-muted">Subtitle / Title</label>
+                                    <input type="text" class="form-control bg-light border-0 px-3 py-2 rounded-3" name="subtitle" placeholder="e.g. Verified Buyer">
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label small fw-bold text-muted">Overall Rating</label>
+                                    <select name="rating" class="form-select bg-light border-0 px-3 py-2 rounded-3" required>
+                                        <option value="" disabled selected>Select your rating</option>
+                                        <option value="5">⭐⭐⭐⭐⭐ (5/5) Excellent</option>
+                                        <option value="4">⭐⭐⭐⭐ (4/5) Very Good</option>
+                                        <option value="3">⭐⭐⭐ (3/5) Average</option>
+                                        <option value="2">⭐⭐ (2/5) Poor</option>
+                                        <option value="1">⭐ (1/5) Terrible</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label small fw-bold text-muted">Your Review</label>
+                                    <textarea class="form-control bg-light border-0 px-3 py-2 rounded-3" name="message" rows="4" placeholder="How was your shopping experience?..." required maxlength="500"></textarea>
+                                </div>
+                                <div class="col-12 mt-4">
+                                    <button type="submit" class="btn btn-dark rounded-pill px-5 py-2 fw-bold w-100 shadow-sm transition-all" style="letter-spacing: 1px;">
+                                        Publish Feedback <i class="fas fa-paper-plane ms-2"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- More subtle layout details -->
+            <div class="text-center mt-4">
+                <p class="text-muted small"><i class="fas fa-shield-alt text-success me-1"></i> All reviews are securely processed and verified for authenticity against recent orders.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="~{layout :: footer}"></footer>
+</body>
+</html>

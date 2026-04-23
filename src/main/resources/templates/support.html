@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head}"></head>
+<body>
+    <nav th:replace="~{layout :: nav}"></nav>
+    <div class="content-wrapper bg-light pt-0">
+        <!-- Support Hero -->
+        <section class="py-5 bg-dark text-white text-center position-relative overflow-hidden"
+            style="background: linear-gradient(135deg, #1a1a1a 0%, #000 100%);">
+            <div class="container py-5 z-1 position-relative">
+                <span class="badge bg-accent text-white rounded-pill px-3 py-2 mb-3 fw-bold text-uppercase tracking-wider">Help Center</span>
+                <h1 class="display-3 fw-bold mb-4">How can we help?</h1>
+                <p class="lead text-white-50 mx-auto" style="max-width: 700px;">Our dedicated support team is here to assist you 24/7. Reach out via email, phone, or send us a message directly. We usually respond within 2 hours.</p>
+                
+                <div class="d-flex flex-wrap justify-content-center gap-4 mt-5">
+                    <div class="d-flex align-items-center text-white fw-bold">
+                        <div class="bg-white bg-opacity-10 rounded-circle p-2 me-2"><i class="fas fa-envelope text-accent"></i></div>
+                        support@shopease.com
+                    </div>
+                    <div class="d-flex align-items-center text-white fw-bold">
+                        <div class="bg-white bg-opacity-10 rounded-circle p-2 me-2"><i class="fas fa-phone-alt text-accent"></i></div>
+                        +91 98765 43210
+                    </div>
+                </div>
+            </div>
+            <!-- Decorative blobs -->
+            <div class="position-absolute rounded-circle bg-accent opacity-25" style="width: 400px; height: 400px; top: -100px; right: -100px; filter: blur(60px);"></div>
+            <div class="position-absolute rounded-circle bg-primary opacity-10" style="width: 300px; height: 300px; bottom: -50px; left: -50px; filter: blur(40px);"></div>
+        </section>
+
+        <div class="container py-5 mt-5">
+            <div class="row align-items-center mb-5 pb-5 border-bottom justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card p-5 border-0 shadow rounded-4 bg-white">
+                        <h4 class="fw-bold mb-4 text-center"><i class="fas fa-paper-plane text-accent me-2"></i>Send us a Message</h4>
+                        <form onsubmit="alert('Message Sent Successfully!'); return false;">
+                            <div class="mb-3">
+                                <input type="text" class="form-control form-control-lg bg-light border-0" placeholder="Your Name" required>
+                            </div>
+                            <div class="mb-3">
+                                <input type="email" class="form-control form-control-lg bg-light border-0" placeholder="Email Address" required>
+                            </div>
+                            <div class="mb-4">
+                                <textarea class="form-control bg-light border-0" rows="5" placeholder="How can we help you?" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-lg w-100 rounded-pill">Submit Request</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQs -->
+            <div class="row justify-content-center">
+                <div class="col-lg-8" id="faq-section">
+                    <div class="text-center mb-5">
+                        <h2 class="fw-bold mb-2">Frequently Asked Questions</h2>
+                        <p class="text-muted">Quick answers to common questions</p>
+                    </div>
+                    <div class="accordion accordion-flush" id="faqAccordion">
+                        <div class="accordion-item bg-transparent border-bottom py-2">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed bg-transparent fw-bold text-dark px-0" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                    How do I track my order?
+                                </button>
+                            </h2>
+                            <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body text-muted px-0">
+                                    Once your order has been dispatched, you will receive an email containing your tracking number and a link to track your package securely.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item bg-transparent border-bottom py-2">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed bg-transparent fw-bold text-dark px-0" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                    What is your return policy?
+                                </button>
+                            </h2>
+                            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body text-muted px-0">
+                                    We offer a 30-day hassle-free return policy. If you are not satisfied with your purchase, you can return it within 30 days for a full refund or exchange.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item bg-transparent py-2">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed bg-transparent fw-bold text-dark px-0" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                    Do you ship internationally?
+                                </button>
+                            </h2>
+                            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body text-muted px-0">
+                                    Yes, we provide free worldwide shipping on all orders over Rs. 999. Customs duties may apply depending on your location.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <footer th:replace="~{layout :: footer}"></footer>
+</body>
+</html>

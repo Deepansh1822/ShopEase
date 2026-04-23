@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head}"></head>
+<body class="bg-light">
+    <nav th:replace="~{layout :: nav}"></nav>
+
+    <div class="content-wrapper py-5">
+        <div class="container">
+            <h2 class="fw-bold mb-4">Secure Checkout</h2>
+            
+            <div class="row g-4">
+                <!-- Left Details Form -->
+                <div class="col-lg-8">
+                    <form id="checkoutForm">
+                        <!-- Shipping Address -->
+                        <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+                            <h4 class="fw-bold mb-4"><i class="fas fa-map-marker-alt text-accent me-2"></i>Shipping Address</h4>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold small text-muted">Full Name</label>
+                                    <input type="text" id="shipName" class="form-control" required placeholder="John Doe">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold small text-muted">Phone Number</label>
+                                    <input type="tel" id="shipPhone" class="form-control" required placeholder="+91 98765 43210">
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label fw-bold small text-muted">Full Address</label>
+                                    <textarea id="shipAddress" class="form-control" rows="3" required placeholder="House No, Street, Landmark..."></textarea>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold small text-muted">City / District</label>
+                                    <input type="text" id="shipCity" class="form-control" required placeholder="New Delhi">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold small text-muted">PIN Code</label>
+                                    <input type="text" id="shipPin" class="form-control" required placeholder="110001">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Payment Method -->
+                        <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+                            <h4 class="fw-bold mb-4"><i class="fas fa-credit-card text-accent me-2"></i>Payment Method</h4>
+                            
+                            <div class="form-check border rounded-3 p-3 mb-3 bg-white shadow-sm d-flex align-items-center">
+                                <input class="form-check-input ms-1 me-3" type="radio" name="paymentMethod" id="payRazorpay" value="razorpay" checked>
+                                <label class="form-check-label flex-grow-1 fw-bold fs-5 d-flex justify-content-between align-items-center" for="payRazorpay" style="cursor:pointer;">
+                                    <span>Pay Online <small class="text-muted fw-normal fs-6 d-block">Credit Card, UPI, Netbanking</small></span>
+                                    <i class="fas fa-shield-alt text-primary fa-lg"></i>
+                                </label>
+                            </div>
+                            
+                            <div class="form-check border rounded-3 p-3 bg-white shadow-sm d-flex align-items-center">
+                                <input class="form-check-input ms-1 me-3" type="radio" name="paymentMethod" id="payCOD" value="cod">
+                                <label class="form-check-label flex-grow-1 fw-bold fs-5 d-flex justify-content-between align-items-center" for="payCOD" style="cursor:pointer;">
+                                    <span>Cash on Delivery <small class="text-muted fw-normal fs-6 d-block">Pay when you receive the package</small></span>
+                                    <i class="fas fa-money-bill-wave text-success fa-lg"></i>
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Right Order Summary -->
+                <div class="col-lg-4">
+                    <div class="card border-0 shadow-sm rounded-4 p-4 sticky-top" style="top: 100px;">
+                        <h4 class="fw-bold mb-4">Order Summary</h4>
+                        
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Item Subtotal</span>
+                            <span class="fw-bold" th:text="'Rs. ' + ${subtotal}">0.00</span>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between mb-2 text-success" th:if="${appliedPromo != null}">
+                            <span>Discount (<span th:text="${appliedPromo}"></span>)</span>
+                            <span class="fw-bold">- Rs. <span th:text="${discountAmount}">0.00</span></span>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="text-muted">Delivery Charges</span>
+                            <span class="fw-bold" th:if="${deliveryFee > 0}" th:text="'+ Rs. ' + ${deliveryFee}">0.00</span>
+                            <span class="fw-bold text-success" th:if="${deliveryFee == 0}">FREE Delivery</span>
+                        </div>
+                        
+                        <hr>
+                        
+                        <div class="d-flex justify-content-between mb-4">
+                            <span class="h5 fw-bold text-dark m-0">Total Amount</span>
+                            <span class="h4 fw-bold text-accent m-0" th:text="'Rs. ' + ${total}">0.00</span>
+                        </div>
+
+                        <button id="placeOrderBtn" class="btn btn-dark btn-lg w-100 py-3 rounded-pill fw-bold shadow-sm">
+                            <i class="fas fa-lock me-2"></i> Confirm & Pay
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="~{layout :: footer}"></footer>
+
+    <script th:inline="javascript">
+        const amount = /*[[${total}]]*/ 0;
+        const razorpayKey = /*[[${razorpayKey}]]*/ '';
+        
+        document.getElementById('placeOrderBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Basic UI Validation
+            const form = document.getElementById('checkoutForm');
+            if(!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+            
+            // Shipping details
+            const shippingData = {
+                name: document.getElementById('shipName').value,
+                phone: document.getElementById('shipPhone').value,
+                address: document.getElementById('shipAddress').value,
+                city: document.getElementById('shipCity').value,
+                pin: document.getElementById('shipPin').value
+            };
+
+            // Disable button
+            this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Processing...';
+            this.disabled = true;
+
+            if (paymentMethod === 'cod') {
+                $.ajax({
+                    url: '/create_order',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({amount: amount}),
+                    success: function(response){
+                        const res = typeof response === 'string' ? JSON.parse(response) : response;
+                        updateOrder(res.id, 'COD_' + Date.now(), 'paid');
+                    },
+                    error: function() {
+                        alert("Error initializing order.");
+                        resetBtn();
+                    }
+                });
+            } else {
+                // Online Razorpay Flow
+                $.ajax({
+                    url: '/create_order',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({amount: amount}),
+                    success: function(response){
+                        const res = typeof response === 'string' ? JSON.parse(response) : response;
+                        
+                        const options = {
+                            "key": razorpayKey,
+                            "amount": res.amount,
+                            "currency": "INR",
+                            "name": "ShopEase",
+                            "description": "Secure Purchase",
+                            "order_id": res.id,
+                            "handler": function (response){
+                                updateOrder(res.id, response.razorpay_payment_id, 'paid');
+                            },
+                            "prefill": {
+                                "name": shippingData.name,
+                                "contact": shippingData.phone
+                            },
+                            "theme": {
+                                "color": "#1a1a1a"
+                            }
+                        };
+                        const rzp1 = new Razorpay(options);
+                        rzp1.on('payment.failed', function (response){
+                            updateOrder(res.id, '', 'failed');
+                        });
+                        rzp1.open();
+                        resetBtn();
+                    },
+                    error: function() {
+                        alert("Error initializing payment gateway.");
+                        resetBtn();
+                    }
+                });
+            }
+        });
+
+        function resetBtn() {
+            const btn = document.getElementById('placeOrderBtn');
+            btn.innerHTML = '<i class="fas fa-lock me-2"></i> Confirm & Pay';
+            btn.disabled = false;
+        }
+
+        function updateOrder(orderId, paymentId, status) {
+            $.ajax({
+                url: '/update_order',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    order_id: orderId,
+                    payment_id: paymentId,
+                    status: status
+                }),
+                success: function(res){
+                    if(status === 'paid') {
+                        alert('Order Placed Successfully! Check your email for the bill.');
+                        window.location.href = '/?success';
+                    } else {
+                        alert('Payment Failed or Cancelled. You have not been charged.');
+                        resetBtn();
+                    }
+                },
+                error: function() {
+                    alert('Critical Error verifying payment.');
+                    resetBtn();
+                }
+            });
+        }
+    </script>
+</body>
+</html>

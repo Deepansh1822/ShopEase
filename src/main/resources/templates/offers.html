@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{layout :: head}"></head>
+
+<body>
+    <nav th:replace="~{layout :: nav}"></nav>
+    <div class="content-wrapper bg-light pt-0">
+
+        <!-- Offers Hero with Gradient -->
+        <section class="py-5 bg-dark text-white text-center position-relative overflow-hidden"
+            style="background: linear-gradient(135deg, #111 0%, #333 100%);">
+            <div class="container py-5 z-1 position-relative">
+                <span
+                    class="badge bg-accent text-white rounded-pill px-3 py-2 mb-3 fw-bold text-uppercase tracking-wider">Limited
+                    Time Deals</span>
+                <h1 class="display-3 fw-bold mb-4">Unbeatable Offers</h1>
+                <p class="lead text-white-50 mx-auto" style="max-width: 600px;">Save big on premium quality items. Use
+                    our exclusive coupons and partner bank discounts before they expire.</p>
+            </div>
+
+            <!-- Decorative blobs -->
+            <div class="position-absolute rounded-circle bg-accent opacity-25"
+                style="width: 400px; height: 400px; top: -100px; right: -100px; filter: blur(60px);"></div>
+            <div class="position-absolute rounded-circle bg-primary opacity-10"
+                style="width: 300px; height: 300px; bottom: -50px; left: -50px; filter: blur(40px);"></div>
+        </section>
+
+        <div class="container py-5 position-relative z-2 mt-5">
+            <!-- Bank & Wallet Offers -->
+            <h4 class="fw-bold mb-4"><i class="fas fa-wallet text-accent me-2"></i>Payment & Wallet Offers</h4>
+            <div class="row g-4 mb-5 pb-4 border-bottom">
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm rounded-4 h-100 p-4 transition-scale">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fab fa-cc-mastercard fa-2x text-dark me-3"></i>
+                            <h6 class="fw-bold m-0">Mastercard Special</h6>
+                        </div>
+                        <p class="text-muted small mb-0">Get flat 10% instant discount up to Rs. 2,000 on all Mastercard
+                            Credit Cards. Minimum purchase Rs. 5,000.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm rounded-4 h-100 p-4 transition-scale">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fab fa-amazon-pay fa-2x text-dark me-3"></i>
+                            <h6 class="fw-bold m-0">Amazon Pay Cashback</h6>
+                        </div>
+                        <p class="text-muted small mb-0">Win scratch cards and get up to Rs. 500 cashback on paying via
+                            Amazon Pay wallet.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm rounded-4 h-100 p-4 transition-scale">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-university fa-2x text-dark me-3"></i>
+                            <h6 class="fw-bold m-0">HDFC Bank EMI</h6>
+                        </div>
+                        <p class="text-muted small mb-0">No Cost EMI available for 3 & 6 months on HDFC Bank Credit
+                            Cards on purchases above Rs. 10,000.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Coupon Codes Section -->
+            <div class="d-flex justify-content-between align-items-end mb-4">
+                <h4 class="fw-bold m-0"><i class="fas fa-ticket-alt text-accent me-2"></i>Exclusive Promo Codes</h4>
+            </div>
+
+            <div class="row g-4 mb-5">
+                <!-- Promo 1 -->
+                <div class="col-lg-6">
+                    <div class="card bg-white border-0 rounded-4 overflow-hidden shadow-sm d-flex flex-row">
+                        <div class="bg-dark text-white p-4 d-flex flex-column justify-content-center align-items-center"
+                            style="min-width: 140px;">
+                            <h2 class="fw-bold mb-0">50%</h2>
+                            <span class="text-uppercase tracking-wider small">OFF</span>
+                        </div>
+                        <div class="p-4 flex-grow-1 d-flex flex-column justify-content-between">
+                            <div>
+                                <h5 class="fw-bold mb-1">Grand Summer Sale</h5>
+                                <p class="text-muted small mb-3">Valid on Fashion & Electronics over Rs. 2,999.</p>
+                            </div>
+                            <div
+                                class="d-flex align-items-center justify-content-between bg-light rounded-pill p-1 ps-3 border border-secondary border-opacity-25">
+                                <span class="fw-bold text-dark code-text font-monospace">SUMMER50</span>
+                                <button class="btn btn-dark rounded-pill btn-sm px-4 copy-btn">Copy Code</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Promo 2 -->
+                <div class="col-lg-6">
+                    <div class="card bg-white border-0 rounded-4 overflow-hidden shadow-sm d-flex flex-row">
+                        <div class="bg-dark text-white p-4 d-flex flex-column justify-content-center align-items-center"
+                            style="min-width: 140px;">
+                            <h2 class="fw-bold mb-0">20%</h2>
+                            <span class="text-uppercase tracking-wider small">OFF</span>
+                        </div>
+                        <div class="p-4 flex-grow-1 d-flex flex-column justify-content-between">
+                            <div>
+                                <h5 class="fw-bold mb-1">Welcome Discount</h5>
+                                <p class="text-muted small mb-3">Exclusive discount for your very first purchase.</p>
+                            </div>
+                            <div
+                                class="d-flex align-items-center justify-content-between bg-light rounded-pill p-1 ps-3 border border-secondary border-opacity-25">
+                                <span class="fw-bold text-dark code-text font-monospace">WELCOME20</span>
+                                <button class="btn btn-dark rounded-pill btn-sm px-4 copy-btn">Copy Code</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Free Shipping Hero -->
+            <div
+                class="card bg-dark text-white border-0 shadow-sm rounded-4 p-5 position-relative overflow-hidden mt-5">
+                <div
+                    class="position-relative z-1 d-flex flex-column flex-md-row align-items-center justify-content-between">
+                    <div class="mb-4 mb-md-0 d-flex align-items-center text-center text-md-start">
+                        <div class="bg-white text-dark rounded-circle d-flex align-items-center justify-content-center me-4 shadow"
+                            style="width: 80px; height: 80px;">
+                            <i class="fas fa-truck-fast fa-2x text-accent"></i>
+                        </div>
+                        <div>
+                            <h3 class="fw-bold mb-1">Free Priority Shipping</h3>
+                            <p class="text-white-50 form-text m-0">On all orders exceeding Rs. 999. Worldwide delivery
+                                handled via DHL.</p>
+                        </div>
+                    </div>
+                    <a th:href="@{/shop}" class="btn btn-accent btn-lg rounded-pill px-5">Shop Now</a>
+                </div>
+                <i class="fas fa-globe position-absolute text-white opacity-10"
+                    style="font-size: 20rem; right: -50px; top: -50px;"></i>
+            </div>
+
+        </div>
+    </div>
+    <footer th:replace="~{layout :: footer}"></footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const copyBtns = document.querySelectorAll('.copy-btn');
+
+            copyBtns.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const codeBlock = this.previousElementSibling;
+                    const code = codeBlock.innerText;
+
+                    navigator.clipboard.writeText(code).then(() => {
+                        const originalText = this.innerText;
+                        this.innerText = 'Copied!';
+                        this.classList.remove('btn-dark');
+                        this.classList.add('btn-success');
+
+                        setTimeout(() => {
+                            this.innerText = originalText;
+                            this.classList.remove('btn-success');
+                            this.classList.add('btn-dark');
+                        }, 2000);
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

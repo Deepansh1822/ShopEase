@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopEase - Your Premium Store</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+    <nav th:fragment="nav" class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand py-0" th:href="@{/}">
+                <img th:src="@{/img/Logo.png}" alt="ShopEase" style="height: 50px; width: auto; object-fit: contain;">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" th:href="@{/}"><i class="fas fa-home me-1"></i>Home</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/shop}"><i
+                                class="fas fa-shopping-bag me-1"></i>Shop</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/offers}"><i
+                                class="fas fa-percent me-1 text-warning"></i>Offers</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/feedback}"><i
+                                class="fas fa-comment-dots me-1 text-info"></i>Feedback</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/support}"><i
+                                class="fas fa-headset me-1"></i>Support</a></li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    <a th:href="@{/wishlist}" class="nav-link position-relative me-3" title="Wishlist">
+                        <i class="fas fa-heart fa-lg text-danger"></i>
+                    </a>
+                    <a th:href="@{/cart}" class="nav-link position-relative me-3">
+                        <i class="fas fa-shopping-cart fa-lg"></i>
+                    </a>
+                    <div sec:authorize="isAnonymous()">
+                        <a th:href="@{/login}" class="btn btn-outline-dark btn-sm rounded-pill px-4">Login</a>
+                    </div>
+                    <div sec:authorize="isAuthenticated()" class="dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle fa-lg"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+                            <li>
+                                <h6 class="dropdown-header" sec:authentication="name">User</h6>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <a class="dropdown-item" th:href="@{/profile}"><i class="fas fa-user-circle me-2"></i>My
+                                    Profile</a>
+                            </li>
+                            <li sec:authorize="hasAuthority('ROLE_ADMIN')">
+                                <a class="dropdown-item" th:href="@{/admin/products}"><i
+                                        class="fas fa-box me-2"></i>Manage Products</a>
+                            </li>
+                            <li sec:authorize="hasAuthority('ROLE_ADMIN')">
+                                <a class="dropdown-item" th:href="@{/admin/orders}"><i
+                                        class="fas fa-list-alt me-2"></i>Order History</a>
+                            </li>
+                            <li sec:authorize="hasAuthority('ROLE_ADMIN')">
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" th:href="@{/logout}"><i
+                                        class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <footer th:fragment="footer">
+        <div class="container text-center">
+            <p class="mb-0">ShopEase &copy; 2026. Made By Deepansh Shakya.</p>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    </footer>
+
+</body>
+
+</html>

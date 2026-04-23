@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head}"></head>
+<body>
+    <nav th:replace="~{layout :: nav}"></nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section bg-dark text-white py-5 position-relative overflow-hidden" style="background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover;">
+        <div class="container py-5 text-center">
+            <h1 class="display-3 fw-bold mb-3">Elevate Your Lifestyle</h1>
+            <p class="lead mb-4">Discover premium products curated just for you. Quality meets elegance.</p>
+            <a th:href="@{/shop}" class="btn btn-primary btn-lg rounded-pill px-5 py-3">Explore Collection</a>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits-section py-5 bg-white border-bottom">
+        <div class="container">
+            <div class="row text-center g-4">
+                <div class="col-md-4">
+                    <div class="p-3">
+                        <i class="fas fa-shipping-fast fa-3x text-accent mb-3"></i>
+                        <h5>Fast Shipping</h5>
+                        <p class="text-muted">Quick delivery to your doorstep.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-3">
+                        <i class="fas fa-shield-alt fa-3x text-accent mb-3"></i>
+                        <h5>Secure Payment</h5>
+                        <p class="text-muted">100% secure checkout via Razorpay.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-3">
+                        <i class="fas fa-sync-alt fa-3x text-accent mb-3"></i>
+                        <h5>Easy Returns</h5>
+                        <p class="text-muted">30-day hassle-free return policy.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="content-wrapper">
+        <div class="container">
+            <!-- Categories Quick Filter -->
+            <div class="text-center mb-5">
+                <h2 class="fw-bold mb-4">Shop By Category</h2>
+                <div class="d-flex justify-content-center flex-wrap gap-3 filter-group border-0" id="categoryFilter">
+                    <button class="btn btn-dark rounded-pill px-4 filter-btn" data-filter="all">All</button>
+                    <button th:each="category : ${categories}" 
+                       th:text="${category.name}"
+                       th:data-filter="${category.id}"
+                       class="btn btn-outline-dark rounded-pill px-4 filter-btn">Category</button>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-8 mx-auto">
+                    <div class="input-group input-group-lg shadow-sm border rounded-pill overflow-hidden">
+                        <span class="input-group-text bg-white border-0 ps-4"><i class="fas fa-search text-muted"></i></span>
+                        <input type="text" id="dashboardSearch" class="form-control border-0 px-3 shadow-none bg-white" placeholder="Search for premium products or categories...">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Products Grid -->
+                <div class="col-12">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3 class="fw-bold m-0"><i class="fas fa-star text-accent me-2"></i>Featured Products</h3>
+                        <span class="text-muted" id="items-found-count" th:text="${products.size()} + ' Items found'">0 Items</span>
+                    </div>
+                    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4" id="productsGrid">
+                        <div class="col product-card-col" th:data-category-id="${product.category.id}" th:each="product : ${products}" style="transition: all 0.3s ease;">
+                            <div class="card h-100 shadow-sm border-0">
+                                <div class="position-relative overflow-hidden rounded-top-4" style="height: 250px;">
+                                    <!-- Wishlist Heart -->
+                                    <a th:href="@{/wishlist/add/{id}(id=${product.id}, redirect='/')}" class="btn btn-white btn-sm rounded-circle shadow-sm position-absolute" style="top: 10px; right: 10px; z-index: 10; width: 32px; height: 32px; padding: 0; line-height: 30px; border: 1px solid rgba(0,0,0,0.05);">
+                                        <i class="text-danger" th:classappend="${wishlistProductIds != null && wishlistProductIds.contains(product.id)} ? 'fas fa-heart' : 'far fa-heart'"></i>
+                                    </a>
+                                    <a th:href="@{/shop/viewproduct/{id}(id=${product.id})}">
+                                        <img th:src="@{'/img/' + ${product.imageName}}" 
+                                             class="card-img-top h-100 w-100 object-fit-cover transition-scale" 
+                                             alt="Product">
+                                    </a>
+                                </div>
+                                <div class="card-body">
+                                    <small class="text-accent fw-bold text-uppercase" th:text="${product.category.name}">Category</small>
+                                    <a th:href="@{/shop/viewproduct/{id}(id=${product.id})}" class="text-decoration-none">
+                                        <h5 class="card-title fw-bold text-dark mt-1" th:text="${product.name}">Product Name</h5>
+                                    </a>
+                                    <p class="card-text text-muted small" th:text="${product.description}">Description</p>
+                                    <div class="d-flex justify-content-between align-items-center mt-3">
+                                        <span class="h5 fw-bold mb-0 text-dark" th:text="'Rs. ' + ${product.price}">Price</span>
+                                        <a th:href="@{/addToCart/{id}(id=${product.id})}" class="btn btn-outline-primary rounded-pill btn-sm px-4">
+                                            <i class="fas fa-plus me-1"></i> Add
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center mt-5">
+                        <a href="/shop" id="viewMoreBtn" class="btn btn-outline-dark rounded-pill px-5 py-2 fw-bold" style="transition: all 0.3s ease;">
+                            View All Products <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Brands Section -->
+    <section class="brands-section py-5 bg-white border-top border-bottom">
+        <div class="container text-center">
+            <h3 class="fw-bold mb-4">Trusted By Premium Brands</h3>
+            <div class="d-flex justify-content-center justify-content-md-between align-items-center flex-wrap gap-4 opacity-50">
+                <i class="fab fa-apple fa-3x"></i>
+                <i class="fab fa-aws fa-3x"></i>
+                <i class="fab fa-google fa-3x"></i>
+                <i class="fab fa-microsoft fa-3x"></i>
+                <i class="fab fa-stripe fa-3x"></i>
+                <i class="fab fa-react fa-3x"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials-section py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h3 class="fw-bold"><i class="fas fa-quote-left text-accent me-2"></i>What Our Customers Say</h3>
+            </div>
+            
+            <!-- Success Message for Feedback Submission -->
+            <div th:if="${feedbackSuccess}" class="alert alert-success text-center rounded-pill mb-5 mx-auto" style="max-width: 600px;" th:text="${feedbackSuccess}"></div>
+
+            <!-- Dynamic Feedbacks Grid -->
+            <div class="row g-4 mb-5">
+                <div class="col-md-4" th:each="fb : ${feedbacks}">
+                    <div class="card border-0 shadow-sm p-4 h-100 rounded-4">
+                        <div class="d-flex text-warning mb-3">
+                            <i class="fas fa-star" th:each="i : ${#numbers.sequence(1, fb.rating)}"></i>
+                            <i class="far fa-star" th:if="${fb.rating < 5}" th:each="i : ${#numbers.sequence(1, 5 - fb.rating)}"></i>
+                        </div>
+                        <p class="text-muted flex-grow-1" th:text=" '&quot;' + ${fb.message} + '&quot;' "></p>
+                        <div class="d-flex align-items-center mt-3">
+                            <div class="bg-dark text-white rounded-circle d-flex justify-content-center align-items-center me-3 text-uppercase" style="width: 40px; height: 40px; font-weight: bold;" th:text="${#strings.substring(fb.name, 0, 1)}">A</div>
+                            <div>
+                                <h6 class="mb-0 fw-bold" th:text="${fb.name}">Name</h6>
+                                <small class="text-muted" th:text="${fb.subtitle}">Subtitle</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download App Section -->
+    <section class="app-download-section py-5 bg-dark text-white position-relative overflow-hidden">
+        <div class="container position-relative z-1">
+            <div class="row align-items-center">
+                <div class="col-lg-6 text-center text-lg-start mb-4 mb-lg-0">
+                    <span class="badge bg-accent text-white rounded-pill px-3 py-2 mb-3 fw-bold text-uppercase tracking-wider">Shop Anywhere</span>
+                    <h2 class="display-5 fw-bold mb-3">Get the ShopEase App <span class="badge bg-warning text-dark fs-6 ms-2 align-middle px-3 py-2 rounded-pill">Coming Soon</span></h2>
+                    <p class="lead text-white-50 mb-4">Our dedicated mobile application is currently under development. Soon, you will unlock exclusive app-only discounts, track live orders, and enjoy a flawless native checkout experience!</p>
+                    <div class="d-flex justify-content-center justify-content-lg-start gap-3">
+                        <button class="btn btn-outline-light btn-lg rounded-4 px-4 d-flex align-items-center disabled" style="opacity: 0.5;">
+                            <i class="fab fa-apple fa-2x me-3"></i>
+                            <div class="text-start">
+                                <small class="d-block text-uppercase" style="font-size: 0.6rem;">Available soon on</small>
+                                <span class="fw-bold lh-1" style="font-size: 1.1rem;">App Store</span>
+                            </div>
+                        </button>
+                        <button class="btn btn-outline-light btn-lg rounded-4 px-4 d-flex align-items-center disabled" style="opacity: 0.5;">
+                            <i class="fab fa-google-play fa-2x me-3"></i>
+                            <div class="text-start">
+                                <small class="d-block text-uppercase" style="font-size: 0.6rem;">Available soon on</small>
+                                <span class="fw-bold lh-1" style="font-size: 1.1rem;">Google Play</span>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="d-flex justify-content-center gap-3 align-items-center">
+                        <div class="bg-white bg-opacity-10 rounded-4 p-2 shadow-lg" style="width: 200px; transform: rotate(-5deg);">
+                            <img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="App Screen 1" class="img-fluid rounded-3 object-fit-cover" style="height: 400px; width: 100%;">
+                        </div>
+                        <div class="bg-white bg-opacity-10 rounded-4 p-2 shadow-lg d-none d-md-block" style="width: 200px; transform: rotate(5deg) translateY(-20px);">
+                            <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="App Screen 2" class="img-fluid rounded-3 object-fit-cover" style="height: 400px; width: 100%;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Decorative blob -->
+        <div class="position-absolute rounded-circle bg-primary opacity-25" style="width: 500px; height: 500px; bottom: -200px; left: -100px; filter: blur(80px);"></div>
+    </section>
+
+    <!-- Social / Community Section -->
+    <section class="social-section py-5 bg-white border-top">
+        <div class="container text-center">
+            <h3 class="fw-bold mb-3"><i class="fas fa-users text-primary me-2"></i>Join Our Community</h3>
+            <p class="text-muted mb-5">Stay connected and never miss an update, exclusive offer, or new arrival.</p>
+            
+            <div class="row justify-content-center g-4">
+                <!-- Instagram -->
+                <div class="col-6 col-md-2">
+                    <a href="#" class="text-decoration-none d-block p-4 rounded-4 shadow-sm border" style="transition: all 0.3s ease; background-color: #fafafa;" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 .5rem 1rem rgba(0,0,0,.15)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 .125rem .25rem rgba(0,0,0,.075)';">
+                        <div class="rounded-circle d-inline-flex justify-content-center align-items-center mb-3" style="width: 70px; height: 70px; background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: white;">
+                            <i class="fab fa-instagram fa-2x"></i>
+                        </div>
+                        <h6 class="mb-1 fw-bold text-dark">Instagram</h6>
+                        <small class="text-muted">Follow Us</small>
+                    </a>
+                </div>
+                
+                <!-- WhatsApp -->
+                <div class="col-6 col-md-2">
+                    <a href="#" class="text-decoration-none d-block p-4 rounded-4 shadow-sm border" style="transition: all 0.3s ease; background-color: #fafafa;" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 .5rem 1rem rgba(0,0,0,.15)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 .125rem .25rem rgba(0,0,0,.075)';">
+                        <div class="bg-success text-white rounded-circle d-inline-flex justify-content-center align-items-center mb-3" style="width: 70px; height: 70px; background-color: #25D366 !important;">
+                            <i class="fab fa-whatsapp fa-2x"></i>
+                        </div>
+                        <h6 class="mb-1 fw-bold text-dark">WhatsApp</h6>
+                        <small class="text-muted">Chat with Us</small>
+                    </a>
+                </div>
+
+                <!-- Facebook -->
+                <div class="col-6 col-md-2">
+                    <a href="#" class="text-decoration-none d-block p-4 rounded-4 shadow-sm border" style="transition: all 0.3s ease; background-color: #fafafa;" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 .5rem 1rem rgba(0,0,0,.15)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 .125rem .25rem rgba(0,0,0,.075)';">
+                        <div class="text-white rounded-circle d-inline-flex justify-content-center align-items-center mb-3" style="width: 70px; height: 70px; background-color: #1877F2;">
+                            <i class="fab fa-facebook-f fa-2x"></i>
+                        </div>
+                        <h6 class="mb-1 fw-bold text-dark">Facebook</h6>
+                        <small class="text-muted">Like our Page</small>
+                    </a>
+                </div>
+
+                <!-- YouTube -->
+                <div class="col-6 col-md-2">
+                    <a href="#" class="text-decoration-none d-block p-4 rounded-4 shadow-sm border" style="transition: all 0.3s ease; background-color: #fafafa;" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 .5rem 1rem rgba(0,0,0,.15)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 .125rem .25rem rgba(0,0,0,.075)';">
+                        <div class="text-white rounded-circle d-inline-flex justify-content-center align-items-center mb-3" style="width: 70px; height: 70px; background-color: #FF0000;">
+                            <i class="fab fa-youtube fa-2x"></i>
+                        </div>
+                        <h6 class="mb-1 fw-bold text-dark">YouTube</h6>
+                        <small class="text-muted">Subscribe</small>
+                    </a>
+                </div>
+
+                <!-- X (Twitter) -->
+                <div class="col-6 col-md-2">
+                    <a href="#" class="text-decoration-none d-block p-4 rounded-4 shadow-sm border" style="transition: all 0.3s ease; background-color: #fafafa;" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 .5rem 1rem rgba(0,0,0,.15)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 .125rem .25rem rgba(0,0,0,.075)';">
+                        <div class="bg-dark text-white rounded-circle d-inline-flex justify-content-center align-items-center mb-3" style="width: 70px; height: 70px;">
+                            <i class="fa-brands fa-x-twitter fa-2x"></i>
+                        </div>
+                        <h6 class="mb-1 fw-bold text-dark">X / Twitter</h6>
+                        <small class="text-muted">Stay Updated</small>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer th:replace="~{layout :: footer}"></footer>
+
+    <script th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const productCols = document.querySelectorAll('.product-card-col');
+            const countDisplay = document.getElementById('items-found-count');
+            const viewMoreBtn = document.getElementById('viewMoreBtn');
+            const dashboardSearch = document.getElementById('dashboardSearch');
+
+            function applyFilter(filterValue) {
+                let visibleCount = 0;
+                const query = dashboardSearch.value.toLowerCase().trim();
+                
+                productCols.forEach(col => {
+                    col.style.opacity = '0';
+                    col.style.transform = 'scale(0.95)';
+                    
+                    setTimeout(() => {
+                        let matchCategory = (filterValue === 'all' || col.getAttribute('data-category-id') === filterValue);
+                        let title = col.querySelector('.card-title').innerText.toLowerCase();
+                        let catText = col.querySelector('.text-uppercase').innerText.toLowerCase();
+                        let matchSearch = title.includes(query) || catText.includes(query);
+                        
+                        let maxItems = 4; // limit to 4 items in each category showcase, unless searching aggressively
+                        let cap = (query.length > 0) ? 12 : maxItems;
+                        
+                        if (matchCategory && matchSearch && visibleCount < cap) {
+                            col.style.display = 'block';
+                            setTimeout(() => {
+                                col.style.opacity = '1';
+                                col.style.transform = 'scale(1)';
+                            }, 50);
+                            visibleCount++;
+                        } else {
+                            col.style.display = 'none';
+                        }
+                        
+                        countDisplay.innerText = visibleCount + ' Items displayed';
+                    }, 250);
+                });
+
+                setTimeout(() => {
+                    if (filterValue === 'all') {
+                        viewMoreBtn.href = '/shop';
+                        viewMoreBtn.innerHTML = 'View All Products <i class="fas fa-arrow-right ms-2"></i>';
+                    } else {
+                        viewMoreBtn.href = '/shop/category/' + filterValue;
+                        const activeBtn = document.querySelector('.filter-btn.active');
+                        if (activeBtn) {
+                            viewMoreBtn.innerHTML = 'View All ' + activeBtn.innerText + ' <i class="fas fa-arrow-right ms-2"></i>';
+                        }
+                    }
+                }, 250);
+            }
+
+            // Init
+            applyFilter('all');
+
+            // Search event listener
+            dashboardSearch.addEventListener('input', function() {
+                const activeBtn = document.querySelector('.filter-btn.active');
+                let activeFilter = activeBtn ? activeBtn.getAttribute('data-filter') : 'all';
+                applyFilter(activeFilter);
+            });
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    filterBtns.forEach(b => {
+                        b.classList.remove('btn-dark', 'active');
+                        b.classList.add('btn-outline-dark');
+                    });
+                    this.classList.remove('btn-outline-dark');
+                    this.classList.add('btn-dark', 'active');
+                    
+                    applyFilter(this.getAttribute('data-filter'));
+                });
+            });
+        });
+    </script>
+</body>
+</html>

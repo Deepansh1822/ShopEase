@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login — ShopEase</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; min-height: 100vh; display: flex; }
+
+        /* Left Panel */
+        .auth-panel-left {
+            background: linear-gradient(145deg, #0f0f0f 0%, #1a1a2e 60%, #16213e 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 60px 56px;
+            position: relative;
+            overflow: hidden;
+            min-height: 100vh;
+        }
+        .auth-panel-left::before {
+            content: '';
+            position: absolute;
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(46,204,113,0.15) 0%, transparent 70%);
+            bottom: -150px; left: -150px;
+            border-radius: 50%;
+        }
+        .auth-panel-left::after {
+            content: '';
+            position: absolute;
+            width: 350px; height: 350px;
+            background: radial-gradient(circle, rgba(52,152,219,0.12) 0%, transparent 70%);
+            top: -80px; right: -60px;
+            border-radius: 50%;
+        }
+        .auth-brand img { height: 52px; width: auto; }
+        .auth-feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .auth-feature-item:last-child { border-bottom: none; }
+        .auth-feature-icon {
+            background: rgba(46,204,113,0.15);
+            color: #2ecc71;
+            border-radius: 10px;
+            width: 40px; height: 40px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+
+        /* Right Panel */
+        .auth-panel-right {
+            background: #fafafa;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 48px 56px;
+            min-height: 100vh;
+            overflow-y: auto;
+        }
+        .auth-form-card {
+            width: 100%;
+            max-width: 420px;
+        }
+        .form-control-auth {
+            border: 1.5px solid #e8e8e8;
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 0.95rem;
+            background: #fff;
+            transition: all 0.25s;
+        }
+        .form-control-auth:focus {
+            border-color: #2ecc71;
+            box-shadow: 0 0 0 3px rgba(46,204,113,0.12);
+            background: #fff;
+        }
+        .btn-auth-primary {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 13px 20px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            letter-spacing: 0.3px;
+            transition: all 0.25s;
+            box-shadow: 0 4px 15px rgba(46,204,113,0.35);
+        }
+        .btn-auth-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(46,204,113,0.45);
+            color: #fff;
+        }
+        .btn-back {
+            border: 1.5px solid #e8e8e8;
+            border-radius: 10px;
+            padding: 8px 18px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #555;
+            background: #fff;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-back:hover {
+            border-color: #2ecc71;
+            color: #2ecc71;
+        }
+        .divider-text {
+            display: flex; align-items: center; gap: 12px;
+            color: #aaa; font-size: 0.82rem; margin: 20px 0;
+        }
+        .divider-text::before, .divider-text::after {
+            content: ''; flex: 1; height: 1px; background: #e8e8e8;
+        }
+        .input-icon-wrapper { position: relative; }
+        .input-icon {
+            position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+            color: #bbb; font-size: 0.9rem;
+        }
+        .form-control-auth.with-icon { padding-left: 40px; }
+
+        @media (max-width: 991px) {
+            .auth-panel-left { display: none !important; }
+            .auth-panel-right { padding: 40px 24px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="row g-0 w-100">
+
+        <!-- ── Left Brand Panel ───────────────────────────── -->
+        <div class="col-lg-6 auth-panel-left">
+            <div class="auth-brand mb-5 z-1 position-relative">
+                <img th:src="@{/img/Logo.png}" alt="ShopEase Logo">
+            </div>
+
+            <div class="z-1 position-relative">
+                <h2 class="text-white fw-bold mb-2" style="font-size: 2.2rem; line-height:1.2;">
+                    Welcome back<br>to <span style="color:#2ecc71;">ShopEase</span>
+                </h2>
+                <p class="text-white-50 mb-5" style="font-size:1rem; max-width: 380px;">
+                    Your premium destination for curated products at unbeatable prices. Sign in to continue where you left off.
+                </p>
+
+                <div class="auth-feature-item">
+                    <div class="auth-feature-icon"><i class="fas fa-shield-alt"></i></div>
+                    <div>
+                        <div class="text-white fw-semibold" style="font-size:0.95rem;">Secure & Encrypted</div>
+                        <div class="text-white-50 small">Your data is always protected with industry-standard encryption.</div>
+                    </div>
+                </div>
+                <div class="auth-feature-item">
+                    <div class="auth-feature-icon"><i class="fas fa-bolt"></i></div>
+                    <div>
+                        <div class="text-white fw-semibold" style="font-size:0.95rem;">Instant Order Tracking</div>
+                        <div class="text-white-50 small">Track your purchases in real time from your personal dashboard.</div>
+                    </div>
+                </div>
+                <div class="auth-feature-item">
+                    <div class="auth-feature-icon"><i class="fas fa-heart"></i></div>
+                    <div>
+                        <div class="text-white fw-semibold" style="font-size:0.95rem;">Personalised Wishlist</div>
+                        <div class="text-white-50 small">Save your favourite products and never lose track of what you love.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Right Form Panel ───────────────────────────── -->
+        <div class="col-lg-6 auth-panel-right">
+            <div class="auth-form-card">
+                <!-- Top bar: Back + Logo (mobile only visible on md) -->
+                <div class="d-flex justify-content-between align-items-center mb-5">
+                    <a href="/" class="btn-back">
+                        <i class="fas fa-arrow-left"></i> Back to Home
+                    </a>
+                    <img th:src="@{/img/Logo.png}" alt="ShopEase" style="height:36px; display:none;" class="d-lg-none">
+                </div>
+
+                <h3 class="fw-bold mb-1" style="font-size:1.75rem;">Sign in</h3>
+                <p class="text-muted mb-4" style="font-size:0.9rem;">Enter your credentials to access your account.</p>
+
+                <!-- Alerts -->
+                <div th:if="${param.error}" class="alert alert-danger rounded-3 border-0 small py-2 mb-3">
+                    <i class="fas fa-exclamation-circle me-2"></i>Invalid email or password. Please try again.
+                </div>
+                <div th:if="${param.logout}" class="alert alert-info rounded-3 border-0 small py-2 mb-3">
+                    <i class="fas fa-info-circle me-2"></i>You've been signed out successfully.
+                </div>
+
+                <!-- Login Form -->
+                <form th:action="@{/login}" method="post">
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold small text-dark">Email Address</label>
+                        <div class="input-icon-wrapper">
+                            <i class="fas fa-envelope input-icon"></i>
+                            <input type="email" name="username"
+                                   class="form-control form-control-auth with-icon"
+                                   placeholder="you@example.com" required>
+                        </div>
+                    </div>
+                    <div class="mb-5">
+                        <label class="form-label fw-semibold small text-dark">Password</label>
+                        <div class="input-icon-wrapper">
+                            <i class="fas fa-lock input-icon"></i>
+                            <input type="password" name="password"
+                                   class="form-control form-control-auth with-icon"
+                                   placeholder="••••••••" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-auth-primary w-100 mb-3">
+                        <i class="fas fa-sign-in-alt me-2"></i>Sign In to ShopEase
+                    </button>
+                </form>
+
+                <div class="divider-text">or</div>
+
+                <div class="text-center">
+                    <span class="text-muted small">New to ShopEase? </span>
+                    <a th:href="@{/registration}" class="fw-bold text-decoration-none" style="color:#2ecc71;">
+                        Create a free account →
+                    </a>
+                </div>
+
+                <p class="text-center text-muted mt-5 mb-0" style="font-size:0.75rem;">
+                    © 2026 ShopEase. All rights reserved.
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
