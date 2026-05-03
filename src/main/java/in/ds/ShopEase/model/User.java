@@ -3,6 +3,7 @@ package in.ds.ShopEase.model;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -23,6 +24,13 @@ public class User {
 
     private String password;
 
+    private boolean member = false;
+    private String membershipPlan;
+    private java.time.LocalDateTime membershipExpiryDate;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Address> addresses;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name = "users_roles",
@@ -31,11 +39,12 @@ public class User {
     )
     private Collection<Role> roles;
 
-    public User(String firstName, String lastName, String email, String password, Collection<Role> roles) {
+    public User(String firstName, String lastName, String email, String password, Collection<Role> roles, boolean member) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.roles = roles;
+        this.member = member;
     }
 }

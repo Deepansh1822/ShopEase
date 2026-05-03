@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head}"></head>
+<body>
+    <nav th:replace="~{layout :: nav}"></nav>
+
+    <!-- Hero Section -->
+    <section class="py-5 bg-dark text-white text-center position-relative overflow-hidden"
+        style="background: linear-gradient(135deg, #111 0%, #000 100%);">
+        <div class="container py-5 z-1 position-relative">
+            <span class="badge bg-accent text-white rounded-pill px-3 py-2 mb-3 fw-bold text-uppercase tracking-wider">
+                <i class="fas fa-shield-alt me-2"></i>Security & Privacy
+            </span>
+            <h1 class="display-4 fw-bold mb-3">Protect Your Account</h1>
+            <p class="lead text-white-50 mx-auto" style="max-width: 600px;">
+                Manage your login credentials and ensure your account remains safe and secure.
+            </p>
+        </div>
+        <!-- Decorative blobs -->
+        <div class="position-absolute rounded-circle bg-primary opacity-20"
+            style="width: 400px; height: 400px; bottom: -100px; left: -100px; filter: blur(70px);"></div>
+        <div class="position-absolute rounded-circle bg-accent opacity-15"
+            style="width: 300px; height: 300px; top: -50px; right: -50px; filter: blur(50px);"></div>
+    </section>
+
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="fw-bold cart-amount m-0">Security Settings</h2>
+                    <a th:href="@{/profile}" class="back-link">
+                        <i class="fas fa-arrow-left me-2"></i> Back to Profile
+                    </a>
+                </div>
+
+                <div class="card theme-card border-0 shadow-sm rounded-4 p-4" style="min-height: 480px;">
+                    <div th:if="${success}" class="alert alert-success alert-dismissible fade show rounded-3 mb-4" role="alert">
+                        <i class="fas fa-check-circle me-2"></i><span th:text="${success}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
+                    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show rounded-3 mb-4" role="alert">
+                        <i class="fas fa-exclamation-circle me-2"></i><span th:text="${error}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
+                    <h5 class="fw-bold cart-amount mb-4">Change Password</h5>
+                    <form th:action="@{/profile/change-password}" method="post">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold small text-muted">Current Password</label>
+                            <input type="password" name="currentPassword" class="form-control" required>
+                            <div class="text-end mt-1">
+                                <a th:href="@{/profile/security/forgot-trigger}" class="text-decoration-none small text-muted hover-accent">
+                                    Forgot Current Password?
+                                </a>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold small text-muted">New Password</label>
+                            <input type="password" name="newPassword" class="form-control" required minlength="6">
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-bold small text-muted">Confirm New Password</label>
+                            <input type="password" name="confirmPassword" class="form-control" required minlength="6">
+                        </div>
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-dark rounded-pill px-5 py-2 fw-bold">
+                                Update Password
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="py-5"></div>
+
+    <footer th:replace="~{layout :: footer}"></footer>
+</body>
+</html>

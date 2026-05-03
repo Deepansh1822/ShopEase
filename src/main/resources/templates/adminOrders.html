@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="~{layout :: head}"></head>
+
 <body>
     <nav th:replace="~{layout :: nav}"></nav>
 
@@ -8,11 +10,15 @@
         <!-- Admin Hero -->
         <section class="py-4 bg-dark text-white position-relative overflow-hidden"
             style="background: linear-gradient(135deg, #1a1a1a 0%, #000 100%);">
-            <div class="container py-4 z-1 position-relative d-flex flex-wrap justify-content-between align-items-center gap-3">
+            <div
+                class="container py-4 z-1 position-relative d-flex flex-wrap justify-content-between align-items-center gap-3">
                 <div>
-                    <span class="badge bg-accent text-white rounded-pill px-3 py-1 mb-2 fw-bold text-uppercase" style="font-size:0.7rem;">Admin Panel</span>
-                    <h1 class="display-6 fw-bold mb-1 text-white"><i class="fas fa-history me-2 text-accent"></i>Order History Log</h1>
-                    <p class="text-white-50 mb-0 small">View all orders placed across the store, track payment statuses, and review items purchased.</p>
+                    <span class="badge bg-accent text-white rounded-pill px-3 py-1 mb-2 fw-bold text-uppercase"
+                        style="font-size:0.7rem;">Admin Panel</span>
+                    <h1 class="display-6 fw-bold mb-1 text-white"><i class="fas fa-history me-2 text-accent"></i>Order
+                        History Log</h1>
+                    <p class="text-white-50 mb-0 small">View all orders placed across the store, track payment statuses,
+                        and review items purchased.</p>
                 </div>
                 <div class="d-flex gap-2 flex-wrap">
                     <a th:href="@{/admin/products}" class="btn btn-outline-light rounded-pill px-4">
@@ -20,108 +26,239 @@
                     </a>
                 </div>
             </div>
+            <div class="position-absolute rounded-circle bg-primary opacity-10"
+                style="width: 300px; height: 300px; bottom: -150px; left: -100px; filter: blur(70px);"></div>
+            <div class="position-absolute rounded-circle bg-accent opacity-15"
+                style="width: 350px; height: 350px; top: -100px; right: -80px; filter: blur(60px);"></div>
         </section>
 
         <div class="container py-5 mt-4">
             <!-- Stats Row -->
             <div class="row g-3 mb-5">
                 <div class="col-sm-4">
-                    <div class="card border-0 shadow-sm rounded-4 p-4 d-flex flex-row align-items-center gap-3 bg-white">
-                        <div class="rounded-circle bg-accent bg-opacity-10 d-flex align-items-center justify-content-center" style="width:55px;height:55px;flex-shrink:0;">
-                            <i class="fas fa-shopping-bag fa-lg text-accent"></i>
+                    <div
+                        class="card border-0 shadow-sm rounded-4 p-4 d-flex flex-row align-items-center gap-3 bg-white">
+                        <div class="rounded-circle bg-primary bg-opacity-10 d-flex align-items-center justify-content-center"
+                            style="width:55px;height:55px;flex-shrink:0;">
+                            <i class="fas fa-shopping-bag fa-lg text-primary"></i>
                         </div>
                         <div>
                             <div class="text-muted small fw-bold text-uppercase">Total Orders</div>
-                            <div class="fw-bold fs-3" th:text="${orders.size()}">0</div>
+                            <div class="fw-bold fs-3 cart-amount" th:text="${orders.size()}">0</div>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-4">
-                    <div class="card border-0 shadow-sm rounded-4 p-4 d-flex flex-row align-items-center gap-3 bg-white">
-                        <div class="rounded-circle bg-success bg-opacity-10 d-flex align-items-center justify-content-center" style="width:55px;height:55px;flex-shrink:0;">
+                    <div
+                        class="card border-0 shadow-sm rounded-4 p-4 d-flex flex-row align-items-center gap-3 admin-stats-card">
+                        <div class="rounded-circle bg-success bg-opacity-10 d-flex align-items-center justify-content-center"
+                            style="width:55px;height:55px;flex-shrink:0;">
                             <i class="fas fa-check-circle fa-lg text-success"></i>
                         </div>
                         <div>
                             <div class="text-muted small fw-bold text-uppercase">Paid Orders</div>
-                            <div class="fw-bold fs-3" th:text="${paidCount}">0</div>
+                            <div class="fw-bold fs-3 cart-amount" th:text="${paidCount}">0</div>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-4">
-                    <div class="card border-0 shadow-sm rounded-4 p-4 d-flex flex-row align-items-center gap-3 bg-white">
-                        <div class="rounded-circle bg-warning bg-opacity-10 d-flex align-items-center justify-content-center" style="width:55px;height:55px;flex-shrink:0;">
+                    <div
+                        class="card border-0 shadow-sm rounded-4 p-4 d-flex flex-row align-items-center gap-3 admin-stats-card">
+                        <div class="rounded-circle bg-warning bg-opacity-10 d-flex align-items-center justify-content-center"
+                            style="width:55px;height:55px;flex-shrink:0;">
                             <i class="fas fa-clock fa-lg text-warning"></i>
                         </div>
                         <div>
                             <div class="text-muted small fw-bold text-uppercase">Pending Orders</div>
-                            <div class="fw-bold fs-3" th:text="${pendingCount}">0</div>
+                            <div class="fw-bold fs-3 cart-amount" th:text="${pendingCount}">0</div>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Orders Table -->
-            <div class="card border-0 shadow rounded-4 overflow-hidden">
-                <div class="card-header bg-white py-3 px-4 border-0 d-flex align-items-center justify-content-between">
-                    <h5 class="fw-bold m-0"><i class="fas fa-list text-accent me-2"></i>All Orders</h5>
+            <div class="card theme-card border-0 shadow rounded-4 overflow-hidden">
+                <div class="card-header theme-card py-3 px-4 border-0 d-flex align-items-center justify-content-between">
+                    <div>
+                        <h5 class="fw-bold cart-amount m-0"><i class="fas fa-list text-accent me-2"></i>All Orders</h5>
+                        <p class="text-muted small mb-0">Click on any row to view full order details.</p>
+                    </div>
                     <span class="badge bg-dark rounded-pill px-3" th:text="${orders.size()} + ' total'">0 total</span>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead style="background:#f8f9fa;">
+                    <table class="table table-hover align-middle mb-0" id="ordersTable">
+                        <thead>
                             <tr>
-                                <th class="px-4 py-3 text-muted small fw-bold text-uppercase">Order ID</th>
+                                <th class="px-4 py-3 text-muted small fw-bold text-uppercase" style="width: 50px;"></th>
+                                <th class="py-3 text-muted small fw-bold text-uppercase">Order ID</th>
                                 <th class="py-3 text-muted small fw-bold text-uppercase">Customer</th>
-                                <th class="py-3 text-muted small fw-bold text-uppercase">Status</th>
+                                <th class="py-3 text-muted small fw-bold text-uppercase text-center">Status</th>
                                 <th class="py-3 text-muted small fw-bold text-uppercase">Amount</th>
-                                <th class="py-3 text-muted small fw-bold text-uppercase">Items</th>
-                                <th class="py-3 text-muted small fw-bold text-uppercase">Date</th>
+                                <th class="py-3 text-muted small fw-bold text-uppercase text-end px-4">Date</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr th:each="order : ${orders}" class="border-top">
-                                <td class="px-4">
-                                    <span class="fw-bold text-dark font-monospace small" th:text="${order.orderId}">ORD-001</span>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <div class="rounded-circle bg-accent bg-opacity-10 d-flex align-items-center justify-content-center" style="width:34px;height:34px;flex-shrink:0;">
-                                            <i class="fas fa-user-circle text-accent small"></i>
+                            <th:block th:each="order : ${orders}">
+                                <tr class="order-row border-top" 
+                                    style="cursor:pointer;" 
+                                    th:id="'row-' + ${order.orderId}"
+                                    th:data-order-id="${order.orderId}">
+                                    <td class="px-4 text-center">
+                                        <i class="fas fa-chevron-right text-muted transition-all chevron-icon"></i>
+                                    </td>
+                                    <td>
+                                        <span class="fw-bold cart-amount font-monospace small"
+                                            th:text="${order.orderId}">ORD-001</span>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="rounded-circle bg-info bg-opacity-10 d-flex align-items-center justify-content-center"
+                                                style="width:34px;height:34px;flex-shrink:0;">
+                                                <i class="fas fa-user-circle text-info small"></i>
+                                            </div>
+                                            <span class="cart-amount small"
+                                                th:text="${order.user != null ? order.user.email : 'Unknown'}">user@example.com</span>
                                         </div>
-                                        <span class="text-dark small" th:text="${order.user != null ? order.user.email : 'Unknown'}">user@example.com</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span th:if="${order.status == 'paid'}"
-                                          class="badge rounded-pill px-3 py-2 fw-bold"
-                                          style="background:#d1fae5; color:#065f46;">PAID</span>
-                                    <span th:if="${order.status == 'created'}"
-                                          class="badge rounded-pill px-3 py-2 fw-bold"
-                                          style="background:#fef3c7; color:#92400e;">PENDING</span>
-                                    <span th:if="${order.status == 'failed'}"
-                                          class="badge rounded-pill px-3 py-2 fw-bold"
-                                          style="background:#fee2e2; color:#991b1b;">FAILED</span>
-                                    <span th:if="${order.status != 'paid' and order.status != 'created' and order.status != 'failed'}"
-                                          class="badge rounded-pill px-3 py-2 fw-bold bg-secondary text-white"
-                                          th:text="${#strings.toUpperCase(order.status)}">STATUS</span>
-                                </td>
-                                <td>
-                                    <span class="fw-bold text-dark" th:text="'Rs. ' + ${order.amount}">Rs. 0</span>
-                                </td>
-                                <td>
-                                    <div th:if="${order.orderItems != null and !order.orderItems.empty}">
-                                        <div th:each="item : ${order.orderItems}" class="small text-muted">
-                                            <i class="fas fa-caret-right text-accent me-1"></i>
-                                            <span th:text="${item.productName} + ' ×' + ${item.quantity}">Item</span>
+                                    </td>
+                                    <td class="text-center" onclick="event.stopPropagation();">
+                                        <select
+                                            class="form-select form-select-sm rounded-pill px-3 fw-bold border-0 shadow-sm status-selector text-center"
+                                            th:data-order-id="${order.orderId}" th:style="${order.status == 'paid' || order.status == 'delivered' || order.status == 'returned' ? 'background:#d1fae5; color:#065f46; text-align-last: center;' : 
+                                                           (order.status == 'failed' || order.status == 'cancelled' || order.status == 'return_rejected' ? 'background:#fee2e2; color:#991b1b; text-align-last: center;' : 
+                                                           'background:#fef3c7; color:#92400e; text-align-last: center;')}">
+                                            <option value="created" th:selected="${order.status == 'created'}">PENDING
+                                            </option>
+                                            <option value="paid" th:selected="${order.status == 'paid'}">PAID / PLACED
+                                            </option>
+                                            <option value="processing" th:selected="${order.status == 'processing'}">
+                                                PROCESSING</option>
+                                            <option value="shipped" th:selected="${order.status == 'shipped'}">SHIPPED
+                                            </option>
+                                            <option value="delivered" th:selected="${order.status == 'delivered'}">DELIVERED
+                                            </option>
+                                            <option value="cancelled" th:selected="${order.status == 'cancelled'}">CANCELLED
+                                            </option>
+                                            <option value="return_pending" th:selected="${order.status == 'return_pending'}">RETURN PENDING
+                                            </option>
+                                            <option value="returned" th:selected="${order.status == 'returned'}">RETURNED
+                                            </option>
+                                            <option value="return_rejected" th:selected="${order.status == 'return_rejected'}">RETURN REJECTED
+                                            </option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <span class="fw-bold cart-amount" th:text="'Rs. ' + ${order.amount}">Rs. 0</span>
+                                    </td>
+                                    <td class="text-muted small text-end px-4">
+                                        <span th:if="${order.createdAt != null}"
+                                            th:text="${#temporals.format(order.createdAt, 'dd MMM yyyy, HH:mm')}">Date</span>
+                                        <span th:if="${order.createdAt == null}" class="text-muted">N/A</span>
+                                    </td>
+                                </tr>
+                                <!-- Expanded Detail Row -->
+                                <tr class="detail-row d-none" th:id="'detail-' + ${order.orderId}">
+                                    <td colspan="6" class="p-0 border-0">
+                                        <div class="px-5 py-4 detail-content animate__animated animate__fadeIn">
+                                            <div class="row g-4">
+                                                <!-- Order Info -->
+                                                <div class="col-md-3">
+                                                    <div class="card theme-card border-0 shadow-sm rounded-4 p-3 h-100">
+                                                        <h6 class="fw-bold text-uppercase small text-muted mb-3">Order Information</h6>
+                                                        <div class="mb-2">
+                                                            <label class="small text-muted d-block">Transaction ID</label>
+                                                            <span class="small font-monospace text-break" th:text="${order.paymentId != null ? order.paymentId : 'N/A'}">PAY-123</span>
+                                                        </div>
+                                                        <div class="mb-2">
+                                                            <label class="small text-muted d-block">Customer Email</label>
+                                                            <span class="small fw-bold" th:text="${order.user != null ? order.user.email : 'Unknown'}">email@example.com</span>
+                                                        </div>
+                                                        <div class="mb-2">
+                                                            <label class="small text-muted d-block">Date Placed</label>
+                                                            <span class="small" th:text="${order.createdAt != null ? #temporals.format(order.createdAt, 'dd MMM yyyy, HH:mm') : 'N/A'}">Date</span>
+                                                        </div>
+                                                        <div class="mb-2" th:if="${order.returnReason != null}">
+                                                            <label class="small text-danger d-block fw-bold"><i class="fas fa-exclamation-circle me-1"></i>Return Reason</label>
+                                                            <p class="small mb-0 text-danger bg-danger bg-opacity-10 p-2 rounded-3" th:text="${order.returnReason}">Reason</p>
+                                                        </div>
+                                                        <div class="mt-3">
+                                                            <span class="badge rounded-pill px-3 py-1" 
+                                                                  th:classappend="${order.status == 'paid' || order.status == 'delivered' ? 'bg-success' : 'bg-warning'}"
+                                                                  th:text="${order.status != null ? #strings.toUpperCase(order.status) : 'UNKNOWN'}">STATUS</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Shipping Address -->
+                                                <div class="col-md-3">
+                                                    <div class="card theme-card border-0 shadow-sm rounded-4 p-3 h-100">
+                                                        <h6 class="fw-bold text-uppercase small text-muted mb-3">Shipping Details</h6>
+                                                        <div th:if="${order.shippingAddress != null}">
+                                                            <div class="mb-2">
+                                                                <label class="small text-muted d-block">Recipient</label>
+                                                                <span class="small fw-bold" th:text="${order.shippingName}">Name</span>
+                                                            </div>
+                                                            <div class="mb-2">
+                                                                <label class="small text-muted d-block">Phone</label>
+                                                                <span class="small" th:text="${order.shippingPhone}">Phone</span>
+                                                            </div>
+                                                            <div class="mb-0">
+                                                                <label class="small text-muted d-block">Address</label>
+                                                                <p class="small mb-0" th:text="${order.shippingAddress}">Address</p>
+                                                                <p class="small mb-0"><span th:text="${order.shippingCity}">City</span>, <span th:text="${order.shippingPin}">Pin</span></p>
+                                                            </div>
+                                                        </div>
+                                                        <div th:if="${order.shippingAddress == null}" class="text-center py-4">
+                                                            <i class="fas fa-info-circle text-muted opacity-50 d-block mb-2"></i>
+                                                            <span class="small text-muted">No address stored for this order.</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- Items List -->
+                                                <div class="col-md-6">
+                                                    <div class="card theme-card border-0 shadow-sm rounded-4 p-3 h-100">
+                                                        <h6 class="fw-bold text-uppercase small text-muted mb-3">Order Items (<span th:text="${order.orderItems.size()}">0</span>)</h6>
+                                                        <div class="table-responsive">
+                                                            <table class="table table-sm table-borderless align-middle mb-0">
+                                                                <thead>
+                                                                    <tr class="border-bottom">
+                                                                        <th class="small text-muted pb-2">Product</th>
+                                                                        <th class="small text-muted pb-2 text-center">Qty</th>
+                                                                        <th class="small text-muted pb-2 text-end">Price</th>
+                                                                        <th class="small text-muted pb-2 text-end">Subtotal</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr th:each="item : ${order.orderItems}">
+                                                                        <td class="py-2">
+                                                                            <div class="d-flex align-items-center gap-2">
+                                                                                <img th:if="${item.product != null}" 
+                                                                                     th:src="@{${item.product.imageName != null ? '/img/' + item.product.imageName : '/img/placeholder.png'}}" 
+                                                                                     class="rounded-3 shadow-sm" style="width:40px; height:40px; object-fit:cover;" />
+                                                                                <div class="bg-light rounded-3" th:if="${item.product == null}" style="width:40px; height:40px;"></div>
+                                                                                <span class="small fw-bold cart-amount" th:text="${item.productName}">Item</span>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td class="py-2 text-center small" th:text="${item.quantity}">1</td>
+                                                                        <td class="py-2 text-end small" th:text="'Rs. ' + ${item.price}">Rs. 0</td>
+                                                                        <td class="py-2 text-end small fw-bold" th:text="'Rs. ' + ${item.price * item.quantity}">Rs. 0</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                                <tfoot>
+                                                                    <tr class="border-top">
+                                                                        <td colspan="3" class="text-end pt-2 small fw-bold">Grand Total:</td>
+                                                                        <td class="text-end pt-2 fw-bold text-accent" th:text="'Rs. ' + ${order.amount}">Rs. 0</td>
+                                                                    </tr>
+                                                                </tfoot>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <span th:if="${order.orderItems == null or order.orderItems.empty}" class="text-muted small">No items</span>
-                                </td>
-                                <td class="text-muted small">
-                                    <span th:if="${order.createdAt != null}" th:text="${#temporals.format(order.createdAt, 'dd MMM yyyy, HH:mm')}">Date</span>
-                                    <span th:if="${order.createdAt == null}" class="text-muted">N/A</span>
-                                </td>
-                            </tr>
+                                    </td>
+                                </tr>
+                            </th:block>
                             <tr th:if="${orders.empty}">
                                 <td colspan="6" class="text-center py-5 text-muted">
                                     <i class="fas fa-shopping-cart fa-3x opacity-25 d-block mb-3"></i>
@@ -136,5 +273,92 @@
     </div>
 
     <footer th:replace="~{layout :: footer}"></footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ordersTable = document.getElementById('ordersTable');
+            if (!ordersTable) return;
+
+            ordersTable.addEventListener('click', function(e) {
+                // Find the closest row that was clicked
+                const row = e.target.closest('.order-row');
+                if (!row) return;
+
+                // Don't expand if we click on the status selector or other interactive elements
+                if (e.target.closest('.status-selector') || e.target.closest('a')) {
+                    return;
+                }
+
+                const orderId = row.getAttribute('data-order-id');
+                const detailRow = document.getElementById('detail-' + orderId);
+                const chevron = row.querySelector('.chevron-icon');
+
+                if (detailRow) {
+                    const isExpanding = detailRow.classList.contains('d-none');
+                    
+                    // Close all other detail rows
+                    document.querySelectorAll('.detail-row').forEach(dr => {
+                        if (dr !== detailRow) dr.classList.add('d-none');
+                    });
+                    document.querySelectorAll('.order-row').forEach(or => {
+                        if (or !== row) or.classList.remove('is-expanded');
+                    });
+
+                    // Toggle current row
+                    if (isExpanding) {
+                        detailRow.classList.remove('d-none');
+                        row.classList.add('is-expanded');
+                    } else {
+                        detailRow.classList.add('d-none');
+                        row.classList.remove('is-expanded');
+                    }
+                }
+            });
+
+            // Status Selector Change Logic
+            document.querySelectorAll('.status-selector').forEach(select => {
+                select.addEventListener('change', function (e) {
+                    const orderId = this.getAttribute('data-order-id');
+                    const status = this.value;
+
+                    fetch('/admin/update_status', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ order_id: orderId, status: status })
+                    })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                showNotification('Status updated successfully.', 'success');
+                                setTimeout(() => location.reload(), 1500);
+                            } else {
+                                showNotification('Error updating status. Please try again.', 'error');
+                            }
+                        });
+                });
+            });
+        });
+    </script>
+    <style>
+        .transition-all { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .order-row:hover { background-color: rgba(0,0,0,0.02); }
+        .order-row.is-expanded { background-color: #f8f9fa !important; }
+        .order-row.is-expanded .chevron-icon { 
+            transform: rotate(90deg); 
+            color: var(--accent) !important;
+        }
+        .detail-content { border-left: 4px solid var(--accent); }
+        .shadow-inner { box-shadow: inset 0 2px 10px rgba(0,0,0,0.05); }
+        
+        /* Animation for detail row */
+        .detail-row:not(.d-none) .detail-content {
+            animation: slideDown 0.3s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </body>
+
 </html>

@@ -1,24 +1,181 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{layout :: head}"></head>
+<head>
+    <div th:replace="~{layout :: head}"></div>
+    <style>
+        .profile-card {
+            border: none;
+            border-radius: 24px;
+            background: var(--white);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
 
-<body class="bg-light">
+        .profile-header-bg {
+            background: linear-gradient(135deg, var(--primary) 0%, #333 100%);
+            height: 100px;
+        }
+
+        .profile-avatar-wrapper {
+            margin-top: -50px;
+            position: relative;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border: 5px solid var(--white);
+            background: var(--accent);
+            color: white;
+            font-size: 2.5rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .order-stepper {
+            position: relative;
+            padding-left: 45px;
+        }
+
+        .order-stepper::before {
+            content: '';
+            position: absolute;
+            left: 18px;
+            top: 10px;
+            bottom: 10px;
+            width: 2px;
+            background: var(--border-color);
+            opacity: 0.2;
+        }
+
+        .step-item {
+            position: relative;
+            padding-bottom: 30px;
+        }
+
+        .step-item:last-child {
+            padding-bottom: 0;
+        }
+
+        .step-icon {
+            position: absolute;
+            left: -45px;
+            top: 0;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--white);
+            border: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .step-item.active .step-icon {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+            box-shadow: 0 0 20px rgba(46, 204, 113, 0.4);
+            transform: scale(1.1);
+        }
+
+        .step-item.completed .step-icon {
+            background: rgba(46, 204, 113, 0.1);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .step-content {
+            padding-top: 4px;
+        }
+
+        .step-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 0;
+        }
+
+        .step-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .order-card {
+            border: 1px solid var(--border-color) !important;
+            border-radius: 16px !important;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            background: var(--white);
+            transition: all 0.3s ease;
+        }
+
+        .order-card-header {
+            background: transparent !important;
+            border: none !important;
+            padding: 1.5rem !important;
+        }
+
+        .order-card-header:after {
+            display: none;
+        }
+
+        .status-indicator {
+            width: 4px;
+            position: absolute;
+            left: 0;
+            top: 15%;
+            bottom: 15%;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .item-row {
+            background: var(--background);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .item-row:hover {
+            background: var(--white);
+            border-color: var(--border-color);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform: translateX(5px);
+        }
+
+        [data-theme="dark"] .order-card-header button {
+            color: var(--text-main) !important;
+        }
+
+        [data-theme="dark"] .accordion-button::after {
+            filter: invert(1);
+        }
+    </style>
+</head>
+
+<body>
     <nav th:replace="~{layout :: nav}"></nav>
 
-    <div class="content-wrapper bg-light pt-0">
+    <div class="content-wrapper flex-grow-1 bg-light pt-0">
         <!-- Profile Hero -->
         <section class="py-5 bg-dark text-white text-center position-relative overflow-hidden"
             style="background: linear-gradient(135deg, #111 0%, #000 100%);">
             <div class="container py-5 z-1 position-relative">
-                <span class="badge bg-accent text-white rounded-pill px-3 py-2 mb-3 fw-bold text-uppercase tracking-wider">Account Dashboard</span>
+                <span
+                    class="badge bg-accent text-white rounded-pill px-3 py-2 mb-3 fw-bold text-uppercase tracking-wider">Account
+                    Dashboard</span>
                 <h1 class="display-3 fw-bold mb-4" th:text="'Hello, ' + ${user.firstName} + '!'">Welcome Back!</h1>
-                <p class="lead text-white-50 mx-auto" style="max-width: 600px;">Manage your orders, track your shipments, and update your personal information in one place.</p>
+                <p class="lead text-white-50 mx-auto" style="max-width: 600px;">Manage your orders, track your
+                    shipments, and update your personal information in one place.</p>
             </div>
             <!-- Decorative blobs -->
-            <div class="position-absolute rounded-circle bg-primary opacity-20" 
+            <div class="position-absolute rounded-circle bg-primary opacity-20"
                 style="width: 400px; height: 400px; bottom: -100px; left: -100px; filter: blur(70px);"></div>
-            <div class="position-absolute rounded-circle bg-accent opacity-15" 
+            <div class="position-absolute rounded-circle bg-accent opacity-15"
                 style="width: 300px; height: 300px; top: -50px; right: -50px; filter: blur(50px);"></div>
         </section>
 
@@ -27,32 +184,67 @@
             <div class="row g-4">
                 <!-- User Details Sidebar -->
                 <div class="col-lg-4">
-                    <div class="card border-0 shadow-sm rounded-4 text-center p-4 sticky-top" style="top: 100px;">
-                        <div class="bg-accent bg-opacity-10 text-accent rounded-circle d-inline-flex align-items-center justify-content-center mx-auto mb-3"
-                            style="width: 100px; height: 100px;">
-                            <i class="fas fa-user fa-3x"></i>
-                        </div>
-                        <h4 class="fw-bold text-dark mb-1" th:text="${user.firstName + ' ' + user.lastName}">John Doe
-                        </h4>
-                        <p class="text-muted mb-4" th:text="${user.email}">user@example.com</p>
-
-                        <div
-                            class="d-flex justify-content-between align-items-center bg-light rounded-3 p-3 mb-2 text-start">
-                            <div>
-                                <small class="text-uppercase text-muted fw-bold d-block">Account Role</small>
-                                <span class="fw-bold" th:each="role : ${user.roles}"
-                                    th:text="${role.name}">ROLE_USER</span>
+                    <div class="profile-card shadow-sm sticky-top" style="top: 100px;">
+                        <div class="profile-header-bg"></div>
+                        <div class="p-4 text-center">
+                            <div class="profile-avatar-wrapper mb-3">
+                                <div class="profile-avatar rounded-circle d-flex align-items-center justify-content-center mx-auto fw-bold"
+                                    th:text="${#strings.substring(user.firstName,0,1)}">J</div>
                             </div>
-                            <i class="fas fa-id-badge text-muted fa-lg"></i>
-                        </div>
 
-                        <div
-                            class="d-flex justify-content-between align-items-center bg-light rounded-3 p-3 text-start">
-                            <div>
-                                <small class="text-uppercase text-muted fw-bold d-block">Total Orders</small>
-                                <span class="fw-bold h5 m-0" th:text="${orders.size()}">0</span>
+                            <h4 class="fw-bold cart-amount mb-1" th:text="${user.firstName + ' ' + user.lastName}">John
+                                Doe</h4>
+                            <p class="text-muted small mb-4"><i class="far fa-envelope me-1"></i> <span
+                                    th:text="${user.email}">user@example.com</span></p>
+
+                            <div class="row g-2 mb-4">
+                                <div class="col-6">
+                                    <div class="bg-light border rounded-3 p-3 text-center d-flex flex-column justify-content-center"
+                                        style="min-height: 90px;">
+                                        <small class="text-muted text-uppercase fw-bold d-block mb-1"
+                                            style="font-size: 0.65rem;">Total Orders</small>
+                                        <span class="fw-bold h5 m-0 cart-amount" th:text="${orders.size()}">0</span>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="bg-light border rounded-3 p-3 text-center d-flex flex-column justify-content-center"
+                                        th:classappend="${isMember} ? 'border-warning' : ''"
+                                        style="min-height: 90px;">
+                                        <small class="text-muted text-uppercase fw-bold d-block mb-1"
+                                            style="font-size: 0.65rem;">Membership</small>
+                                        <span class="fw-bold h6 m-0"
+                                            th:classappend="${isMember} ? 'text-warning' : 'text-accent'">
+                                            <i class="fas fa-crown me-1" th:if="${isMember}"></i>
+                                            <span
+                                                th:text="${isMember} ? 'Elite ' + ${membershipPlan} : 'No Membership'">No
+                                                Membership</span>
+                                        </span>
+                                        <small class="d-block text-muted mt-1" th:if="${isMember}"
+                                            style="font-size: 0.65rem;"
+                                            th:text="'Expires: ' + ${#temporals.format(membershipExpiry, 'dd MMM yyyy')}">
+                                        </small>
+                                    </div>
+                                </div>
                             </div>
-                            <i class="fas fa-shopping-bag text-accent fa-lg"></i>
+
+                            <div class="list-group list-group-flush text-start border-top pt-3">
+                                <a th:href="@{/profile/edit}"
+                                    class="list-group-item list-group-item-action border-0 py-3 rounded-3 mb-1">
+                                    <i class="fas fa-user-edit me-3 text-muted"></i>Manage Profile
+                                </a>
+                                <a th:href="@{/profile/security}"
+                                    class="list-group-item list-group-item-action border-0 py-3 rounded-3 mb-1">
+                                    <i class="fas fa-shield-alt me-3 text-muted"></i>Security Settings
+                                </a>
+                                <a th:href="@{/profile/addresses}"
+                                    class="list-group-item list-group-item-action border-0 py-3 rounded-3 mb-1">
+                                    <i class="fas fa-map-marker-alt me-3 text-muted"></i>My Addresses
+                                </a>
+                                <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#logoutModal"
+                                    class="list-group-item list-group-item-action border-0 py-3 rounded-3 text-danger fw-bold">
+                                    <i class="fas fa-sign-out-alt me-3"></i>Logout
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -60,9 +252,9 @@
                 <!-- Order History Main Content -->
                 <div class="col-lg-8">
                     <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-                        <div class="card-header bg-white border-bottom py-3 d-flex align-items-center">
+                        <div class="card-header theme-card border-bottom py-3 d-flex align-items-center">
                             <i class="fas fa-clock text-accent me-2"></i>
-                            <h5 class="fw-bold m-0">Recent Order History</h5>
+                            <h5 class="fw-bold cart-amount m-0">Recent Order History</h5>
                         </div>
                         <div class="card-body p-0">
 
@@ -75,77 +267,203 @@
                             </div>
 
                             <!-- List of Orders -->
-                            <div class="accordion accordion-flush" id="ordersAccordion"
+                            <div class="accordion accordion-flush p-4 theme-card" id="ordersAccordion"
                                 th:unless="${#lists.isEmpty(orders)}">
 
-                                <div class="accordion-item border-bottom" th:each="order, stat : ${orders}">
+                                <div class="order-card shadow-sm position-relative" th:each="order, stat : ${orders}">
+                                    <!-- Status Border Indicator -->
+                                    <div class="status-indicator"
+                                        th:classappend="${order.status == 'paid' ? 'bg-success' : (order.status == 'cancelled' ? 'bg-secondary' : 'bg-warning')}">
+                                    </div>
+
                                     <h2 class="accordion-header" th:id="'heading' + ${stat.index}">
-                                        <button class="accordion-button collapsed px-4 py-3" type="button"
+                                        <button class="accordion-button collapsed order-card-header" type="button"
                                             data-bs-toggle="collapse" th:data-bs-target="'#collapse' + ${stat.index}">
-                                            <div class="d-flex w-100 justify-content-between align-items-center pe-3">
-                                                <div>
-                                                    <small class="text-muted d-block mb-1">Order # <span
-                                                            th:text="${order.orderId}">id</span></small>
-                                                    <span class="fw-bold text-dark d-block"
-                                                        th:text="'Rs. ' + ${order.amount}">Amount</span>
-                                                    <small class="text-muted" th:if="${order.createdAt != null}"
-                                                        th:text="${#temporals.format(order.createdAt, 'dd MMM yyyy, HH:mm')}">Date</small>
-                                                    <small class="text-muted" th:if="${order.createdAt == null}">Date
-                                                        Unavailable</small>
+                                            <div class="d-flex w-100 justify-content-between align-items-center">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="bg-dark bg-opacity-10 rounded-3 p-2 me-3 d-none d-md-block text-center"
+                                                        style="width: 60px;">
+                                                        <small class="text-muted d-block fw-bold"
+                                                            style="font-size: 0.6rem;"
+                                                            th:text="${#temporals.format(order.createdAt, 'MMM')}">Month</small>
+                                                        <span class="fw-bold cart-amount h5 mb-0"
+                                                            th:text="${#temporals.format(order.createdAt, 'dd')}">00</span>
+                                                    </div>
+                                                    <div>
+                                                        <small class="text-muted d-block">Order #<span
+                                                                th:text="${order.orderId}">000</span></small>
+                                                        <span class="fw-bold cart-amount h6 mb-0"
+                                                            th:text="'Rs. ' + ${order.amount}">Amount</span>
+                                                    </div>
                                                 </div>
-                                                <div>
+                                                <div class="text-end me-3">
                                                     <span th:if="${order.status == 'paid'}"
-                                                        class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-2">Paid
-                                                        / Confirmed</span>
+                                                        class="badge bg-success-soft text-success rounded-pill px-3 py-2 border border-success border-opacity-10">Confirmed</span>
                                                     <span th:if="${order.status == 'created'}"
-                                                        class="badge bg-warning bg-opacity-10 text-warning rounded-pill px-3 py-2">Pending</span>
-                                                    <span th:if="${order.status == 'failed'}"
-                                                        class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3 py-2">Failed</span>
+                                                        class="badge bg-warning-soft text-warning rounded-pill px-3 py-2 border border-warning border-opacity-10">Pending</span>
+                                                    <span th:if="${order.status == 'cancelled'}"
+                                                        class="badge bg-secondary-soft text-muted rounded-pill px-3 py-2 border">Cancelled</span>
                                                 </div>
                                             </div>
                                         </button>
                                     </h2>
                                     <div th:id="'collapse' + ${stat.index}" class="accordion-collapse collapse"
                                         th:data-bs-parent="'#ordersAccordion'">
-                                        <div class="accordion-body bg-light">
-                                            <h6 class="fw-bold mb-3 small text-uppercase text-muted">Items Included</h6>
-
-                                            <div th:if="${#lists.isEmpty(order.orderItems)}" class="text-muted small">
-                                                No item details recovered for this transaction.
-                                            </div>
-
-                                            <div class="card border-0 rounded-3 mb-2 shadow-sm"
-                                                th:each="item : ${order.orderItems}">
-                                                <div class="card-body p-3 d-flex align-items-center">
-                                                    <div class="bg-white rounded-2 me-3 d-flex align-items-center justify-content-center border"
-                                                        style="width: 50px; height: 50px;">
-                                                        <i class="fas fa-box text-muted"></i>
-                                                    </div>
-                                                    <div class="flex-grow-1">
-                                                        <h6 class="mb-1 fw-bold text-dark"
-                                                            th:text="${item.productName}">Product Name</h6>
-                                                        <small class="text-muted">Qty: <span
-                                                                th:text="${item.quantity}">1</span></small>
-                                                    </div>
-                                                    <div class="text-end">
-                                                        <span class="fw-bold"
-                                                            th:text="'Rs. ' + ${item.price * item.quantity}">Price</span>
+                                        <div class="accordion-body theme-card border-top p-4">
+                                            <div class="row g-4">
+                                                <!-- Vertical Stepper -->
+                                                <div class="col-md-5 border-end pe-md-4">
+                                                    <h6 class="fw-bold mb-4 small text-uppercase text-muted">Tracking
+                                                        Timeline</h6>
+                                                    <div class="order-stepper">
+                                                        <div class="step-item"
+                                                            th:classappend="${order.status == 'paid' || order.status == 'processing' || order.status == 'shipped' || order.status == 'delivered' ? 'completed' : ''} + ${order.status == 'paid' ? ' active' : ''}">
+                                                            <div class="step-icon"><i class="fas fa-check small"></i>
+                                                            </div>
+                                                            <div class="step-content">
+                                                                <div class="step-title">Order Placed</div>
+                                                                <div class="step-desc">Confirmation received</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="step-item"
+                                                            th:classappend="${order.status == 'processing' || order.status == 'shipped' || order.status == 'delivered' ? 'completed' : ''} + ${order.status == 'processing' ? ' active' : ''}">
+                                                            <div class="step-icon"><i class="fas fa-box small"></i>
+                                                            </div>
+                                                            <div class="step-content">
+                                                                <div class="step-title">Processing</div>
+                                                                <div class="step-desc">Being prepared for dispatch</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="step-item"
+                                                            th:classappend="${order.status == 'shipped' || order.status == 'delivered' ? 'completed' : ''} + ${order.status == 'shipped' ? ' active' : ''}">
+                                                            <div class="step-icon"><i class="fas fa-truck small"></i>
+                                                            </div>
+                                                            <div class="step-content">
+                                                                <div class="step-title">Shipped</div>
+                                                                <div class="step-desc">In transit to destination</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="step-item"
+                                                            th:classappend="${order.status == 'delivered' ? 'completed active' : ''}">
+                                                            <div class="step-icon"><i class="fas fa-home small"></i>
+                                                            </div>
+                                                            <div class="step-content">
+                                                                <div class="step-title">Delivered</div>
+                                                                <div class="step-desc">Arrived safely</div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
+
+                                                <!-- Items List -->
+                                                <div class="col-md-7 ps-md-4">
+                                                    <h6 class="fw-bold mb-4 small text-uppercase text-muted">Items
+                                                        Summary</h6>
+                                                    <div th:if="${order.orderItems == null or order.orderItems.empty}"
+                                                        class="text-muted small">
+                                                        No items found for this order.
+                                                    </div>
+                                                    <div class="item-row d-flex align-items-center"
+                                                        th:each="item : ${order.orderItems}">
+                                                        <div class="bg-dark bg-opacity-10 rounded-circle me-3 d-flex align-items-center justify-content-center border border-white border-opacity-10"
+                                                            style="width: 40px; height: 40px; flex-shrink: 0;">
+                                                            <i class="fas fa-shopping-bag text-accent small"></i>
+                                                        </div>
+                                                        <div class="flex-grow-1">
+                                                            <div class="fw-bold cart-amount mb-0"
+                                                                style="font-size: 0.85rem;"
+                                                                th:text="${item.productName}">Product Name</div>
+                                                            <small class="text-muted">Qty: <span
+                                                                    th:text="${item.quantity}">1</span></small>
+                                                        </div>
+                                                        <div class="text-end ms-3">
+                                                            <span class="fw-bold cart-amount" style="font-size: 0.9rem;"
+                                                                th:text="'Rs. ' + ${item.price * item.quantity}">Price</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Cancel Button -->
+                                            <div class="text-end mt-4 pt-3 border-top"
+                                                th:if="${order.status == 'paid' || order.status == 'processing' || order.status == 'created' || order.status == 'delivered'}">
+                                                <button
+                                                    class="btn btn-outline-danger btn-sm rounded-pill px-4 cancel-order-btn"
+                                                    th:if="${order.status == 'paid' || order.status == 'processing' || order.status == 'created'}"
+                                                    th:data-order-id="${order.orderId}">
+                                                    <i class="fas fa-times-circle me-1"></i> Cancel Order
+                                                </button>
+                                                <button th:if="${order.status == 'delivered' && order.isReturnEligible()}"
+                                                     class="btn btn-outline-warning btn-sm rounded-pill px-3 return-order-btn"
+                                                     th:data-order-id="${order.orderId}">
+                                                     <i class="fas fa-undo me-1"></i> Return Item
+                                                 </button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
                             </div>
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    </div>
 
+    <script>
+        // Cancel Order Logic
+        document.querySelectorAll('.cancel-order-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const orderId = this.getAttribute('data-order-id');
+                if (confirm('Are you sure you want to cancel this order?')) {
+                    fetch('/order/cancel', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ order_id: orderId })
+                    })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                showNotification('Order cancelled successfully.', 'success');
+                                setTimeout(() => location.reload(), 1500);
+                            } else {
+                                showNotification('Error cancelling order. It may already be shipped.', 'error');
+                            }
+                        });
+                }
+            });
+        });
+
+        // Return Order Logic
+        document.querySelectorAll('.return-order-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const orderId = this.getAttribute('data-order-id');
+                const reason = prompt('Please provide a reason for the return:');
+                
+                if (reason && reason.trim().length > 0) {
+                    fetch('/order/return', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ order_id: orderId, reason: reason })
+                    })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                showNotification('Return request submitted successfully.', 'success');
+                                setTimeout(() => location.reload(), 1500);
+                            } else {
+                                showNotification(data.message || 'Error requesting return.', 'error');
+                            }
+                        });
+                } else if (reason !== null) {
+                    showNotification('Return reason is required.', 'error');
+                }
+            });
+        });
+    </script>
     <footer th:replace="~{layout :: footer}"></footer>
 </body>
-
 </html>

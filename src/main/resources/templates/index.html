@@ -1,274 +1,546 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="~{layout :: head}"></head>
+
 <body>
     <nav th:replace="~{layout :: nav}"></nav>
+    <main class="flex-grow-1">
 
-    <!-- Hero Section -->
-    <section class="hero-section bg-dark text-white py-5 position-relative overflow-hidden" style="background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover;">
-        <div class="container py-5 text-center">
-            <h1 class="display-3 fw-bold mb-3">Elevate Your Lifestyle</h1>
-            <p class="lead mb-4">Discover premium products curated just for you. Quality meets elegance.</p>
-            <a th:href="@{/shop}" class="btn btn-primary btn-lg rounded-pill px-5 py-3">Explore Collection</a>
-        </div>
-    </section>
-
-    <!-- Benefits Section -->
-    <section class="benefits-section py-5 bg-white border-bottom">
-        <div class="container">
-            <div class="row text-center g-4">
-                <div class="col-md-4">
-                    <div class="p-3">
-                        <i class="fas fa-shipping-fast fa-3x text-accent mb-3"></i>
-                        <h5>Fast Shipping</h5>
-                        <p class="text-muted">Quick delivery to your doorstep.</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="p-3">
-                        <i class="fas fa-shield-alt fa-3x text-accent mb-3"></i>
-                        <h5>Secure Payment</h5>
-                        <p class="text-muted">100% secure checkout via Razorpay.</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="p-3">
-                        <i class="fas fa-sync-alt fa-3x text-accent mb-3"></i>
-                        <h5>Easy Returns</h5>
-                        <p class="text-muted">30-day hassle-free return policy.</p>
-                    </div>
-                </div>
+        <!-- Hero Section -->
+        <section class="hero-section bg-dark text-white py-5 position-relative overflow-hidden">
+            <div class="container py-5 text-center">
+                <h1 class="display-3 fw-bold mb-3">Elevate Your Lifestyle</h1>
+                <p class="lead mb-4">Discover premium products curated just for you. Quality meets elegance.</p>
+                <a th:href="@{/shop}" class="btn btn-primary btn-lg rounded-pill px-5 py-3">Explore Collection</a>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <div class="content-wrapper">
-        <div class="container">
-            <!-- Categories Quick Filter -->
-            <div class="text-center mb-5">
-                <h2 class="fw-bold mb-4">Shop By Category</h2>
-                <div class="d-flex justify-content-center flex-wrap gap-3 filter-group border-0" id="categoryFilter">
-                    <button class="btn btn-dark rounded-pill px-4 filter-btn" data-filter="all">All</button>
-                    <button th:each="category : ${categories}" 
-                       th:text="${category.name}"
-                       th:data-filter="${category.id}"
-                       class="btn btn-outline-dark rounded-pill px-4 filter-btn">Category</button>
-                </div>
-            </div>
-
-            <div class="row mb-4">
-                <div class="col-md-8 mx-auto">
-                    <div class="input-group input-group-lg shadow-sm border rounded-pill overflow-hidden">
-                        <span class="input-group-text bg-white border-0 ps-4"><i class="fas fa-search text-muted"></i></span>
-                        <input type="text" id="dashboardSearch" class="form-control border-0 px-3 shadow-none bg-white" placeholder="Search for premium products or categories...">
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <!-- Products Grid -->
-                <div class="col-12">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h3 class="fw-bold m-0"><i class="fas fa-star text-accent me-2"></i>Featured Products</h3>
-                        <span class="text-muted" id="items-found-count" th:text="${products.size()} + ' Items found'">0 Items</span>
-                    </div>
-                    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4" id="productsGrid">
-                        <div class="col product-card-col" th:data-category-id="${product.category.id}" th:each="product : ${products}" style="transition: all 0.3s ease;">
-                            <div class="card h-100 shadow-sm border-0">
-                                <div class="position-relative overflow-hidden rounded-top-4" style="height: 250px;">
-                                    <!-- Wishlist Heart -->
-                                    <a th:href="@{/wishlist/add/{id}(id=${product.id}, redirect='/')}" class="btn btn-white btn-sm rounded-circle shadow-sm position-absolute" style="top: 10px; right: 10px; z-index: 10; width: 32px; height: 32px; padding: 0; line-height: 30px; border: 1px solid rgba(0,0,0,0.05);">
-                                        <i class="text-danger" th:classappend="${wishlistProductIds != null && wishlistProductIds.contains(product.id)} ? 'fas fa-heart' : 'far fa-heart'"></i>
-                                    </a>
-                                    <a th:href="@{/shop/viewproduct/{id}(id=${product.id})}">
-                                        <img th:src="@{'/img/' + ${product.imageName}}" 
-                                             class="card-img-top h-100 w-100 object-fit-cover transition-scale" 
-                                             alt="Product">
-                                    </a>
+        <!-- Benefits Section -->
+        <section class="benefits-section position-relative" style="margin-top: -50px; z-index: 10;">
+            <div class="container">
+                <div class="row g-4 justify-content-center">
+                    <div class="col-lg-10">
+                        <div class="bg-white rounded-4 shadow-lg p-4 p-md-5 border-0">
+                            <div class="row g-4">
+                                <!-- Fast Shipping -->
+                                <div class="col-md-4">
+                                    <div class="benefit-card d-flex align-items-center p-3 rounded-4 transition-all">
+                                        <div class="benefit-icon-wrapper me-3 bg-light rounded-circle d-flex align-items-center justify-content-center"
+                                            style="width: 60px; height: 60px; flex-shrink: 0;">
+                                            <i class="fas fa-shipping-fast fa-2x text-accent"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="fw-bold mb-1">Fast Shipping</h6>
+                                            <p class="text-muted small mb-0">Quick delivery to your doorstep.</p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="card-body">
-                                    <small class="text-accent fw-bold text-uppercase" th:text="${product.category.name}">Category</small>
-                                    <a th:href="@{/shop/viewproduct/{id}(id=${product.id})}" class="text-decoration-none">
-                                        <h5 class="card-title fw-bold text-dark mt-1" th:text="${product.name}">Product Name</h5>
-                                    </a>
-                                    <p class="card-text text-muted small" th:text="${product.description}">Description</p>
-                                    <div class="d-flex justify-content-between align-items-center mt-3">
-                                        <span class="h5 fw-bold mb-0 text-dark" th:text="'Rs. ' + ${product.price}">Price</span>
-                                        <a th:href="@{/addToCart/{id}(id=${product.id})}" class="btn btn-outline-primary rounded-pill btn-sm px-4">
-                                            <i class="fas fa-plus me-1"></i> Add
-                                        </a>
+                                <!-- Secure Payment -->
+                                <div class="col-md-4">
+                                    <div class="benefit-card d-flex align-items-center p-3 rounded-4 transition-all">
+                                        <div class="benefit-icon-wrapper me-3 bg-light rounded-circle d-flex align-items-center justify-content-center"
+                                            style="width: 60px; height: 60px; flex-shrink: 0;">
+                                            <i class="fas fa-shield-alt fa-2x text-accent"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="fw-bold mb-1">Secure Payment</h6>
+                                            <p class="text-muted small mb-0">100% secure checkout via Razorpay.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Easy Returns -->
+                                <div class="col-md-4">
+                                    <div class="benefit-card d-flex align-items-center p-3 rounded-4 transition-all">
+                                        <div class="benefit-icon-wrapper me-3 bg-light rounded-circle d-flex align-items-center justify-content-center"
+                                            style="width: 60px; height: 60px; flex-shrink: 0;">
+                                            <i class="fas fa-sync-alt fa-2x text-accent"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="fw-bold mb-1">Easy Returns</h6>
+                                            <p class="text-muted small mb-0">30-day hassle-free return policy.</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="text-center mt-5">
-                        <a href="/shop" id="viewMoreBtn" class="btn btn-outline-dark rounded-pill px-5 py-2 fw-bold" style="transition: all 0.3s ease;">
-                            View All Products <i class="fas fa-arrow-right ms-2"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- Elite Membership CTA Section -->
+        <section class="elite-cta-section py-5 mb-5" th:if="${!isMember}">
+            <div class="container">
+                <div class="bg-dark rounded-4 shadow-lg overflow-hidden position-relative"
+                    style="background: linear-gradient(135deg, #1a1a1a 0%, #000 100%);">
+                    <div class="row align-items-center g-0">
+                        <div class="col-lg-7 p-4 p-md-5 z-1">
+                            <span
+                                class="badge bg-warning text-dark rounded-pill px-3 py-2 mb-3 fw-bold text-uppercase tracking-wider shadow-sm">ShopEase
+                                Elite</span>
+                            <h2 class="display-5 fw-bold text-white mb-3">Join Elite for Extra Savings</h2>
+                            <p class="lead text-white-50 mb-4">Unlock 10% automatic discount on all products, free
+                                express delivery, and priority support. Elevate your shopping game today.</p>
+                            <a th:href="@{/membership}"
+                                class="btn btn-warning btn-lg rounded-pill px-5 py-3 fw-bold shadow hover-scale">
+                                Learn More & Join <i class="fas fa-crown ms-2"></i>
+                            </a>
+                        </div>
+                        <div class="col-lg-5 position-relative d-none d-lg-block" style="height: 350px;">
+                            <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+                                alt="Elite Membership" class="h-100 object-fit-cover opacity-50"
+                                style="border-radius: 10px; width:99%;">
+                            <div class="position-absolute top-50 start-50 translate-middle">
+                                <i class="fas fa-crown text-warning display-1 animate__animated animate__pulse animate__infinite"
+                                    style="opacity: 0.8;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="content-wrapper">
+            <div class="container">
+                <!-- Categories Quick Filter -->
+                <div class="text-center mb-5">
+                    <h2 class="fw-bold mb-4"><i class="fa-solid fa-magnifying-glass text-info me-2"></i>Explore
+                        Collections</h2>
+                    <div class="d-flex justify-content-center flex-nowrap gap-3 filter-group border-0 pb-2"
+                        id="categoryFilter">
+                        <button class="btn btn-dark rounded-pill px-4 filter-btn" data-filter="all">All</button>
+                        <button th:each="category : ${categories}" th:text="${category.name}"
+                            th:data-filter="${category.id}"
+                            class="btn btn-outline-dark rounded-pill px-4 filter-btn">Category</button>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-8 mx-auto">
+                        <div class="input-group input-group-lg shadow-sm border rounded-pill overflow-hidden">
+                            <span class="input-group-text bg-white border-0 ps-4"><i
+                                    class="fas fa-search text-muted"></i></span>
+                            <input type="text" id="dashboardSearch"
+                                class="form-control border-0 px-3 shadow-none bg-white"
+                                placeholder="Search for premium products or categories...">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Products Grid -->
+                    <div class="col-12">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h3 class="fw-bold m-0"><i class="fas fa-star text-accent me-2"></i>Featured Products</h3>
+                            <span class="text-muted" id="items-found-count"
+                                th:text="${products.size()} + ' Items found'">0
+                                Items</span>
+                        </div>
+                        <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4" id="productsGrid">
+                            <div class="col product-card-col" th:data-category-id="${product.category.id}"
+                                th:each="product : ${products}" style="transition: all 0.3s ease;">
+                                <div class="card h-100 shadow-sm border-0 rounded-4">
+                                    <div class="position-relative overflow-hidden rounded-top-4" style="height: 230px;">
+                                        <!-- Wishlist Heart -->
+                                        <a th:href="@{/wishlist/add/{id}(id=${product.id}, redirect='/')}"
+                                            class="btn btn-white btn-sm rounded-circle shadow-sm position-absolute"
+                                            style="top: 10px; right: 10px; z-index: 10; width: 32px; height: 32px; padding: 0; line-height: 30px; border: 1px solid rgba(0,0,0,0.05);">
+                                            <i class="text-danger"
+                                                th:classappend="${wishlistProductIds != null && wishlistProductIds.contains(product.id)} ? 'fas fa-heart' : 'far fa-heart'"></i>
+                                        </a>
+                                        <a th:href="@{/shop/viewproduct/{id}(id=${product.id})}">
+                                        <img th:src="@{'/img/' + ${product.imageName}}"
+                                            class="card-img-top h-100 w-100 object-fit-cover transition-scale"
+                                            alt="Product">
+                                        <!-- Low Stock Badge -->
+                                        <div class="badge-low-stock animate__animated animate__pulse animate__infinite" th:if="${product.stockQuantity > 0 && product.stockQuantity <= 5}">
+                                            Only <span th:text="${product.stockQuantity}"></span> left!
+                                        </div>
+                                        <!-- Membership Badge -->
+                                        <div class="position-absolute top-0 start-0 m-2" th:if="${isMember}">
+                                            <span class="badge bg-warning text-dark rounded-pill shadow-sm" style="font-size: 0.65rem;">
+                                                <i class="fas fa-crown me-1"></i>Elite: Same Day Delivery
+                                            </span>
+                                        </div>
+                                        </a>
+                                    </div>
+                                    <div class="card-body d-flex flex-column">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <small class="text-accent fw-bold text-uppercase"
+                                                th:text="${product.category.name}">Category</small>
+                                            <small class="text-muted fw-bold"
+                                                th:text="${product.brand != null ? product.brand : ''}">Brand</small>
+                                        </div>
+                                        <a th:href="@{/shop/viewproduct/{id}(id=${product.id})}"
+                                            class="text-decoration-none">
+                                            <h5 class="card-title fw-bold text-dark mt-1" th:text="${product.name}">Product Name</h5>
+                                        </a>
+                                        <p class="card-text text-muted small flex-grow-1" th:text="${product.description}">
+                                            Description</p>
+                                        <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+                                            <span class="h5 fw-bold mb-0 text-dark"
+                                                th:text="'Rs. ' + ${product.price}">Price</span>
+                                            <a th:if="${product.stockQuantity > 0}" th:href="@{/addToCart/{id}(id=${product.id})}"
+                                                class="btn btn-outline-primary rounded-circle btn-sm p-2 d-flex align-items-center justify-content-center ajax-add-to-cart" 
+                                                style="width: 38px; height: 38px;" title="Add to Cart">
+                                                <i class="fas fa-cart-plus"></i>
+                                            </a>
+                                            <span th:if="${product.stockQuantity <= 0}" 
+                                                class="btn btn-outline-secondary rounded-circle btn-sm p-2 d-flex align-items-center justify-content-center disabled" 
+                                                style="width: 38px; height: 38px; opacity: 0.5;" title="Out of Stock">
+                                                <i class="fas fa-ban"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center mt-5">
+                            <a href="/shop" id="viewMoreBtn" class="btn btn-outline-dark rounded-pill px-5 py-2 fw-bold"
+                                style="transition: all 0.3s ease;">
+                                View All Products <i class="fas fa-arrow-right ms-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Brands Section -->
+        <section class="brands-section py-5 bg-white border-top border-bottom overflow-hidden">
+            <div class="container text-center">
+                <h3 class="fw-bold mb-5"><i class="fas fa-award text-warning me-2"></i>Trusted By Premium Brands</h3>
+                <div class="marquee-container">
+                    <div class="marquee-content opacity-50">
+                        <!-- First set of brands -->
+                        <i class="fab fa-apple fa-3x"></i>
+                        <i class="fab fa-aws fa-3x"></i>
+                        <i class="fab fa-google fa-3x"></i>
+                        <i class="fab fa-microsoft fa-3x"></i>
+                        <i class="fab fa-stripe fa-3x"></i>
+                        <i class="fab fa-react fa-3x"></i>
+                        <i class="fab fa-amazon fa-3x"></i>
+                        <i class="fab fa-paypal fa-3x"></i>
+                        <i class="fab fa-shopify fa-3x"></i>
+                        <i class="fab fa-digital-ocean fa-3x"></i>
+                        <i class="fab fa-github fa-3x"></i>
+                        <i class="fab fa-discord fa-3x"></i>
+
+                        <!-- Duplicated set for seamless loop -->
+                        <i class="fab fa-apple fa-3x"></i>
+                        <i class="fab fa-aws fa-3x"></i>
+                        <i class="fab fa-google fa-3x"></i>
+                        <i class="fab fa-microsoft fa-3x"></i>
+                        <i class="fab fa-stripe fa-3x"></i>
+                        <i class="fab fa-react fa-3x"></i>
+                        <i class="fab fa-amazon fa-3x"></i>
+                        <i class="fab fa-paypal fa-3x"></i>
+                        <i class="fab fa-shopify fa-3x"></i>
+                        <i class="fab fa-digital-ocean fa-3x"></i>
+                        <i class="fab fa-github fa-3x"></i>
+                        <i class="fab fa-discord fa-3x"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="testimonials-section py-5">
+            <div class="container">
+                <div class="text-center mb-5">
+                    <h3 class="fw-bold"><i class="fas fa-heart text-danger me-2"></i> <i
+                            class="fas fa-quote-left text-accent mx-2"></i>What Our Customers Say <i
+                            class="fas fa-quote-right text-accent mx-2"></i></h3>
+                </div>
+
+                <!-- Success Message for Feedback Submission -->
+                <div th:if="${feedbackSuccess}" class="alert alert-success text-center rounded-pill mb-5 mx-auto"
+                    style="max-width: 600px;" th:text="${feedbackSuccess}"></div>
+
+                <!-- Dynamic Feedbacks Grid -->
+                <div class="row g-4 mb-5">
+                    <div class="col-md-4" th:each="fb : ${feedbacks}">
+                        <div class="card testimonial-card border-0 shadow-sm p-4 h-100 rounded-4">
+                            <div class="d-flex text-warning mb-3">
+                                <i class="fas fa-star" th:each="i : ${#numbers.sequence(1, fb.rating)}"></i>
+                                <i class="far fa-star" th:if="${fb.rating < 5}"
+                                    th:each="i : ${#numbers.sequence(1, 5 - fb.rating)}"></i>
+                            </div>
+                            <p class="testimonial-text text-muted flex-grow-1"
+                                th:text=" '&quot;' + ${fb.message} + '&quot;' "></p>
+                            <div class="d-flex align-items-center mt-3">
+                                <div class="user-avatar bg-dark text-white rounded-circle d-flex justify-content-center align-items-center me-3 text-uppercase"
+                                    style="width: 45px; height: 45px; font-weight: bold;"
+                                    th:text="${#strings.substring(fb.name, 0, 1)}">A</div>
+                                <div>
+                                    <h6 class="mb-0 fw-bold" th:text="${fb.name}">Name</h6>
+                                    <small class="text-muted" th:text="${fb.subtitle}">Subtitle</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Download App Section -->
+        <section class="app-download-section py-5 bg-dark text-white position-relative overflow-hidden">
+            <div class="container position-relative z-1">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 text-center text-lg-start mb-4 mb-lg-0">
+                        <span
+                            class="badge bg-accent text-white rounded-pill px-3 py-2 mb-3 fw-bold text-uppercase tracking-wider">Shop
+                            Anywhere</span>
+                        <h2 class="display-5 fw-bold mb-3"><i class="fas fa-mobile-alt me-2 text-warning"></i>Get the
+                            ShopEase App <span
+                                class="badge bg-warning text-dark fs-6 ms-2 align-middle px-3 py-2 rounded-pill">Coming
+                                Soon</span></h2>
+                        <p class="lead text-white-50 mb-4">Our dedicated mobile application is currently under
+                            development.
+                            Soon, you will unlock exclusive app-only discounts, track live orders, and enjoy a flawless
+                            native checkout experience!</p>
+                        <div class="d-flex justify-content-center justify-content-lg-start gap-3">
+                            <button
+                                class="btn btn-outline-light btn-lg rounded-4 px-4 d-flex align-items-center disabled"
+                                style="opacity: 0.5;">
+                                <i class="fab fa-apple fa-2x me-3"></i>
+                                <div class="text-start">
+                                    <small class="d-block text-uppercase" style="font-size: 0.6rem;">Available soon
+                                        on</small>
+                                    <span class="fw-bold lh-1" style="font-size: 1.1rem;">App Store</span>
+                                </div>
+                            </button>
+                            <button
+                                class="btn btn-outline-light btn-lg rounded-4 px-4 d-flex align-items-center disabled"
+                                style="opacity: 0.5;">
+                                <i class="fab fa-google-play fa-2x me-3"></i>
+                                <div class="text-start">
+                                    <small class="d-block text-uppercase" style="font-size: 0.6rem;">Available soon
+                                        on</small>
+                                    <span class="fw-bold lh-1" style="font-size: 1.1rem;">Google Play</span>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="d-flex justify-content-center gap-3 align-items-center">
+                            <div class="bg-white bg-opacity-10 rounded-4 p-2 shadow-lg"
+                                style="width: 200px; transform: rotate(-5deg);">
+                                <img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80"
+                                    alt="App Screen 1" class="img-fluid rounded-3 object-fit-cover"
+                                    style="height: 400px; width: 100%;">
+                            </div>
+                            <div class="bg-white bg-opacity-10 rounded-4 p-2 shadow-lg d-none d-md-block"
+                                style="width: 200px; transform: rotate(5deg) translateY(-20px);">
+                                <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80"
+                                    alt="App Screen 2" class="img-fluid rounded-3 object-fit-cover"
+                                    style="height: 400px; width: 100%;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Decorative blob -->
+            <div class="position-absolute rounded-circle bg-primary opacity-25"
+                style="width: 500px; height: 500px; bottom: -200px; left: -100px; filter: blur(80px);"></div>
+        </section>
+
+        <!-- Our Story / Brand Philosophy Section -->
+        <section class="about-brand-section py-5 bg-white overflow-hidden border-top border-bottom">
+            <div class="container py-5">
+                <div class="row align-items-center g-5">
+                    <div class="col-lg-6">
+                        <span class="text-accent fw-bold text-uppercase tracking-wider mb-2 d-block">Our
+                            Philosophy</span>
+                        <h2 class="display-5 fw-bold mb-4">Redefining Your Shopping Experience</h2>
+                        <p class="lead text-muted mb-4" style="text-align: justify;">At <a
+                                style="text-decoration: none; font-weight: bold;">ShopEase</a>, we don't just sell
+                            products,
+                            we curate
+                            experiences. Our
+                            journey started with a simple goal to make premium quality accessible to everyone without
+                            any
+                            compromise.</p>
+
+                        <div class="row g-4 mt-2">
+                            <div class="col-sm-6">
+                                <div class="feature-card p-3 rounded-4 transition-all">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div
+                                            class="feature-icon-box bg-accent-soft p-2 rounded-circle me-3 transition-all">
+                                            <i class="fas fa-check text-accent"></i>
+                                        </div>
+                                        <h6 class="fw-bold mb-0">Handpicked Quality</h6>
+                                    </div>
+                                    <p class="small text-muted mb-0">Every item is inspected by our experts to ensure it
+                                        meets
+                                        our strict standards.</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="feature-card p-3 rounded-4 transition-all">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div
+                                            class="feature-icon-box bg-accent-soft p-2 rounded-circle me-3 transition-all">
+                                            <i class="fas fa-heart text-accent"></i>
+                                        </div>
+                                        <h6 class="fw-bold mb-0">Customer First</h6>
+                                    </div>
+                                    <p class="small text-muted mb-0">Our support team is here 24/7 to ensure your
+                                        journey is
+                                        flawless.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-5">
+                            <a href="/shop" class="btn btn-dark btn-lg rounded-pill px-5 fw-bold shadow-sm hover-scale">
+                                Explore Collection <i class="fas fa-arrow-right ms-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="position-relative">
+                            <div class="rounded-4 overflow-hidden shadow-lg hover-scale" style="height: 450px;">
+                                <img src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+                                    alt="Our Story Image" class="w-100 h-100 object-fit-cover">
+                            </div>
+                            <!-- Decorative element -->
+                            <div class="position-absolute bg-accent opacity-10 rounded-4"
+                                style="width: 100%; height: 100%; top: 20px; right: -20px; z-index: -1;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Social / Community Section -->
+        <section class="social-section py-5 bg-white border-top">
+            <div class="container text-center">
+                <h3 class="fw-bold mb-3"><i class="fas fa-users text-primary me-2"></i>Join Our Community</h3>
+                <p class="text-muted mb-5">Stay connected and never miss an update, exclusive offer, or new arrival.</p>
+
+                <div class="row justify-content-center g-4">
+                    <!-- Instagram -->
+                    <div class="col-6 col-md-2">
+                        <a href="#" class="text-decoration-none d-block p-4 rounded-4 shadow-sm border community-card"
+                            style="transition: all 0.3s ease;"
+                            onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 .5rem 1rem rgba(0,0,0,.15)';"
+                            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 .125rem .25rem rgba(0,0,0,.075)';">
+                            <div class="rounded-circle d-inline-flex justify-content-center align-items-center mb-3"
+                                style="width: 70px; height: 70px; background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: white;">
+                                <i class="fab fa-instagram fa-2x"></i>
+                            </div>
+                            <h6 class="mb-1 fw-bold text-dark">Instagram</h6>
+                            <small class="text-muted">Follow Us</small>
                         </a>
+                    </div>
+
+                    <!-- WhatsApp -->
+                    <div class="col-6 col-md-2">
+                        <a href="#" class="text-decoration-none d-block p-4 rounded-4 shadow-sm border community-card"
+                            style="transition: all 0.3s ease;"
+                            onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 .5rem 1rem rgba(0,0,0,.15)';"
+                            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 .125rem .25rem rgba(0,0,0,.075)';">
+                            <div class="bg-success text-white rounded-circle d-inline-flex justify-content-center align-items-center mb-3"
+                                style="width: 70px; height: 70px; background-color: #25D366 !important;">
+                                <i class="fab fa-whatsapp fa-2x"></i>
+                            </div>
+                            <h6 class="mb-1 fw-bold text-dark">WhatsApp</h6>
+                            <small class="text-muted">Chat with Us</small>
+                        </a>
+                    </div>
+
+                    <!-- Facebook -->
+                    <div class="col-6 col-md-2">
+                        <a href="#" class="text-decoration-none d-block p-4 rounded-4 shadow-sm border community-card"
+                            style="transition: all 0.3s ease;"
+                            onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 .5rem 1rem rgba(0,0,0,.15)';"
+                            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 .125rem .25rem rgba(0,0,0,.075)';">
+                            <div class="text-white rounded-circle d-inline-flex justify-content-center align-items-center mb-3"
+                                style="width: 70px; height: 70px; background-color: #1877F2;">
+                                <i class="fab fa-facebook-f fa-2x"></i>
+                            </div>
+                            <h6 class="mb-1 fw-bold text-dark">Facebook</h6>
+                            <small class="text-muted">Like our Page</small>
+                        </a>
+                    </div>
+
+                    <!-- YouTube -->
+                    <div class="col-6 col-md-2">
+                        <a href="#" class="text-decoration-none d-block p-4 rounded-4 shadow-sm border community-card"
+                            style="transition: all 0.3s ease;"
+                            onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 .5rem 1rem rgba(0,0,0,.15)';"
+                            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 .125rem .25rem rgba(0,0,0,.075)';">
+                            <div class="text-white rounded-circle d-inline-flex justify-content-center align-items-center mb-3"
+                                style="width: 70px; height: 70px; background-color: #FF0000;">
+                                <i class="fab fa-youtube fa-2x"></i>
+                            </div>
+                            <h6 class="mb-1 fw-bold text-dark">YouTube</h6>
+                            <small class="text-muted">Subscribe</small>
+                        </a>
+                    </div>
+
+                    <!-- X (Twitter) -->
+                    <div class="col-6 col-md-2">
+                        <a href="#" class="text-decoration-none d-block p-4 rounded-4 shadow-sm border community-card"
+                            style="transition: all 0.3s ease;"
+                            onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 .5rem 1rem rgba(0,0,0,.15)';"
+                            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 .125rem .25rem rgba(0,0,0,.075)';">
+                            <div class="bg-dark text-white rounded-circle d-inline-flex justify-content-center align-items-center mb-3"
+                                style="width: 70px; height: 70px;">
+                                <i class="fa-brands fa-x-twitter fa-2x"></i>
+                            </div>
+                            <h6 class="mb-1 fw-bold text-dark">X / Twitter</h6>
+                            <small class="text-muted">Stay Updated</small>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    <footer th:replace="~{layout :: footer}"></footer>
+
+    <!-- Quick View Modal -->
+    <div class="modal fade" id="quickViewModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 rounded-4 shadow-lg overflow-hidden">
+                <div class="modal-body p-0">
+                    <button type="button" class="btn-close position-absolute" data-bs-dismiss="modal" aria-label="Close"
+                        style="top: 20px; right: 20px; z-index: 100;"></button>
+                    <div class="row g-0">
+                        <div class="col-md-6 bg-light d-flex align-items-center justify-content-center p-4">
+                            <img src="" id="qvImage" class="img-fluid rounded-4 shadow-sm" alt="Product"
+                                style="max-height: 400px; object-fit: contain;">
+                        </div>
+                        <div class="col-md-6 p-5">
+                            <span
+                                class="badge bg-accent-soft text-accent rounded-pill px-3 py-2 mb-3 fw-bold text-uppercase"
+                                id="qvCategory">Category</span>
+                            <h2 class="fw-bold mb-2 text-dark" id="qvName">Product Name</h2>
+                            <h4 class="text-accent fw-bold mb-4" id="qvPrice">Rs. 0</h4>
+                            <p class="text-muted mb-5 lead" id="qvDesc" style="font-size: 0.95rem;">Product description
+                                goes here. It provides essential details about the item.</p>
+                            <div class="d-grid gap-3">
+                                <a href="" id="qvCartBtn"
+                                    class="btn btn-primary btn-lg rounded-pill py-3 fw-bold shadow">
+                                    <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                                </a>
+                                <a href="" id="qvViewBtn" class="btn btn-outline-dark btn-lg rounded-pill py-3 fw-bold">
+                                    View Full Details
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Top Brands Section -->
-    <section class="brands-section py-5 bg-white border-top border-bottom">
-        <div class="container text-center">
-            <h3 class="fw-bold mb-4">Trusted By Premium Brands</h3>
-            <div class="d-flex justify-content-center justify-content-md-between align-items-center flex-wrap gap-4 opacity-50">
-                <i class="fab fa-apple fa-3x"></i>
-                <i class="fab fa-aws fa-3x"></i>
-                <i class="fab fa-google fa-3x"></i>
-                <i class="fab fa-microsoft fa-3x"></i>
-                <i class="fab fa-stripe fa-3x"></i>
-                <i class="fab fa-react fa-3x"></i>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonials Section -->
-    <section class="testimonials-section py-5 bg-light">
-        <div class="container">
-            <div class="text-center mb-5">
-                <h3 class="fw-bold"><i class="fas fa-quote-left text-accent me-2"></i>What Our Customers Say</h3>
-            </div>
-            
-            <!-- Success Message for Feedback Submission -->
-            <div th:if="${feedbackSuccess}" class="alert alert-success text-center rounded-pill mb-5 mx-auto" style="max-width: 600px;" th:text="${feedbackSuccess}"></div>
-
-            <!-- Dynamic Feedbacks Grid -->
-            <div class="row g-4 mb-5">
-                <div class="col-md-4" th:each="fb : ${feedbacks}">
-                    <div class="card border-0 shadow-sm p-4 h-100 rounded-4">
-                        <div class="d-flex text-warning mb-3">
-                            <i class="fas fa-star" th:each="i : ${#numbers.sequence(1, fb.rating)}"></i>
-                            <i class="far fa-star" th:if="${fb.rating < 5}" th:each="i : ${#numbers.sequence(1, 5 - fb.rating)}"></i>
-                        </div>
-                        <p class="text-muted flex-grow-1" th:text=" '&quot;' + ${fb.message} + '&quot;' "></p>
-                        <div class="d-flex align-items-center mt-3">
-                            <div class="bg-dark text-white rounded-circle d-flex justify-content-center align-items-center me-3 text-uppercase" style="width: 40px; height: 40px; font-weight: bold;" th:text="${#strings.substring(fb.name, 0, 1)}">A</div>
-                            <div>
-                                <h6 class="mb-0 fw-bold" th:text="${fb.name}">Name</h6>
-                                <small class="text-muted" th:text="${fb.subtitle}">Subtitle</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Download App Section -->
-    <section class="app-download-section py-5 bg-dark text-white position-relative overflow-hidden">
-        <div class="container position-relative z-1">
-            <div class="row align-items-center">
-                <div class="col-lg-6 text-center text-lg-start mb-4 mb-lg-0">
-                    <span class="badge bg-accent text-white rounded-pill px-3 py-2 mb-3 fw-bold text-uppercase tracking-wider">Shop Anywhere</span>
-                    <h2 class="display-5 fw-bold mb-3">Get the ShopEase App <span class="badge bg-warning text-dark fs-6 ms-2 align-middle px-3 py-2 rounded-pill">Coming Soon</span></h2>
-                    <p class="lead text-white-50 mb-4">Our dedicated mobile application is currently under development. Soon, you will unlock exclusive app-only discounts, track live orders, and enjoy a flawless native checkout experience!</p>
-                    <div class="d-flex justify-content-center justify-content-lg-start gap-3">
-                        <button class="btn btn-outline-light btn-lg rounded-4 px-4 d-flex align-items-center disabled" style="opacity: 0.5;">
-                            <i class="fab fa-apple fa-2x me-3"></i>
-                            <div class="text-start">
-                                <small class="d-block text-uppercase" style="font-size: 0.6rem;">Available soon on</small>
-                                <span class="fw-bold lh-1" style="font-size: 1.1rem;">App Store</span>
-                            </div>
-                        </button>
-                        <button class="btn btn-outline-light btn-lg rounded-4 px-4 d-flex align-items-center disabled" style="opacity: 0.5;">
-                            <i class="fab fa-google-play fa-2x me-3"></i>
-                            <div class="text-start">
-                                <small class="d-block text-uppercase" style="font-size: 0.6rem;">Available soon on</small>
-                                <span class="fw-bold lh-1" style="font-size: 1.1rem;">Google Play</span>
-                            </div>
-                        </button>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="d-flex justify-content-center gap-3 align-items-center">
-                        <div class="bg-white bg-opacity-10 rounded-4 p-2 shadow-lg" style="width: 200px; transform: rotate(-5deg);">
-                            <img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="App Screen 1" class="img-fluid rounded-3 object-fit-cover" style="height: 400px; width: 100%;">
-                        </div>
-                        <div class="bg-white bg-opacity-10 rounded-4 p-2 shadow-lg d-none d-md-block" style="width: 200px; transform: rotate(5deg) translateY(-20px);">
-                            <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="App Screen 2" class="img-fluid rounded-3 object-fit-cover" style="height: 400px; width: 100%;">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Decorative blob -->
-        <div class="position-absolute rounded-circle bg-primary opacity-25" style="width: 500px; height: 500px; bottom: -200px; left: -100px; filter: blur(80px);"></div>
-    </section>
-
-    <!-- Social / Community Section -->
-    <section class="social-section py-5 bg-white border-top">
-        <div class="container text-center">
-            <h3 class="fw-bold mb-3"><i class="fas fa-users text-primary me-2"></i>Join Our Community</h3>
-            <p class="text-muted mb-5">Stay connected and never miss an update, exclusive offer, or new arrival.</p>
-            
-            <div class="row justify-content-center g-4">
-                <!-- Instagram -->
-                <div class="col-6 col-md-2">
-                    <a href="#" class="text-decoration-none d-block p-4 rounded-4 shadow-sm border" style="transition: all 0.3s ease; background-color: #fafafa;" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 .5rem 1rem rgba(0,0,0,.15)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 .125rem .25rem rgba(0,0,0,.075)';">
-                        <div class="rounded-circle d-inline-flex justify-content-center align-items-center mb-3" style="width: 70px; height: 70px; background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: white;">
-                            <i class="fab fa-instagram fa-2x"></i>
-                        </div>
-                        <h6 class="mb-1 fw-bold text-dark">Instagram</h6>
-                        <small class="text-muted">Follow Us</small>
-                    </a>
-                </div>
-                
-                <!-- WhatsApp -->
-                <div class="col-6 col-md-2">
-                    <a href="#" class="text-decoration-none d-block p-4 rounded-4 shadow-sm border" style="transition: all 0.3s ease; background-color: #fafafa;" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 .5rem 1rem rgba(0,0,0,.15)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 .125rem .25rem rgba(0,0,0,.075)';">
-                        <div class="bg-success text-white rounded-circle d-inline-flex justify-content-center align-items-center mb-3" style="width: 70px; height: 70px; background-color: #25D366 !important;">
-                            <i class="fab fa-whatsapp fa-2x"></i>
-                        </div>
-                        <h6 class="mb-1 fw-bold text-dark">WhatsApp</h6>
-                        <small class="text-muted">Chat with Us</small>
-                    </a>
-                </div>
-
-                <!-- Facebook -->
-                <div class="col-6 col-md-2">
-                    <a href="#" class="text-decoration-none d-block p-4 rounded-4 shadow-sm border" style="transition: all 0.3s ease; background-color: #fafafa;" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 .5rem 1rem rgba(0,0,0,.15)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 .125rem .25rem rgba(0,0,0,.075)';">
-                        <div class="text-white rounded-circle d-inline-flex justify-content-center align-items-center mb-3" style="width: 70px; height: 70px; background-color: #1877F2;">
-                            <i class="fab fa-facebook-f fa-2x"></i>
-                        </div>
-                        <h6 class="mb-1 fw-bold text-dark">Facebook</h6>
-                        <small class="text-muted">Like our Page</small>
-                    </a>
-                </div>
-
-                <!-- YouTube -->
-                <div class="col-6 col-md-2">
-                    <a href="#" class="text-decoration-none d-block p-4 rounded-4 shadow-sm border" style="transition: all 0.3s ease; background-color: #fafafa;" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 .5rem 1rem rgba(0,0,0,.15)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 .125rem .25rem rgba(0,0,0,.075)';">
-                        <div class="text-white rounded-circle d-inline-flex justify-content-center align-items-center mb-3" style="width: 70px; height: 70px; background-color: #FF0000;">
-                            <i class="fab fa-youtube fa-2x"></i>
-                        </div>
-                        <h6 class="mb-1 fw-bold text-dark">YouTube</h6>
-                        <small class="text-muted">Subscribe</small>
-                    </a>
-                </div>
-
-                <!-- X (Twitter) -->
-                <div class="col-6 col-md-2">
-                    <a href="#" class="text-decoration-none d-block p-4 rounded-4 shadow-sm border" style="transition: all 0.3s ease; background-color: #fafafa;" onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 .5rem 1rem rgba(0,0,0,.15)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 .125rem .25rem rgba(0,0,0,.075)';">
-                        <div class="bg-dark text-white rounded-circle d-inline-flex justify-content-center align-items-center mb-3" style="width: 70px; height: 70px;">
-                            <i class="fa-brands fa-x-twitter fa-2x"></i>
-                        </div>
-                        <h6 class="mb-1 fw-bold text-dark">X / Twitter</h6>
-                        <small class="text-muted">Stay Updated</small>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer th:replace="~{layout :: footer}"></footer>
-
     <script th:inline="javascript">
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const filterBtns = document.querySelectorAll('.filter-btn');
             const productCols = document.querySelectorAll('.product-card-col');
             const countDisplay = document.getElementById('items-found-count');
@@ -276,22 +548,43 @@
             const dashboardSearch = document.getElementById('dashboardSearch');
 
             function applyFilter(filterValue) {
-                let visibleCount = 0;
-                const query = dashboardSearch.value.toLowerCase().trim();
-                
-                productCols.forEach(col => {
-                    col.style.opacity = '0';
-                    col.style.transform = 'scale(0.95)';
-                    
-                    setTimeout(() => {
+                // Show Skeletons
+                productCols.forEach(col => col.style.display = 'none');
+                const skeletonContainer = document.createElement('div');
+                skeletonContainer.id = 'skeletonGrid';
+                skeletonContainer.className = 'row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4';
+                for (let i = 0; i < 4; i++) {
+                    skeletonContainer.innerHTML += `
+                        <div class="col">
+                            <div class="card border-0 shadow-sm h-100 p-3">
+                                <div class="skeleton mb-3" style="height: 200px;"></div>
+                                <div class="skeleton mb-2" style="height: 20px; width: 60%;"></div>
+                                <div class="skeleton mb-2" style="height: 25px;"></div>
+                                <div class="skeleton" style="height: 15px; width: 80%;"></div>
+                            </div>
+                        </div>
+                    `;
+                }
+                const productsGrid = document.getElementById('productsGrid');
+                productsGrid.parentNode.insertBefore(skeletonContainer, productsGrid);
+
+                setTimeout(() => {
+                    skeletonContainer.remove();
+                    let visibleCount = 0;
+                    const query = dashboardSearch.value.toLowerCase().trim();
+
+                    productCols.forEach(col => {
+                        col.style.opacity = '0';
+                        col.style.transform = 'scale(0.95)';
+
                         let matchCategory = (filterValue === 'all' || col.getAttribute('data-category-id') === filterValue);
                         let title = col.querySelector('.card-title').innerText.toLowerCase();
                         let catText = col.querySelector('.text-uppercase').innerText.toLowerCase();
                         let matchSearch = title.includes(query) || catText.includes(query);
-                        
-                        let maxItems = 4; // limit to 4 items in each category showcase, unless searching aggressively
+
+                        let maxItems = 4;
                         let cap = (query.length > 0) ? 12 : maxItems;
-                        
+
                         if (matchCategory && matchSearch && visibleCount < cap) {
                             col.style.display = 'block';
                             setTimeout(() => {
@@ -302,12 +595,9 @@
                         } else {
                             col.style.display = 'none';
                         }
-                        
-                        countDisplay.innerText = visibleCount + ' Items displayed';
-                    }, 250);
-                });
+                    });
+                    countDisplay.innerText = visibleCount + ' Items displayed';
 
-                setTimeout(() => {
                     if (filterValue === 'all') {
                         viewMoreBtn.href = '/shop';
                         viewMoreBtn.innerHTML = 'View All Products <i class="fas fa-arrow-right ms-2"></i>';
@@ -318,21 +608,21 @@
                             viewMoreBtn.innerHTML = 'View All ' + activeBtn.innerText + ' <i class="fas fa-arrow-right ms-2"></i>';
                         }
                     }
-                }, 250);
+                }, 600); // skeleton show duration
             }
 
             // Init
             applyFilter('all');
 
             // Search event listener
-            dashboardSearch.addEventListener('input', function() {
+            dashboardSearch.addEventListener('input', function () {
                 const activeBtn = document.querySelector('.filter-btn.active');
                 let activeFilter = activeBtn ? activeBtn.getAttribute('data-filter') : 'all';
                 applyFilter(activeFilter);
             });
 
             filterBtns.forEach(btn => {
-                btn.addEventListener('click', function(e) {
+                btn.addEventListener('click', function (e) {
                     e.preventDefault();
                     filterBtns.forEach(b => {
                         b.classList.remove('btn-dark', 'active');
@@ -340,11 +630,29 @@
                     });
                     this.classList.remove('btn-outline-dark');
                     this.classList.add('btn-dark', 'active');
-                    
+
                     applyFilter(this.getAttribute('data-filter'));
                 });
+            });
+            // Newsletter Form Logic Removed (Section replaced by Flash Sale)
+
+            // Quick View Logic
+            const qvModal = new bootstrap.Modal(document.getElementById('quickViewModal'));
+            document.addEventListener('click', function (e) {
+                if (e.target.closest('.quick-view-btn')) {
+                    const btn = e.target.closest('.quick-view-btn');
+                    document.getElementById('qvImage').src = '/img/' + btn.dataset.image;
+                    document.getElementById('qvName').innerText = btn.dataset.name;
+                    document.getElementById('qvPrice').innerText = 'Rs. ' + btn.dataset.price;
+                    document.getElementById('qvDesc').innerText = btn.dataset.desc;
+                    document.getElementById('qvCategory').innerText = btn.dataset.cat;
+                    document.getElementById('qvCartBtn').href = '/addToCart/' + btn.dataset.id;
+                    document.getElementById('qvViewBtn').href = '/shop/viewproduct/' + btn.dataset.id;
+                    qvModal.show();
+                }
             });
         });
     </script>
 </body>
+
 </html>

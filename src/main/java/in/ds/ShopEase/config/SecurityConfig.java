@@ -45,7 +45,9 @@ public class SecurityConfig {
                     "/api/admin/create",
                     "/api/admin/promote/**",
                     "/offers",
-                    "/support"
+                    "/support",
+                    "/forgot_password**",
+                    "/reset_password**"
                 ).permitAll()
                 .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated()

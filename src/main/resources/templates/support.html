@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{layout :: head}"></head>
+
+<head>
+    <title>Help Center | ShopEase</title>
+    <th:block th:replace="~{layout :: head}"></th:block>
+</head>
+
 <body>
     <nav th:replace="~{layout :: nav}"></nav>
     <div class="content-wrapper bg-light pt-0">
@@ -8,97 +13,162 @@
         <section class="py-5 bg-dark text-white text-center position-relative overflow-hidden"
             style="background: linear-gradient(135deg, #1a1a1a 0%, #000 100%);">
             <div class="container py-5 z-1 position-relative">
-                <span class="badge bg-accent text-white rounded-pill px-3 py-2 mb-3 fw-bold text-uppercase tracking-wider">Help Center</span>
-                <h1 class="display-3 fw-bold mb-4">How can we help?</h1>
-                <p class="lead text-white-50 mx-auto" style="max-width: 700px;">Our dedicated support team is here to assist you 24/7. Reach out via email, phone, or send us a message directly. We usually respond within 2 hours.</p>
-                
-                <div class="d-flex flex-wrap justify-content-center gap-4 mt-5">
-                    <div class="d-flex align-items-center text-white fw-bold">
-                        <div class="bg-white bg-opacity-10 rounded-circle p-2 me-2"><i class="fas fa-envelope text-accent"></i></div>
-                        support@shopease.com
+                <span
+                    class="badge bg-accent text-white rounded-pill px-3 py-2 mb-3 fw-bold text-uppercase tracking-wider">How
+                    can we help?</span>
+                <h1 class="display-3 fw-bold mb-3">Help Center</h1>
+                <p class="lead text-white-50 mx-auto" style="max-width: 700px;">Find answers to your questions, track
+                    your orders, and get instant assistance from our AI assistant. We're here to help 24/7.</p>
+            </div>
+            <!-- Decorative blobs -->
+            <div class="position-absolute rounded-circle bg-accent opacity-40"
+                style="width: 400px; height: 400px; top: -100px; right: -100px; filter: blur(40px);"></div>
+            <div class="position-absolute rounded-circle bg-primary opacity-20"
+                style="width: 300px; height: 300px; bottom: -50px; left: -50px; filter: blur(30px);"></div>
+        </section>
+
+        <div class="container py-5 mt-5 position-relative z-2">
+
+            <!-- Support Contact Cards -->
+            <div class="row g-4 mb-5 justify-content-center">
+                <!-- Email Support -->
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm rounded-4 p-4 text-center h-100 transition-all hover-translate-y bg-white border-bottom border-4"
+                        style="border-color: #6366f1 !important;">
+                        <div class="rounded-circle d-inline-flex justify-content-center align-items-center mb-3"
+                            style="width: 70px; height: 70px; background-color: rgba(99, 102, 241, 0.1); color: #6366f1;">
+                            <i class="fas fa-envelope-open-text fa-2x"></i>
+                        </div>
+                        <h5 class="fw-bold mb-1">Email Support</h5>
+                        <p class="text-muted small mb-3">We usually respond within 2-4 hours</p>
+                        <a href="mailto:support@shopease.com"
+                            class="btn btn-support-email rounded-pill px-4 py-2 small fw-bold">
+                            support@shopease.com <i class="fas fa-external-link-alt ms-1"
+                                style="font-size: 0.7rem;"></i>
+                        </a>
                     </div>
-                    <div class="d-flex align-items-center text-white fw-bold">
-                        <div class="bg-white bg-opacity-10 rounded-circle p-2 me-2"><i class="fas fa-phone-alt text-accent"></i></div>
-                        +91 98765 43210
+                </div>
+                <!-- Call Center -->
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm rounded-4 p-4 text-center h-100 transition-all hover-translate-y bg-white border-bottom border-4"
+                        style="border-color: #0ea5e9 !important;">
+                        <div class="rounded-circle d-inline-flex justify-content-center align-items-center mb-3"
+                            style="width: 70px; height: 70px; background-color: rgba(14, 165, 233, 0.1); color: #0ea5e9;">
+                            <i class="fas fa-headset fa-2x"></i>
+                        </div>
+                        <h5 class="fw-bold mb-1">Call Center</h5>
+                        <p class="text-muted small mb-3">Mon-Fri · 9 AM - 6 PM</p>
+                        <a href="tel:+919876543210" class="btn btn-support-call rounded-pill px-4 py-2 small fw-bold">
+                            +91 98765 43210 <i class="fas fa-phone-alt ms-1" style="font-size: 0.7rem;"></i>
+                        </a>
+                    </div>
+                </div>
+                <!-- WhatsApp Chat -->
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm rounded-4 p-4 text-center h-100 transition-all hover-translate-y bg-white border-bottom border-4"
+                        style="border-color: #22c55e !important;">
+                        <div class="rounded-circle d-inline-flex justify-content-center align-items-center mb-3"
+                            style="width: 70px; height: 70px; background-color: rgba(34, 197, 94, 0.1); color: #22c55e;">
+                            <i class="fab fa-whatsapp fa-2x"></i>
+                        </div>
+                        <h5 class="fw-bold mb-1">WhatsApp Chat</h5>
+                        <p class="text-muted small mb-3">Fastest response · Instant help</p>
+                        <a href="https://wa.me/919876543210" target="_blank"
+                            class="btn btn-support-whatsapp rounded-pill px-4 py-2 small fw-bold">
+                            Chat with us <i class="fab fa-whatsapp ms-1"></i>
+                        </a>
                     </div>
                 </div>
             </div>
-            <!-- Decorative blobs -->
-            <div class="position-absolute rounded-circle bg-accent opacity-25" style="width: 400px; height: 400px; top: -100px; right: -100px; filter: blur(60px);"></div>
-            <div class="position-absolute rounded-circle bg-primary opacity-10" style="width: 300px; height: 300px; bottom: -50px; left: -50px; filter: blur(40px);"></div>
-        </section>
 
-        <div class="container py-5 mt-5">
-            <div class="row align-items-center mb-5 pb-5 border-bottom justify-content-center">
-                <div class="col-lg-8">
-                    <div class="card p-5 border-0 shadow rounded-4 bg-white">
-                        <h4 class="fw-bold mb-4 text-center"><i class="fas fa-paper-plane text-accent me-2"></i>Send us a Message</h4>
-                        <form onsubmit="alert('Message Sent Successfully!'); return false;">
-                            <div class="mb-3">
-                                <input type="text" class="form-control form-control-lg bg-light border-0" placeholder="Your Name" required>
+            <!-- Send Message Form -->
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden mx-auto bg-white mb-5"
+                style="max-width: 1300px;">
+                <div class="row g-0">
+                    <div class="col-lg-4 bg-dark text-white p-5 d-flex flex-column justify-content-center"
+                        style="background: linear-gradient(135deg, #2c3e50 0%, #000 100%);">
+                        <div class="bg-accent bg-opacity-20 text-accent rounded-circle d-inline-flex justify-content-center align-items-center mb-4 mx-auto mx-lg-0"
+                            style="width: 70px; height: 70px;">
+                            <i class="fas fa-paper-plane fa-2x"></i>
+                        </div>
+                        <h3 class="fw-bold mb-3 text-center text-lg-start">Direct Inquiry</h3>
+                        <p class="text-white-50 text-center text-lg-start mb-0 lead" style="font-size: 1rem;">Have a
+                            specific question about an order or a product? Send us a message and our specialists will
+                            get back to you shortly.</p>
+
+                        <div class="mt-5 d-none d-lg-block border-top pt-4 border-white border-opacity-10">
+                            <p class="small text-white-50"><i class="fas fa-clock me-2"></i> Average response time: 2
+                                hours</p>
+                            <p class="small text-white-50"><i class="fas fa-globe me-2"></i> Support available in 5
+                                languages</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-8 p-4 p-md-5">
+                        <form onsubmit="showNotification('Message Sent Successfully!', 'success'); return false;">
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-muted text-uppercase">Full Name</label>
+                                    <input type="text" class="form-control border shadow-none px-4 py-3 rounded-4"
+                                        placeholder="Enter your name" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-muted text-uppercase">Email
+                                        Address</label>
+                                    <input type="email" class="form-control border shadow-none px-4 py-3 rounded-4"
+                                        placeholder="name@example.com" required>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label small fw-bold text-muted text-uppercase">Subject</label>
+                                    <select class="form-select border shadow-none px-4 py-3 rounded-4 cursor-pointer"
+                                        required>
+                                        <option value="" disabled selected>What is this regarding?</option>
+                                        <option value="order">Order Tracking & Status</option>
+                                        <option value="product">Product Information</option>
+                                        <option value="return">Returns & Refunds</option>
+                                        <option value="account">Account & Security</option>
+                                        <option value="other">Other Inquiry</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label small fw-bold text-muted text-uppercase">How can we
+                                        help?</label>
+                                    <textarea class="form-control border shadow-none px-4 py-3 rounded-4" rows="5"
+                                        placeholder="Please describe your issue in detail..." required></textarea>
+                                </div>
+                                <div class="col-12 mt-4 text-center text-lg-start"
+                                    style="display:flex; justify-content:flex-end;">
+                                    <button type="submit"
+                                        class="btn btn-dark rounded-pill px-5 py-3 fw-bold shadow hover-scale"
+                                        style="min-width: 250px;">
+                                        Send Request <i class="fas fa-paper-plane ms-2"></i>
+                                    </button>
+                                </div>
                             </div>
-                            <div class="mb-3">
-                                <input type="email" class="form-control form-control-lg bg-light border-0" placeholder="Email Address" required>
-                            </div>
-                            <div class="mb-4">
-                                <textarea class="form-control bg-light border-0" rows="5" placeholder="How can we help you?" required></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary btn-lg w-100 rounded-pill">Submit Request</button>
                         </form>
                     </div>
                 </div>
             </div>
 
-            <!-- FAQs -->
-            <div class="row justify-content-center">
-                <div class="col-lg-8" id="faq-section">
-                    <div class="text-center mb-5">
-                        <h2 class="fw-bold mb-2">Frequently Asked Questions</h2>
-                        <p class="text-muted">Quick answers to common questions</p>
-                    </div>
-                    <div class="accordion accordion-flush" id="faqAccordion">
-                        <div class="accordion-item bg-transparent border-bottom py-2">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button collapsed bg-transparent fw-bold text-dark px-0" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
-                                    How do I track my order?
-                                </button>
-                            </h2>
-                            <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                                <div class="accordion-body text-muted px-0">
-                                    Once your order has been dispatched, you will receive an email containing your tracking number and a link to track your package securely.
-                                </div>
-                            </div>
+            <!-- Link to FAQs -->
+            <div class="row justify-content-center py-5">
+                <div class="col-lg-12">
+                    <div class="card border-0 shadow-sm rounded-4 p-5 bg-white text-center">
+                        <div class="bg-accent bg-opacity-10 text-accent rounded-circle d-inline-flex justify-content-center align-items-center mb-4"
+                            style="width: 70px; height: 70px;">
+                            <i class="fas fa-question-circle fa-2x"></i>
                         </div>
-                        <div class="accordion-item bg-transparent border-bottom py-2">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button collapsed bg-transparent fw-bold text-dark px-0" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
-                                    What is your return policy?
-                                </button>
-                            </h2>
-                            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                                <div class="accordion-body text-muted px-0">
-                                    We offer a 30-day hassle-free return policy. If you are not satisfied with your purchase, you can return it within 30 days for a full refund or exchange.
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item bg-transparent py-2">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button collapsed bg-transparent fw-bold text-dark px-0" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
-                                    Do you ship internationally?
-                                </button>
-                            </h2>
-                            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                                <div class="accordion-body text-muted px-0">
-                                    Yes, we provide free worldwide shipping on all orders over Rs. 999. Customs duties may apply depending on your location.
-                                </div>
-                            </div>
-                        </div>
+                        <h3 class="fw-bold mb-3">Looking for quick answers?</h3>
+                        <p class="text-muted mb-4 lead" style="font-size: 1.1rem;">Check out our comprehensive knowledge
+                            base for answers to common questions about orders, shipping, and returns.</p>
+                        <a th:href="@{/faq}" class="btn btn-outline-dark rounded-pill px-5 py-3 fw-bold hover-scale">
+                            View FAQs <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
     <footer th:replace="~{layout :: footer}"></footer>
 </body>
+
 </html>

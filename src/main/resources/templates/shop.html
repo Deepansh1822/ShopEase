@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="~{layout :: head}"></head>
+
 <body>
     <nav th:replace="~{layout :: nav}"></nav>
     <div class="content-wrapper bg-light pt-0">
@@ -8,14 +10,17 @@
         <section class="py-5 bg-dark text-white text-center position-relative overflow-hidden"
             style="background: linear-gradient(135deg, #111 0%, #000 100%);">
             <div class="container py-5 z-1 position-relative">
-                <span class="badge bg-accent text-white rounded-pill px-3 py-2 mb-3 fw-bold text-uppercase tracking-wider">The Shop</span>
+                <span
+                    class="badge bg-accent text-white rounded-pill px-3 py-2 mb-3 fw-bold text-uppercase tracking-wider">The
+                    Shop</span>
                 <h1 class="display-3 fw-bold mb-4">Discover Quality</h1>
-                <p class="lead text-white-50 mx-auto" style="max-width: 600px;">Explore our curated collection of premium products. Quality materials meets state-of-the-art design.</p>
+                <p class="lead text-white-50 mx-auto" style="max-width: 600px;">Explore our curated collection of
+                    premium products. Quality materials meets state-of-the-art design.</p>
             </div>
             <!-- Decorative blobs -->
-            <div class="position-absolute rounded-circle bg-primary opacity-20" 
+            <div class="position-absolute rounded-circle bg-primary opacity-20"
                 style="width: 400px; height: 400px; bottom: -100px; left: -100px; filter: blur(70px);"></div>
-            <div class="position-absolute rounded-circle bg-accent opacity-15" 
+            <div class="position-absolute rounded-circle bg-accent opacity-15"
                 style="width: 300px; height: 300px; top: -50px; right: -50px; filter: blur(50px);"></div>
         </section>
 
@@ -26,7 +31,7 @@
                 <div class="col-lg-3 mb-4 mb-lg-0">
                     <div class="card border-0 shadow-sm rounded-4 p-4 sticky-top" style="top: 100px; z-index: 900;">
                         <h5 class="fw-bold mb-4"><i class="fas fa-filter text-accent me-2"></i>Filters</h5>
-                        
+
                         <!-- Search Box -->
                         <div class="mb-4">
                             <label class="form-label fw-bold small text-muted text-uppercase">Search</label>
@@ -38,12 +43,15 @@
                             <label class="form-label fw-bold small text-muted text-uppercase">Category</label>
                             <div class="d-flex flex-column gap-2" id="categoryFilter">
                                 <div class="form-check">
-                                    <input class="form-check-input filter-category" type="radio" name="cat" id="cat_all" value="all" checked>
+                                    <input class="form-check-input filter-category" type="radio" name="cat" id="cat_all"
+                                        value="all" checked>
                                     <label class="form-check-label" for="cat_all">All Categories</label>
                                 </div>
                                 <div class="form-check" th:each="category : ${categories}">
-                                    <input class="form-check-input filter-category" type="radio" name="cat" th:id="'cat_' + ${category.id}" th:value="${category.id}">
-                                    <label class="form-check-label" th:for="'cat_' + ${category.id}" th:text="${category.name}">Category</label>
+                                    <input class="form-check-input filter-category" type="radio" name="cat"
+                                        th:id="'cat_' + ${category.id}" th:value="${category.id}">
+                                    <label class="form-check-label" th:for="'cat_' + ${category.id}"
+                                        th:text="${category.name}">Category</label>
                                 </div>
                             </div>
                         </div>
@@ -51,17 +59,20 @@
                         <!-- Brand Filter (Populated via JS) -->
                         <div class="mb-4">
                             <label class="form-label fw-bold small text-muted text-uppercase">Brands</label>
-                            <div id="brandFilterContainer" class="d-flex flex-column gap-2" style="max-height: 200px; overflow-y: auto;">
+                            <div id="brandFilterContainer" class="d-flex flex-column gap-2"
+                                style="max-height: 200px; overflow-y: auto;">
                                 <!-- Dynamic checkboxes injected here -->
                             </div>
                         </div>
 
                         <!-- Price Range -->
                         <div class="mb-4">
-                            <label class="form-label fw-bold small text-muted text-uppercase">Max Price: <span id="priceVal" class="text-dark">Rs. 100000</span></label>
-                            <input type="range" class="form-range" id="priceRange" min="0" max="100000" step="500" value="100000">
+                            <label class="form-label fw-bold small text-muted text-uppercase">Max Price: <span
+                                    id="priceVal" class="text-dark">Rs. 1,00,00,000</span></label>
+                            <input type="range" class="form-range" id="priceRange" min="0" max="10000000" step="5000"
+                                value="10000000">
                         </div>
-                        
+
                         <!-- Sort By -->
                         <div class="mb-4">
                             <label class="form-label fw-bold small text-muted text-uppercase">Sort By</label>
@@ -73,77 +84,148 @@
                             </select>
                         </div>
 
-                        <button id="resetFilters" class="btn btn-outline-danger w-100 rounded-pill"><i class="fas fa-redo me-2"></i>Reset Filters</button>
+                        <button id="resetFilters" class="btn btn-outline-danger w-100 rounded-pill"><i
+                                class="fas fa-redo me-2"></i>Reset Filters</button>
                     </div>
                 </div>
 
                 <!-- Products Grid -->
                 <div class="col-lg-9">
-                    <div class="d-flex justify-content-between align-items-center mb-4 bg-white p-3 rounded-4 shadow-sm">
-                        <h4 class="fw-bold m-0 text-dark">Results</h4>
-                        <span class="badge bg-dark rounded-pill py-2 px-3" id="items-found-count" th:text="${products.size()} + ' Items found'">0 Items</span>
+                    <div
+                        class="d-flex justify-content-between align-items-center mb-4 shop-results-bar p-3 rounded-4 shadow-sm">
+                        <div class="d-flex align-items-center gap-3">
+                            <h4 class="fw-bold m-0 text-dark">Results</h4>
+                            <div class="btn-group btn-group-sm rounded-0 overflow-hidden border">
+                                <button class="btn btn-dark view-toggle rounded-0" data-view="grid" title="Grid View"><i
+                                        class="fas fa-th-large"></i></button>
+                                <button class="btn btn-outline-dark view-toggle rounded-0" data-view="list"
+                                    title="List View"><i class="fas fa-list"></i></button>
+                            </div>
+                        </div>
+                        <span class="badge bg-dark rounded-0 py-2 px-3" id="items-found-count"
+                            th:text="${products.size()} + ' Items found'">0 Items</span>
                     </div>
-                    
+
                     <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4" id="productsGrid">
-                        <div class="col product-card-col" 
-                             th:data-category-id="${product.category.id}" 
-                             th:data-brand="${product.brand != null ? product.brand : 'Other'}"
-                             th:data-price="${product.price}"
-                             th:data-name="${#strings.toLowerCase(product.name)}"
-                             th:each="product : ${products}" 
-                             style="transition: all 0.3s ease;">
-                             
+                        <div class="col product-card-col" th:data-category-id="${product.category.id}"
+                            th:data-brand="${product.brand != null ? product.brand : 'Other'}"
+                            th:data-price="${product.price}" th:data-name="${#strings.toLowerCase(product.name)}"
+                            th:each="product : ${products}" style="transition: all 0.3s ease;">
+
                             <div class="card h-100 shadow-sm border-0 rounded-4">
                                 <div class="position-relative overflow-hidden rounded-top-4" style="height: 230px;">
                                     <!-- Wishlist Heart -->
-                                    <a th:href="@{/wishlist/add/{id}(id=${product.id}, redirect='/shop')}" class="btn btn-white btn-sm rounded-circle shadow-sm position-absolute" style="top: 10px; right: 10px; z-index: 10; width: 32px; height: 32px; padding: 0; line-height: 30px; border: 1px solid rgba(0,0,0,0.05);">
-                                        <i class="text-danger" th:classappend="${wishlistProductIds != null && wishlistProductIds.contains(product.id)} ? 'fas fa-heart' : 'far fa-heart'"></i>
+                                    <a th:href="@{/wishlist/add/{id}(id=${product.id}, redirect='/shop')}"
+                                        class="btn btn-white btn-sm rounded-circle shadow-sm position-absolute"
+                                        style="top: 10px; right: 10px; z-index: 10; width: 32px; height: 32px; padding: 0; line-height: 30px; border: 1px solid rgba(0,0,0,0.05);">
+                                        <i class="text-danger"
+                                            th:classappend="${wishlistProductIds != null && wishlistProductIds.contains(product.id)} ? 'fas fa-heart' : 'far fa-heart'"></i>
                                     </a>
                                     <a th:href="@{/shop/viewproduct/{id}(id=${product.id})}">
-                                        <img th:src="@{'/img/' + ${product.imageName}}" 
-                                             class="card-img-top h-100 w-100 object-fit-cover transition-scale" 
-                                             alt="Product">
+                                        <img th:src="@{'/img/' + ${product.imageName}}"
+                                            class="card-img-top h-100 w-100 object-fit-cover transition-scale"
+                                            alt="Product">
+                                        <!-- Low Stock Badge -->
+                                        <div class="badge-low-stock animate__animated animate__pulse animate__infinite" th:if="${product.stockQuantity > 0 && product.stockQuantity <= 5}">
+                                            Only <span th:text="${product.stockQuantity}"></span> left!
+                                        </div>
+                                        <!-- Membership Badge -->
+                                        <div class="position-absolute top-0 start-0 m-2" th:if="${isMember}">
+                                            <span class="badge bg-warning text-dark rounded-pill shadow-sm" style="font-size: 0.65rem;">
+                                                <i class="fas fa-crown me-1"></i>Elite: Same Day Delivery
+                                            </span>
+                                        </div>
                                     </a>
                                 </div>
                                 <div class="card-body d-flex flex-column">
                                     <div class="d-flex justify-content-between mb-1">
-                                        <small class="text-accent fw-bold text-uppercase" th:text="${product.category.name}">Category</small>
-                                        <small class="text-muted fw-bold" th:text="${product.brand != null ? product.brand : ''}">Brand</small>
+                                        <small class="text-accent fw-bold text-uppercase"
+                                            th:text="${product.category.name}">Category</small>
+                                        <small class="text-muted fw-bold"
+                                            th:text="${product.brand != null ? product.brand : ''}">Brand</small>
                                     </div>
-                                    <a th:href="@{/shop/viewproduct/{id}(id=${product.id})}" class="text-decoration-none">
-                                        <h5 class="card-title fw-bold text-dark mt-1" th:text="${product.name}">Product Name</h5>
+                                    <a th:href="@{/shop/viewproduct/{id}(id=${product.id})}"
+                                        class="text-decoration-none">
+                                        <h5 class="card-title fw-bold text-dark mt-1" th:text="${product.name}">Product
+                                            Name</h5>
                                     </a>
-                                    <p class="card-text text-muted small flex-grow-1" th:text="${product.description}">Description</p>
+                                    <p class="card-text text-muted small flex-grow-1" th:text="${product.description}">
+                                        Description</p>
                                     <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
-                                        <span class="h5 fw-bold mb-0 text-dark" th:text="'Rs. ' + ${product.price}">Price</span>
-                                        <a th:href="@{/addToCart/{id}(id=${product.id})}" class="btn btn-outline-primary rounded-pill btn-sm px-4">
-                                            <i class="fas fa-plus me-1"></i> Add
+                                        <span class="h5 fw-bold mb-0 text-dark"
+                                            th:text="'Rs. ' + ${product.price}">Price</span>
+                                        <a th:if="${product.stockQuantity > 0}" th:href="@{/addToCart/{id}(id=${product.id})}"
+                                            class="btn btn-outline-primary rounded-circle btn-sm p-2 d-flex align-items-center justify-content-center ajax-add-to-cart"
+                                            style="width: 38px; height: 38px;" title="Add to Cart">
+                                            <i class="fas fa-cart-plus"></i>
                                         </a>
+                                        <span th:if="${product.stockQuantity <= 0}" 
+                                            class="btn btn-outline-secondary rounded-circle btn-sm p-2 d-flex align-items-center justify-content-center disabled" 
+                                            style="width: 38px; height: 38px; opacity: 0.5;" title="Out of Stock">
+                                            <i class="fas fa-ban"></i>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
+
                     <div id="noResultsMsg" class="text-center py-5 d-none bg-white rounded-4 shadow-sm mt-4">
                         <i class="fas fa-search fa-4x text-muted mb-3 opacity-25"></i>
                         <h4 class="text-muted">No products match your filters</h4>
-                        <button class="btn btn-primary mt-3 rounded-pill" onclick="document.getElementById('resetFilters').click();">Clear Filters</button>
+                        <button class="btn btn-primary mt-3 rounded-pill"
+                            onclick="document.getElementById('resetFilters').click();">Clear Filters</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <footer th:replace="~{layout :: footer}"></footer>
 
+    <!-- Quick View Modal -->
+    <div class="modal fade" id="quickViewModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 rounded-4 shadow-lg overflow-hidden">
+                <div class="modal-body p-0">
+                    <button type="button" class="btn-close position-absolute" data-bs-dismiss="modal" aria-label="Close"
+                        style="top: 20px; right: 20px; z-index: 100;"></button>
+                    <div class="row g-0">
+                        <div class="col-md-6 bg-light d-flex align-items-center justify-content-center p-4">
+                            <img src="" id="qvImage" class="img-fluid rounded-4 shadow-sm" alt="Product"
+                                style="max-height: 400px; object-fit: contain;">
+                        </div>
+                        <div class="col-md-6 p-5">
+                            <span
+                                class="badge bg-accent-soft text-accent rounded-pill px-3 py-2 mb-3 fw-bold text-uppercase"
+                                id="qvCategory">Category</span>
+                            <h2 class="fw-bold mb-2 text-dark" id="qvName">Product Name</h2>
+                            <h4 class="text-accent fw-bold mb-4" id="qvPrice">Rs. 0</h4>
+                            <p class="text-muted mb-5 lead" id="qvDesc" style="font-size: 0.95rem;">Product description
+                                goes here. It provides essential details about the item.</p>
+                            <div class="d-grid gap-3">
+                                <a href="" id="qvCartBtn"
+                                    class="btn btn-primary btn-lg rounded-pill py-3 fw-bold shadow">
+                                    <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                                </a>
+                                <a href="" id="qvViewBtn" class="btn btn-outline-dark btn-lg rounded-pill py-3 fw-bold">
+                                    View Full Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script th:inline="javascript">
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const productCols = Array.from(document.querySelectorAll('.product-card-col'));
             const productsGrid = document.getElementById('productsGrid');
             const countDisplay = document.getElementById('items-found-count');
             const noResultsMsg = document.getElementById('noResultsMsg');
-            
+
             // Inputs
             const searchInput = document.getElementById('searchInput');
             const categoryRadios = document.querySelectorAll('.filter-category');
@@ -159,7 +241,7 @@
                 let b = col.getAttribute('data-brand');
                 if (b) brands.add(b);
             });
-            
+
             Array.from(brands).sort().forEach(brand => {
                 const id = 'brand_' + brand.replace(/\s+/g, '_');
                 const html = `
@@ -174,80 +256,99 @@
 
             // 2. Preselect category if passed in URL (e.g., from Dashboard view more button)
             const urlPath = window.location.pathname;
-            if(urlPath.includes('/shop/category/')) {
+            if (urlPath.includes('/shop/category/')) {
                 const catId = urlPath.split('/').pop();
                 const targetRadio = document.getElementById('cat_' + catId);
-                if(targetRadio) targetRadio.checked = true;
+                if (targetRadio) targetRadio.checked = true;
             }
 
             // Main Apply Filter Logic
             function applyFilters() {
                 const query = searchInput.value.toLowerCase().trim();
                 const maxPrice = parseFloat(priceRange.value);
-                
+
                 // Get selected category
                 let activeCategory = 'all';
-                categoryRadios.forEach(r => { if(r.checked) activeCategory = r.value; });
-                
+                categoryRadios.forEach(r => { if (r.checked) activeCategory = r.value; });
+
                 // Get selected brands
                 const activeBrands = Array.from(brandCheckboxes)
-                                          .filter(cb => cb.checked)
-                                          .map(cb => cb.value);
+                    .filter(cb => cb.checked)
+                    .map(cb => cb.value);
 
-                let visibleCount = 0;
-                let visibleElements = [];
+                // Show Skeletons
+                const skeletonContainer = document.createElement('div');
+                skeletonContainer.id = 'skeletonGrid';
+                skeletonContainer.className = productsGrid.className;
+                for (let i = 0; i < 6; i++) {
+                    skeletonContainer.innerHTML += `
+                        <div class="col">
+                            <div class="card border-0 shadow-sm h-100 p-3 rounded-4">
+                                <div class="skeleton mb-3" style="height: 180px;"></div>
+                                <div class="skeleton mb-2" style="height: 15px; width: 40%;"></div>
+                                <div class="skeleton mb-2" style="height: 20px;"></div>
+                                <div class="skeleton" style="height: 60px;"></div>
+                            </div>
+                        </div>
+                    `;
+                }
+                productsGrid.style.display = 'none';
+                productsGrid.parentNode.insertBefore(skeletonContainer, productsGrid);
 
-                productCols.forEach(col => {
-                    const price = parseFloat(col.getAttribute('data-price'));
-                    const catId = col.getAttribute('data-category-id');
-                    const brand = col.getAttribute('data-brand');
-                    const name = col.getAttribute('data-name');
+                setTimeout(() => {
+                    skeletonContainer.remove();
+                    productsGrid.style.display = 'flex';
 
-                    let matchCategory = (activeCategory === 'all' || catId === activeCategory);
-                    let matchBrand = (activeBrands.length === 0 || activeBrands.includes(brand));
-                    let matchPrice = (price <= maxPrice);
-                    let matchSearch = (name.includes(query) || brand.toLowerCase().includes(query));
+                    let visibleCount = 0;
+                    let visibleElements = [];
 
-                    if (matchCategory && matchBrand && matchPrice && matchSearch) {
-                        visibleElements.push(col);
-                        visibleCount++;
-                    } else {
-                        col.style.display = 'none';
-                    }
-                });
+                    productCols.forEach(col => {
+                        const price = parseFloat(col.getAttribute('data-price'));
+                        const catId = col.getAttribute('data-category-id');
+                        const brand = col.getAttribute('data-brand');
+                        const name = col.getAttribute('data-name');
 
-                // Apply Sorting
-                const sortType = sortSelect.value;
-                if (sortType !== 'default') {
-                    visibleElements.sort((a, b) => {
-                        if (sortType === 'price_asc') {
-                            return parseFloat(a.getAttribute('data-price')) - parseFloat(b.getAttribute('data-price'));
-                        } else if (sortType === 'price_desc') {
-                            return parseFloat(b.getAttribute('data-price')) - parseFloat(a.getAttribute('data-price'));
-                        } else if (sortType === 'name_asc') {
-                            return a.getAttribute('data-name').localeCompare(b.getAttribute('data-name'));
+                        let matchCategory = (activeCategory === 'all' || catId === activeCategory);
+                        let matchBrand = (activeBrands.length === 0 || activeBrands.includes(brand));
+                        let matchPrice = (price <= maxPrice);
+                        let matchSearch = (name.includes(query) || brand.toLowerCase().includes(query));
+
+                        if (matchCategory && matchBrand && matchPrice && matchSearch) {
+                            visibleElements.push(col);
+                            visibleCount++;
+                        } else {
+                            col.style.display = 'none';
                         }
                     });
-                } else {
-                    // Reset to DOM order roughly (re-append in original order)
-                    visibleElements.sort((a, b) => {
-                        return productCols.indexOf(a) - productCols.indexOf(b);
+
+                    // Apply Sorting
+                    const sortType = sortSelect.value;
+                    if (sortType !== 'default') {
+                        visibleElements.sort((a, b) => {
+                            if (sortType === 'price_asc') {
+                                return parseFloat(a.getAttribute('data-price')) - parseFloat(b.getAttribute('data-price'));
+                            } else if (sortType === 'price_desc') {
+                                return parseFloat(b.getAttribute('data-price')) - parseFloat(a.getAttribute('data-price'));
+                            } else if (sortType === 'name_asc') {
+                                return a.getAttribute('data-name').localeCompare(b.getAttribute('data-name'));
+                            }
+                        });
+                    }
+
+                    // Render
+                    visibleElements.forEach(col => {
+                        col.style.display = 'block';
+                        productsGrid.appendChild(col);
                     });
-                }
 
-                // Render visible elements in sorted order
-                visibleElements.forEach(col => {
-                    col.style.display = 'block';
-                    productsGrid.appendChild(col); // Moves to end, effectively sorting them
-                });
-
-                // Update UI Feedback
-                countDisplay.innerText = visibleCount + ' Items found';
-                if (visibleCount === 0) {
-                    noResultsMsg.classList.remove('d-none');
-                } else {
-                    noResultsMsg.classList.add('d-none');
-                }
+                    // Update UI Feedback
+                    countDisplay.innerText = visibleCount + ' Items found';
+                    if (visibleCount === 0) {
+                        noResultsMsg.classList.remove('d-none');
+                    } else {
+                        noResultsMsg.classList.add('d-none');
+                    }
+                }, 500);
             }
 
             // Event Listeners
@@ -255,20 +356,60 @@
             categoryRadios.forEach(r => r.addEventListener('change', applyFilters));
             brandCheckboxes.forEach(cb => cb.addEventListener('change', applyFilters));
             sortSelect.addEventListener('change', applyFilters);
-            priceRange.addEventListener('input', function() {
-                priceVal.innerText = 'Rs. ' + this.value;
+            priceRange.addEventListener('input', function () {
+                priceVal.innerText = 'Rs. ' + parseInt(this.value).toLocaleString('en-IN');
                 applyFilters();
             });
 
             // Reset
-            resetFiltersBtn.addEventListener('click', function() {
+            resetFiltersBtn.addEventListener('click', function () {
                 searchInput.value = '';
                 document.getElementById('cat_all').checked = true;
                 brandCheckboxes.forEach(cb => cb.checked = false);
-                priceRange.value = 100000;
-                priceVal.innerText = 'Rs. 100000';
+                priceRange.value = 10000000;
+                priceVal.innerText = 'Rs. 1,00,00,000';
                 sortSelect.value = 'default';
                 applyFilters();
+            });
+
+            // View Toggle Logic
+            const viewToggles = document.querySelectorAll('.view-toggle');
+            viewToggles.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const view = this.dataset.view;
+                    viewToggles.forEach(b => {
+                        b.classList.remove('btn-dark');
+                        b.classList.add('btn-outline-dark');
+                    });
+                    this.classList.remove('btn-outline-dark');
+                    this.classList.add('btn-dark');
+
+                    if (view === 'list') {
+                        productsGrid.classList.remove('row-cols-md-2', 'row-cols-xl-3');
+                        productsGrid.classList.add('row-cols-1');
+                        productCols.forEach(col => col.classList.add('list-view'));
+                    } else {
+                        productsGrid.classList.add('row-cols-md-2', 'row-cols-xl-3');
+                        productsGrid.classList.remove('row-cols-1');
+                        productCols.forEach(col => col.classList.remove('list-view'));
+                    }
+                });
+            });
+
+            // Quick View Logic
+            const qvModal = new bootstrap.Modal(document.getElementById('quickViewModal'));
+            document.addEventListener('click', function (e) {
+                if (e.target.closest('.quick-view-btn')) {
+                    const btn = e.target.closest('.quick-view-btn');
+                    document.getElementById('qvImage').src = '/img/' + btn.dataset.image;
+                    document.getElementById('qvName').innerText = btn.dataset.name;
+                    document.getElementById('qvPrice').innerText = 'Rs. ' + btn.dataset.price;
+                    document.getElementById('qvDesc').innerText = btn.dataset.desc;
+                    document.getElementById('qvCategory').innerText = btn.dataset.cat;
+                    document.getElementById('qvCartBtn').href = '/addToCart/' + btn.dataset.id;
+                    document.getElementById('qvViewBtn').href = '/shop/viewproduct/' + btn.dataset.id;
+                    qvModal.show();
+                }
             });
 
             // Initial Run to satisfy URL category preset if present
@@ -276,4 +417,5 @@
         });
     </script>
 </body>
+
 </html>

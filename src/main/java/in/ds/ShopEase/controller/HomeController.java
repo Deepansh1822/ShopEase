@@ -19,6 +19,9 @@ public class HomeController {
     @Autowired
     private in.ds.ShopEase.repository.FeedbackRepository feedbackRepository;
 
+    @Autowired
+    private in.ds.ShopEase.repository.OfferRepository offerRepository;
+
     private java.util.Set<Long> getWishlistProductIds(java.security.Principal principal) {
         if (principal == null) return new java.util.HashSet<>();
         in.ds.ShopEase.model.User user = userRepository.findByEmail(principal.getName());
@@ -77,7 +80,18 @@ public class HomeController {
     private in.ds.ShopEase.repository.OrderRepository orderRepository;
 
     @GetMapping("/offers")
-    public String offersPage() {
+    public String offersPage(Model model) {
+        java.util.List<in.ds.ShopEase.model.Offer> activeOffers = offerRepository.findByActiveTrue();
+        
+        // Find the nearest expiry date
+        java.time.LocalDate nearestExpiry = activeOffers.stream()
+                .map(in.ds.ShopEase.model.Offer::getExpiryDate)
+                .filter(java.util.Objects::nonNull)
+                .min(java.time.LocalDate::compareTo)
+                .orElse(null);
+
+        model.addAttribute("offers", activeOffers);
+        model.addAttribute("nearestExpiry", nearestExpiry);
         return "offers";
     }
 
@@ -86,13 +100,26 @@ public class HomeController {
         return "support";
     }
 
+    @GetMapping("/faq")
+    public String faqPage() {
+        return "faq";
+    }
+
+    @GetMapping("/privacy")
+    public String privacyPage() {
+        return "privacy";
+    }
+
     @GetMapping("/profile")
     public String profilePage(Model model, java.security.Principal principal) {
         if (principal == null) {
             return "redirect:/login";
         }
         in.ds.ShopEase.model.User user = userRepository.findByEmail(principal.getName());
-        java.util.List<in.ds.ShopEase.model.Order> userOrders = orderRepository.findByUserOrderByCreatedAtDesc(user);
+        java.util.List<in.ds.ShopEase.model.Order> allOrders = orderRepository.findByUserOrderByCreatedAtDesc(user);
+        java.util.List<in.ds.ShopEase.model.Order> userOrders = allOrders.stream()
+                .filter(o -> !"created".equals(o.getStatus()))
+                .collect(java.util.stream.Collectors.toList());
         
         model.addAttribute("user", user);
         model.addAttribute("orders", userOrders);
@@ -107,8 +134,14 @@ public class HomeController {
         in.ds.ShopEase.model.Product product = productService.getProductById(id).get();
         java.util.List<in.ds.ShopEase.model.ProductReview> reviews = productReviewRepository.findByProductOrderByCreatedAtDesc(product);
         
+        double averageRating = reviews.stream()
+                .mapToInt(in.ds.ShopEase.model.ProductReview::getRating)
+                .average()
+                .orElse(0.0);
+
         model.addAttribute("product", product);
         model.addAttribute("reviews", reviews);
+        model.addAttribute("averageRating", averageRating);
         model.addAttribute("wishlistProductIds", getWishlistProductIds(principal));
         model.addAttribute("relatedProducts", productService.getProductsByCategoryId(product.getCategory().getId()));
         return "viewProduct";
@@ -120,27 +153,30 @@ public class HomeController {
             @org.springframework.web.bind.annotation.RequestParam("reviewerName") String reviewerName,
             @org.springframework.web.bind.annotation.RequestParam("reviewText") String reviewText,
             @org.springframework.web.bind.annotation.RequestParam("rating") int rating,
-            @org.springframework.web.bind.annotation.RequestParam(value = "reviewImage", required = false) org.springframework.web.multipart.MultipartFile file,
+            @org.springframework.web.bind.annotation.RequestParam(value = "reviewImages", required = false) org.springframework.web.multipart.MultipartFile[] files,
             org.springframework.web.servlet.mvc.support.RedirectAttributes redirectAttributes) {
         
         in.ds.ShopEase.model.Product product = productService.getProductById(productId).orElse(null);
         if (product == null) return "redirect:/shop";
 
-        String imageName = null;
-        if (file != null && !file.isEmpty()) {
-            // For now, we'll use the original filename and assume it's in /img/ (simulated)
-            // In a real app, we'd save the file to the 'static/img' directory
-            imageName = file.getOriginalFilename();
-            try {
-                String uploadDir = "src/main/resources/static/img/";
-                java.nio.file.Path path = java.nio.file.Paths.get(uploadDir + imageName);
-                java.nio.file.Files.copy(file.getInputStream(), path, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
-            } catch (Exception e) {
-                // Fail silently or log
+        java.util.List<String> imageNames = new java.util.ArrayList<>();
+        if (files != null && files.length > 0) {
+            for (org.springframework.web.multipart.MultipartFile file : files) {
+                if (!file.isEmpty()) {
+                    String imageName = java.util.UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+                    try {
+                        String uploadDir = "src/main/resources/static/img/";
+                        java.nio.file.Path path = java.nio.file.Paths.get(uploadDir + imageName);
+                        java.nio.file.Files.copy(file.getInputStream(), path, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                        imageNames.add(imageName);
+                    } catch (Exception e) {
+                        // Fail silently or log
+                    }
+                }
             }
         }
 
-        productReviewRepository.save(new in.ds.ShopEase.model.ProductReview(product, reviewerName, reviewText, rating, imageName));
+        productReviewRepository.save(new in.ds.ShopEase.model.ProductReview(product, reviewerName, reviewText, rating, imageNames));
         redirectAttributes.addFlashAttribute("reviewSuccess", "Your review has been posted!");
         return "redirect:/shop/viewproduct/" + productId;
     }

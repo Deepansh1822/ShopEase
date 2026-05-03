@@ -1,122 +1,406 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{layout :: head}"></head>
-<body class="bg-light">
+
+<head>
+    <th:block th:replace="~{layout :: head}"></th:block>
+    <!-- Leaflet CSS for Maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+            border-radius: 15px;
+        }
+
+        .map-search-hint {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        .saved-address-card:hover {
+            border-color: var(--accent-color) !important;
+            background-color: var(--background);
+        }
+
+        .saved-address-card.active {
+            border-color: var(--accent-color) !important;
+            background-color: var(--white);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .saved-address-card.active .check-icon {
+            display: block !important;
+        }
+    </style>
+</head>
+
+<body>
     <nav th:replace="~{layout :: nav}"></nav>
+    <main class="flex-grow-1">
+        <div class="content-wrapper bg-light pt-0">
+            <!-- Checkout Hero -->
+            <section class="py-5 bg-dark text-white text-center position-relative overflow-hidden"
+                style="background: linear-gradient(135deg, #111 0%, #000 100%);">
+                <div class="container py-5 z-1 position-relative">
+                    <span
+                        class="badge bg-accent text-white rounded-pill px-3 py-2 mb-3 fw-bold text-uppercase tracking-wider">
+                        <i class="fas fa-lock me-2"></i>Secure Checkout
+                    </span>
+                    <h1 class="display-3 fw-bold mb-3">Finalize Your Order</h1>
+                    <p class="lead text-white-50 mx-auto" style="max-width: 600px;">
+                        Provide your delivery details and choose a payment method to complete your purchase.
+                    </p>
+                </div>
+                <!-- Decorative blobs -->
+                <div class="position-absolute rounded-circle bg-primary opacity-20"
+                    style="width: 400px; height: 400px; bottom: -100px; left: -100px; filter: blur(70px);"></div>
+                <div class="position-absolute rounded-circle bg-accent opacity-15"
+                    style="width: 300px; height: 300px; top: -50px; right: -50px; filter: blur(50px);"></div>
+            </section>
 
-    <div class="content-wrapper py-5">
-        <div class="container">
-            <h2 class="fw-bold mb-4">Secure Checkout</h2>
-            
-            <div class="row g-4">
-                <!-- Left Details Form -->
-                <div class="col-lg-8">
-                    <form id="checkoutForm">
-                        <!-- Shipping Address -->
-                        <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
-                            <h4 class="fw-bold mb-4"><i class="fas fa-map-marker-alt text-accent me-2"></i>Shipping Address</h4>
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label class="form-label fw-bold small text-muted">Full Name</label>
-                                    <input type="text" id="shipName" class="form-control" required placeholder="John Doe">
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label fw-bold small text-muted">Phone Number</label>
-                                    <input type="tel" id="shipPhone" class="form-control" required placeholder="+91 98765 43210">
-                                </div>
-                                <div class="col-12">
-                                    <label class="form-label fw-bold small text-muted">Full Address</label>
-                                    <textarea id="shipAddress" class="form-control" rows="3" required placeholder="House No, Street, Landmark..."></textarea>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label fw-bold small text-muted">City / District</label>
-                                    <input type="text" id="shipCity" class="form-control" required placeholder="New Delhi">
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label fw-bold small text-muted">PIN Code</label>
-                                    <input type="text" id="shipPin" class="form-control" required placeholder="110001">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Payment Method -->
-                        <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
-                            <h4 class="fw-bold mb-4"><i class="fas fa-credit-card text-accent me-2"></i>Payment Method</h4>
-                            
-                            <div class="form-check border rounded-3 p-3 mb-3 bg-white shadow-sm d-flex align-items-center">
-                                <input class="form-check-input ms-1 me-3" type="radio" name="paymentMethod" id="payRazorpay" value="razorpay" checked>
-                                <label class="form-check-label flex-grow-1 fw-bold fs-5 d-flex justify-content-between align-items-center" for="payRazorpay" style="cursor:pointer;">
-                                    <span>Pay Online <small class="text-muted fw-normal fs-6 d-block">Credit Card, UPI, Netbanking</small></span>
-                                    <i class="fas fa-shield-alt text-primary fa-lg"></i>
-                                </label>
-                            </div>
-                            
-                            <div class="form-check border rounded-3 p-3 bg-white shadow-sm d-flex align-items-center">
-                                <input class="form-check-input ms-1 me-3" type="radio" name="paymentMethod" id="payCOD" value="cod">
-                                <label class="form-check-label flex-grow-1 fw-bold fs-5 d-flex justify-content-between align-items-center" for="payCOD" style="cursor:pointer;">
-                                    <span>Cash on Delivery <small class="text-muted fw-normal fs-6 d-block">Pay when you receive the package</small></span>
-                                    <i class="fas fa-money-bill-wave text-success fa-lg"></i>
-                                </label>
-                            </div>
-                        </div>
-                    </form>
+            <div class="container py-5">
+                <div class="d-flex justify-content-end align-items-center mb-4">
+                    <a th:href="@{/cart}" class="btn btn-link text-muted text-decoration-none fw-medium back-link">
+                        <i class="fas fa-arrow-left me-2"></i> Back to Cart
+                    </a>
                 </div>
 
-                <!-- Right Order Summary -->
-                <div class="col-lg-4">
-                    <div class="card border-0 shadow-sm rounded-4 p-4 sticky-top" style="top: 100px;">
-                        <h4 class="fw-bold mb-4">Order Summary</h4>
-                        
-                        <div class="d-flex justify-content-between mb-2">
-                            <span class="text-muted">Item Subtotal</span>
-                            <span class="fw-bold" th:text="'Rs. ' + ${subtotal}">0.00</span>
-                        </div>
-                        
-                        <div class="d-flex justify-content-between mb-2 text-success" th:if="${appliedPromo != null}">
-                            <span>Discount (<span th:text="${appliedPromo}"></span>)</span>
-                            <span class="fw-bold">- Rs. <span th:text="${discountAmount}">0.00</span></span>
-                        </div>
-                        
-                        <div class="d-flex justify-content-between mb-3">
-                            <span class="text-muted">Delivery Charges</span>
-                            <span class="fw-bold" th:if="${deliveryFee > 0}" th:text="'+ Rs. ' + ${deliveryFee}">0.00</span>
-                            <span class="fw-bold text-success" th:if="${deliveryFee == 0}">FREE Delivery</span>
-                        </div>
-                        
-                        <hr>
-                        
-                        <div class="d-flex justify-content-between mb-4">
-                            <span class="h5 fw-bold text-dark m-0">Total Amount</span>
-                            <span class="h4 fw-bold text-accent m-0" th:text="'Rs. ' + ${total}">0.00</span>
-                        </div>
 
-                        <button id="placeOrderBtn" class="btn btn-dark btn-lg w-100 py-3 rounded-pill fw-bold shadow-sm">
-                            <i class="fas fa-lock me-2"></i> Confirm & Pay
-                        </button>
+                <!-- Checkout Steps Indicator -->
+                <div class="row mb-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8">
+                        <div class="d-flex justify-content-between position-relative px-2">
+                            <!-- Progress Line Background -->
+                            <div class="position-absolute top-50 start-0 end-0 translate-middle-y bg-secondary bg-opacity-20"
+                                style="height: 2px; z-index: 0; margin-top: -12px;"></div>
+                            <!-- Progress Line Fill (Cart to Shipping) -->
+                            <div class="position-absolute top-50 start-0 translate-middle-y bg-success"
+                                style="height: 2px; z-index: 0; margin-top: -12px; width: 50%;"></div>
+
+                            <!-- Step 1: Cart (Done) -->
+                            <div class="text-center position-relative" style="z-index: 1;">
+                                <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center mx-auto mb-2 shadow-sm"
+                                    style="width: 35px; height: 35px;">
+                                    <i class="fas fa-check small"></i>
+                                </div>
+                                <span class="small fw-bold text-success text-uppercase"
+                                    style="font-size: 0.7rem; letter-spacing: 1px;">Cart</span>
+                            </div>
+
+                            <!-- Step 2: Shipping & Payment (Active) -->
+                            <div class="text-center position-relative" style="z-index: 1;">
+                                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto mb-2 shadow-lg"
+                                    style="width: 45px; height: 45px; border: 4px solid #fff;">
+                                    <i class="fas fa-credit-card small"></i>
+                                </div>
+                                <span class="small fw-bold text-primary text-uppercase"
+                                    style="font-size: 0.7rem; letter-spacing: 1px;">Checkout & Payment</span>
+                            </div>
+
+                            <!-- Step 3: Confirmation (Inactive) -->
+                            <div class="text-center position-relative" style="z-index: 1;">
+                                <div class="rounded-circle bg-white text-muted border d-flex align-items-center justify-content-center mx-auto mb-2 shadow-sm"
+                                    style="width: 35px; height: 35px;">
+                                    <i class="fas fa-check small"></i>
+                                </div>
+                                <span class="small fw-bold text-muted text-uppercase"
+                                    style="font-size: 0.7rem; letter-spacing: 1px;">Confirmation</span>
+                            </div>
+                        </div>
                     </div>
+                </div>
+
+                <div class="row g-4">
+                    <!-- Left Details Form -->
+                    <div class="col-lg-8">
+                        <form id="checkoutForm">
+                            <!-- Shipping Address Selection -->
+                            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <h4 class="fw-bold m-0"><i
+                                            class="fas fa-map-marker-alt text-accent me-2"></i>Shipping Details</h4>
+                                    <button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-3"
+                                        data-bs-toggle="modal" data-bs-target="#mapModal">
+                                        <i class="fas fa-map-marked-alt me-1"></i> Pick on Map
+                                    </button>
+                                </div>
+
+                                <!-- Saved Addresses Horizontal Scroll -->
+                                <div th:if="${not #lists.isEmpty(savedAddresses)}" class="mb-4">
+                                    <label class="form-label fw-bold small text-muted mb-3">Choose from saved
+                                        addresses:</label>
+                                    <div class="d-flex gap-3 overflow-auto pb-3" style="scrollbar-width: thin;">
+                                        <div th:each="addr : ${savedAddresses}"
+                                            class="saved-address-card border rounded-4 p-3 flex-shrink-0"
+                                            style="min-width: 250px; cursor: pointer; transition: all 0.2s;"
+                                            th:data-name="${addr.fullName}" th:data-phone="${addr.phone}"
+                                            th:data-street="${addr.streetAddress}" th:data-city="${addr.city}"
+                                            th:data-pin="${addr.pinCode}" onclick="selectSavedAddress(this)">
+                                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                                <span class="fw-bold cart-amount" th:text="${addr.fullName}">Name</span>
+                                                <i class="fas fa-check-circle text-success d-none check-icon"></i>
+                                            </div>
+                                            <p class="small text-muted mb-0" th:text="${addr.streetAddress}">Address</p>
+                                            <p class="small text-muted mb-0"><span th:text="${addr.city}">City</span>,
+                                                <span th:text="${addr.pinCode}">PIN</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold small text-muted">Full Name</label>
+                                        <input type="text" id="shipName" class="form-control" required
+                                            placeholder="John Doe">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold small text-muted">Phone Number</label>
+                                        <input type="tel" id="shipPhone" class="form-control" required
+                                            placeholder="+91 98765 43210">
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label fw-bold small text-muted">Full Address</label>
+                                        <textarea id="shipAddress" class="form-control" rows="3" required
+                                            placeholder="House No, Street, Landmark..."></textarea>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold small text-muted">City / District</label>
+                                        <input type="text" id="shipCity" class="form-control" required
+                                            placeholder="New Delhi">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold small text-muted">PIN Code</label>
+                                        <input type="text" id="shipPin" class="form-control" required
+                                            placeholder="110001">
+                                    </div>
+                                </div>
+
+                                <div class="form-check mt-3" th:if="${#lists.isEmpty(savedAddresses)} or ${true}">
+                                    <input class="form-check-input" type="checkbox" id="saveAddressCheckbox" checked>
+                                    <label class="form-check-label small text-muted" for="saveAddressCheckbox">
+                                        Save this address for future use
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Payment Method -->
+                            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+                                <h4 class="fw-bold mb-4"><i class="fas fa-credit-card text-accent me-2"></i>Payment
+                                    Method</h4>
+
+                                <div
+                                    class="form-check border rounded-3 p-3 mb-3 theme-card shadow-sm d-flex align-items-center">
+                                    <input class="form-check-input ms-1 me-3" type="radio" name="paymentMethod"
+                                        id="payRazorpay" value="razorpay" checked>
+                                    <label
+                                        class="form-check-label flex-grow-1 fw-bold fs-5 d-flex justify-content-between align-items-center"
+                                        for="payRazorpay" style="cursor:pointer;">
+                                        <span>Pay Online <small class="text-muted fw-normal fs-6 d-block">Credit Card,
+                                                UPI,
+                                                Netbanking</small></span>
+                                        <i class="fas fa-shield-alt text-primary fa-lg"></i>
+                                    </label>
+                                </div>
+
+                                <div
+                                    class="form-check border rounded-3 p-3 theme-card shadow-sm d-flex align-items-center">
+                                    <input class="form-check-input ms-1 me-3" type="radio" name="paymentMethod"
+                                        id="payCOD" value="cod">
+                                    <label
+                                        class="form-check-label flex-grow-1 fw-bold fs-5 d-flex justify-content-between align-items-center"
+                                        for="payCOD" style="cursor:pointer;">
+                                        <span>Cash on Delivery <small class="text-muted fw-normal fs-6 d-block">Pay when
+                                                you
+                                                receive the package</small></span>
+                                        <i class="fas fa-money-bill-wave text-success fa-lg"></i>
+                                    </label>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Right Order Summary -->
+                    <div class="col-lg-4">
+                        <div class="card border-0 shadow-sm rounded-4 p-4 sticky-top" style="top: 100px;">
+                            <h4 class="fw-bold mb-4">Order Summary</h4>
+
+                            <div class="d-flex justify-content-between mb-2" th:if="${isMember}">
+                                <span class="text-warning fw-bold"><i class="fas fa-crown me-1"></i>Elite Discount
+                                    (10%)</span>
+                                <span class="fw-bold text-success"
+                                    th:text="'- Rs. ' + ${#numbers.formatDecimal(membershipDiscount, 1, 2)}">0.00</span>
+                            </div>
+
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-muted">Item Subtotal</span>
+                                <span class="fw-bold cart-amount"
+                                    th:text="'Rs. ' + ${#numbers.formatDecimal(subtotal, 1, 2)}">0.00</span>
+                            </div>
+
+                            <div class="d-flex justify-content-between mb-2 text-success"
+                                th:if="${appliedPromo != null}">
+                                <span>Discount (<span th:text="${appliedPromo}"></span>)</span>
+                                <span class="fw-bold">- Rs. <span
+                                        th:text="${#numbers.formatDecimal(discountAmount, 1, 2)}">0.00</span></span>
+                            </div>
+
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="text-muted">Delivery Charges</span>
+                                <span class="fw-bold" th:if="${deliveryFee > 0}"
+                                    th:text="'+ Rs. ' + ${deliveryFee}">0.00</span>
+                                <span class="fw-bold text-success" th:if="${deliveryFee == 0}">FREE Delivery</span>
+                            </div>
+
+                            <hr>
+
+                            <div class="d-flex justify-content-between mb-4">
+                                <span class="h5 fw-bold cart-amount m-0">Total Amount</span>
+                                <span class="h4 fw-bold text-accent m-0"
+                                    th:text="'Rs. ' + ${#numbers.formatDecimal(total, 1, 2)}">0.00</span>
+                            </div>
+
+                            <button id="placeOrderBtn"
+                                class="btn btn-dark btn-lg w-100 py-3 rounded-pill fw-bold shadow-sm mb-3">
+                                <i class="fas fa-lock me-2"></i> Confirm & Pay
+                            </button>
+
+                            <a th:href="@{/cart}"
+                                class="btn btn-outline-secondary w-100 py-2 rounded-pill fw-medium btn-sm">
+                                <i class="fas fa-arrow-left me-2"></i> Back to Cart
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </main>
+
+    <!-- Map Modal -->
+    <div class="modal fade" id="mapModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow rounded-4">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold">Select Delivery Location</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-muted small mb-3">Drag the marker to your exact delivery location. We'll
+                        automatically fetch the address.</p>
+                    <div id="map"></div>
+                    <div class="map-search-hint">
+                        <i class="fas fa-info-circle me-1"></i> Tip: You can zoom in for better accuracy.
+                    </div>
+                </div>
+                <div class="modal-footer border-0 pt-0">
+                    <button type="button" class="btn btn-light rounded-pill px-4"
+                        data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" id="confirmLocationBtn" class="btn btn-primary rounded-pill px-4"
+                        data-bs-dismiss="modal">Confirm Location</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <footer th:replace="~{layout :: footer}"></footer>
+
+
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script th:inline="javascript">
         const amount = /*[[${total}]]*/ 0;
         const razorpayKey = /*[[${razorpayKey}]]*/ '';
-        
-        document.getElementById('placeOrderBtn').addEventListener('click', function(e) {
+
+        // Address Filling Logic
+        function selectSavedAddress(el) {
+            fillAddress(
+                el.getAttribute('data-name'),
+                el.getAttribute('data-phone'),
+                el.getAttribute('data-street'),
+                el.getAttribute('data-city'),
+                el.getAttribute('data-pin')
+            );
+
+            // Update UI active state
+            document.querySelectorAll('.saved-address-card').forEach(card => card.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        function fillAddress(name, phone, address, city, pin) {
+            document.getElementById('shipName').value = name;
+            document.getElementById('shipPhone').value = phone;
+            document.getElementById('shipAddress').value = address;
+            document.getElementById('shipCity').value = city;
+            document.getElementById('shipPin').value = pin;
+        }
+
+        // Map Logic
+        let map, marker;
+        const mapModal = document.getElementById('mapModal');
+
+        mapModal.addEventListener('shown.bs.modal', function () {
+            if (!map) {
+                // Default to Delhi if geolocation fails
+                const defaultPos = [28.6139, 77.2090];
+                map = L.map('map').setView(defaultPos, 13);
+
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; OpenStreetMap contributors'
+                }).addTo(map);
+
+                marker = L.marker(defaultPos, { draggable: true }).addTo(map);
+
+                // Try Geolocation
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(position => {
+                        const pos = [position.coords.latitude, position.coords.longitude];
+                        map.setView(pos, 16);
+                        marker.setLatLng(pos);
+                    });
+                }
+            } else {
+                map.invalidateSize();
+            }
+        });
+
+        document.getElementById('confirmLocationBtn').addEventListener('click', function () {
+            const pos = marker.getLatLng();
+
+            // Reverse Geocoding using Nominatim (Free)
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${pos.lat}&lon=${pos.lng}`)
+                .then(response => response.json())
+                .then(data => {
+                    const addr = data.address;
+                    document.getElementById('shipAddress').value = data.display_name || '';
+                    document.getElementById('shipCity').value = addr.city || addr.town || addr.village || addr.state_district || '';
+                    document.getElementById('shipPin').value = addr.postcode || '';
+
+                    // Simple animation to show fields updated
+                    const fields = ['shipAddress', 'shipCity', 'shipPin'];
+                    fields.forEach(id => {
+                        const el = document.getElementById(id);
+                        el.style.backgroundColor = '#e8f0fe';
+                        setTimeout(() => el.style.backgroundColor = '', 1000);
+                    });
+                })
+                .catch(err => console.error("Geocoding error:", err));
+        });
+
+        document.getElementById('placeOrderBtn').addEventListener('click', function (e) {
             e.preventDefault();
-            
+
             // Basic UI Validation
             const form = document.getElementById('checkoutForm');
-            if(!form.checkValidity()) {
+            if (!form.checkValidity()) {
                 form.reportValidity();
                 return;
             }
 
             const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
-            
+
             // Shipping details
             const shippingData = {
                 name: document.getElementById('shipName').value,
@@ -135,13 +419,13 @@
                     url: '/create_order',
                     type: 'POST',
                     contentType: 'application/json',
-                    data: JSON.stringify({amount: amount}),
-                    success: function(response){
+                    data: JSON.stringify({ amount: amount }),
+                    success: function (response) {
                         const res = typeof response === 'string' ? JSON.parse(response) : response;
                         updateOrder(res.id, 'COD_' + Date.now(), 'paid');
                     },
-                    error: function() {
-                        alert("Error initializing order.");
+                    error: function () {
+                        showNotification("Error initializing order. Please try again.", "error");
                         resetBtn();
                     }
                 });
@@ -151,10 +435,10 @@
                     url: '/create_order',
                     type: 'POST',
                     contentType: 'application/json',
-                    data: JSON.stringify({amount: amount}),
-                    success: function(response){
+                    data: JSON.stringify({ amount: amount }),
+                    success: function (response) {
                         const res = typeof response === 'string' ? JSON.parse(response) : response;
-                        
+
                         const options = {
                             "key": razorpayKey,
                             "amount": res.amount,
@@ -162,7 +446,7 @@
                             "name": "ShopEase",
                             "description": "Secure Purchase",
                             "order_id": res.id,
-                            "handler": function (response){
+                            "handler": function (response) {
                                 updateOrder(res.id, response.razorpay_payment_id, 'paid');
                             },
                             "prefill": {
@@ -174,14 +458,14 @@
                             }
                         };
                         const rzp1 = new Razorpay(options);
-                        rzp1.on('payment.failed', function (response){
+                        rzp1.on('payment.failed', function (response) {
                             updateOrder(res.id, '', 'failed');
                         });
                         rzp1.open();
                         resetBtn();
                     },
-                    error: function() {
-                        alert("Error initializing payment gateway.");
+                    error: function () {
+                        showNotification("Error initializing payment gateway. Please check your connection.", "error");
                         resetBtn();
                     }
                 });
@@ -195,6 +479,8 @@
         }
 
         function updateOrder(orderId, paymentId, status) {
+            const saveAddress = document.getElementById('saveAddressCheckbox') ? document.getElementById('saveAddressCheckbox').checked : false;
+
             $.ajax({
                 url: '/update_order',
                 type: 'POST',
@@ -202,23 +488,32 @@
                 data: JSON.stringify({
                     order_id: orderId,
                     payment_id: paymentId,
-                    status: status
+                    status: status,
+                    save_address: saveAddress,
+                    shipping_details: {
+                        name: document.getElementById('shipName').value,
+                        phone: document.getElementById('shipPhone').value,
+                        address: document.getElementById('shipAddress').value,
+                        city: document.getElementById('shipCity').value,
+                        pin: document.getElementById('shipPin').value
+                    }
                 }),
-                success: function(res){
-                    if(status === 'paid') {
-                        alert('Order Placed Successfully! Check your email for the bill.');
-                        window.location.href = '/?success';
+                success: function (res) {
+                    if (status === 'paid') {
+                        window.location.href = '/orderSuccess/' + orderId;
                     } else {
-                        alert('Payment Failed or Cancelled. You have not been charged.');
+                        showNotification('Payment Failed or Cancelled. You have not been charged.', 'error');
                         resetBtn();
                     }
                 },
-                error: function() {
-                    alert('Critical Error verifying payment.');
+                error: function () {
+                    showNotification('Critical Error verifying payment. Please contact support.', 'error');
                     resetBtn();
                 }
             });
         }
     </script>
+    <footer th:replace="~{layout :: footer}"></footer>
 </body>
+
 </html>

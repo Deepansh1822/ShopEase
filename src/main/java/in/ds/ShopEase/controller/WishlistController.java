@@ -16,8 +16,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
+import in.ds.ShopEase.service.ProductService;
 
 @Controller
 public class WishlistController {
@@ -31,13 +32,34 @@ public class WishlistController {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private ProductService productService;
+
     @GetMapping("/wishlist")
-    public String viewWishlist(Model model, Principal principal) {
+    public String wishlistPage(Model model, Principal principal) {
         if (principal == null) return "redirect:/login";
         
         User user = userRepository.findByEmail(principal.getName());
         List<Wishlist> wishlistItems = wishlistRepository.findByUserOrderByAddedAtDesc(user);
+        
+        List<Product> suggestions = new ArrayList<>();
+        if (!wishlistItems.isEmpty()) {
+            Set<Long> categoryIds = wishlistItems.stream()
+                .map(w -> w.getProduct().getCategory().getId())
+                .collect(Collectors.toSet());
+            
+            for (Long catId : categoryIds) {
+                suggestions.addAll(productService.getProductsByCategoryId(catId).stream()
+                    .filter(p -> wishlistItems.stream().noneMatch(w -> w.getProduct().getId().equals(p.getId())))
+                    .limit(2)
+                    .collect(Collectors.toList()));
+            }
+        } else {
+            suggestions = productService.getAllProducts().stream().limit(4).collect(Collectors.toList());
+        }
+
         model.addAttribute("wishlistItems", wishlistItems);
+        model.addAttribute("suggestions", suggestions);
         return "wishlist";
     }
 

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{layout :: head}"></head>
+
+<body>
+    <nav th:replace="~{layout :: nav}"></nav>
+
+    <div class="content-wrapper bg-light pt-0">
+        <!-- Admin Hero -->
+        <section class="py-4 bg-dark text-white position-relative overflow-hidden"
+            style="background: linear-gradient(135deg, #2c3e50 0%, #000 100%);">
+            <div
+                class="container py-4 z-1 position-relative d-flex flex-wrap justify-content-between align-items-center gap-3">
+                <div>
+                    <span class="badge bg-warning text-dark rounded-pill px-3 py-1 mb-2 fw-bold text-uppercase"
+                        style="font-size:0.7rem;">Marketing</span>
+                    <h1 class="display-6 fw-bold mb-1 text-white"><i
+                            class="fas fa-percentage me-2 text-warning"></i>Offers Management</h1>
+                    <p class="text-white-50 mb-0 small">Create and manage seasonal sales, promotional banners, and
+                        discount offers.</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <a th:href="@{/admin/products}" class="btn btn-outline-light rounded-pill px-4">
+                        <i class="fas fa-boxes me-2"></i>Manage Products
+                    </a>
+                    <a th:href="@{/admin/offers/add}"
+                        class="btn fw-bold shadow rounded-pill px-4 d-inline-flex align-items-center gap-2"
+                        style="background:#f1c40f; border:none; color:#000;">
+                        <i class="fas fa-plus"></i><span>Create Offer</span>
+                    </a>
+                </div>
+            </div>
+            <div class="position-absolute rounded-circle bg-danger opacity-10"
+                style="width: 300px; height: 300px; bottom: -150px; left: -100px; filter: blur(70px);"></div>
+            <div class="position-absolute rounded-circle bg-warning opacity-10"
+                style="width: 350px; height: 350px; top: -100px; right: -80px; filter: blur(60px);"></div>
+        </section>
+
+        <div class="container py-5 mt-4">
+            <!-- Offers Table -->
+            <div class="card theme-card border-0 shadow rounded-4 overflow-hidden">
+                <div class="card-header theme-card py-3 px-4 border-0 d-flex align-items-center justify-content-between">
+                    <h5 class="fw-bold cart-amount m-0"><i class="fas fa-bullhorn text-warning me-2"></i>Active Campaigns</h5>
+                    <span class="badge bg-dark rounded-pill px-3" th:text="${offers.size()} + ' campaigns'">0
+                        items</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th class="px-4 py-3 text-muted small fw-bold text-uppercase">Status</th>
+                                <th class="py-3 text-muted small fw-bold text-uppercase">Banner</th>
+                                <th class="py-3 text-muted small fw-bold text-uppercase">Campaign</th>
+                                <th class="py-3 text-muted small fw-bold text-uppercase text-center">Discount</th>
+                                <th class="py-3 text-muted small fw-bold text-uppercase">Promo Code</th>
+                                <th class="py-3 text-muted small fw-bold text-uppercase">Expiry</th>
+                                <th class="py-3 text-muted small fw-bold text-uppercase text-end pe-4">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="offer : ${offers}" class="border-top">
+                                <td class="px-4">
+                                    <a th:href="@{/admin/offers/toggle/{id}(id=${offer.id})}"
+                                        class="text-decoration-none">
+                                        <span th:if="${offer.active}"
+                                            class="badge bg-success rounded-pill px-3 py-1 shadow-sm">Active</span>
+                                        <span th:unless="${offer.active}"
+                                            class="badge bg-secondary rounded-pill px-3 py-1">Paused</span>
+                                    </a>
+                                </td>
+                                <td>
+                                    <img th:src="@{'/img/' + ${offer.imageName}}" width="100" height="40"
+                                        class="object-fit-cover rounded-3 shadow-sm border" alt="Offer">
+                                </td>
+                                <td>
+                                    <span class="fw-bold cart-amount" th:text="${offer.title}">Title</span>
+                                    <br>
+                                    <small class="text-muted" th:text="${offer.description}"></small>
+                                </td>
+                                <td class="text-center">
+                                    <span class="h5 fw-bold text-accent m-0"
+                                        th:text="${offer.discountPercentage} + '%'">0%</span>
+                                </td>
+                                <td>
+                                    <code class="bg-dark bg-opacity-10 border border-white border-opacity-10 px-2 py-1 rounded fw-bold cart-amount"
+                                        th:text="${offer.promoCode}">PROMO</code>
+                                </td>
+                                <td>
+                                    <span class="text-muted small" th:text="${offer.expiryDate}">2026-01-01</span>
+                                </td>
+                                <td class="text-end pe-4">
+                                    <div class="d-flex gap-1 justify-content-end">
+                                        <a th:href="@{/admin/offers/edit/{id}(id=${offer.id})}"
+                                            class="btn btn-sm btn-light rounded-circle"
+                                            style="width:32px;height:32px;padding:0;line-height:30px;" title="Edit">
+                                            <i class="fas fa-edit text-primary"></i>
+                                        </a>
+                                        <a th:href="@{/admin/offers/delete/{id}(id=${offer.id})}"
+                                            class="btn btn-sm btn-light rounded-circle"
+                                            style="width:32px;height:32px;padding:0;line-height:30px;"
+                                            onclick="return confirm('Delete this offer permanently?');" title="Delete">
+                                            <i class="fas fa-trash text-danger"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr th:if="${offers.empty}">
+                                <td colspan="7" class="text-center py-5 text-muted">
+                                    <i class="fas fa-gift fa-3x opacity-25 d-block mb-3"></i>
+                                    No promotional offers created yet.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="~{layout :: footer}"></footer>
+</body>
+
+</html>

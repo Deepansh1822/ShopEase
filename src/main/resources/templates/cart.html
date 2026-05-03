@@ -1,106 +1,290 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="~{layout :: head}"></head>
+
 <body>
     <nav th:replace="~{layout :: nav}"></nav>
+    <main class="flex-grow-1">
 
-    <div class="content-wrapper">
-        <div class="container">
-            <h2 class="mb-4">Your Shopping Cart</h2>
-            <div class="row" th:if="${not #lists.isEmpty(cart)}">
-                <div class="col-lg-8">
-                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
-                        <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
-                            <h5 class="fw-bold m-0"><i class="fas fa-shopping-cart text-accent me-2"></i>Cart Items</h5>
-                            <span class="badge bg-dark rounded-pill px-3 py-2" th:text="${cart.size()} + ' Items'">0 Items</span>
-                        </div>
-                        <div class="card-body p-0">
-                            <div class="row align-items-center p-4 border-bottom position-relative" th:each="item : ${cart}">
-                                <div class="col-3 col-md-2">
-                                    <div class="ratio ratio-1x1 rounded-3 overflow-hidden shadow-sm">
-                                        <img th:src="@{'/img/' + ${item.product.imageName}}" class="object-fit-cover" alt="Product">
-                                    </div>
+        <div class="content-wrapper bg-light pt-0">
+            <!-- Cart Hero -->
+            <section class="py-5 bg-dark text-white text-center position-relative overflow-hidden"
+                style="background: linear-gradient(135deg, #1a1a1a 0%, #000 100%);">
+                <div class="container py-5 z-1 position-relative">
+                    <span
+                        class="badge bg-accent text-white rounded-pill px-3 py-2 mb-3 fw-bold text-uppercase tracking-wider">Secured
+                        Bag</span>
+                    <h1 class="display-3 fw-bold mb-3">Review Your Selection</h1>
+                    <p class="lead text-white-50 mx-auto" style="max-width: 600px;">Every item in your cart is reserved
+                        for
+                        you. Proceed to checkout to finalize your premium collection.</p>
+                </div>
+                <!-- Decorative blobs -->
+                <div class="position-absolute rounded-circle bg-accent opacity-40"
+                    style="width: 400px; height: 400px; top: -100px; right: -100px; filter: blur(40px);"></div>
+                <div class="position-absolute rounded-circle bg-primary opacity-20"
+                    style="width: 300px; height: 300px; bottom: -50px; left: -50px; filter: blur(30px);"></div>
+            </section>
+
+            <div class="container py-5 mt-5" style="max-width: 1300px;">
+                <!-- Checkout Steps Indicator -->
+                <div class="row mb-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8">
+                        <div class="d-flex justify-content-between position-relative px-2">
+                            <!-- Progress Line Background -->
+                            <div class="position-absolute top-50 start-0 end-0 translate-middle-y bg-secondary bg-opacity-20"
+                                style="height: 2px; z-index: 0; margin-top: -12px;"></div>
+
+                            <!-- Step 1: Cart (Active) -->
+                            <div class="text-center position-relative" style="z-index: 1;">
+                                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto mb-2 shadow-lg"
+                                    style="width: 45px; height: 45px; border: 4px solid #fff;">
+                                    <i class="fas fa-shopping-cart small"></i>
                                 </div>
-                                <div class="col-9 col-md-4">
-                                    <h5 class="mb-1 fw-bold text-dark" th:text="${item.product.name}">Product Name</h5>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <span class="badge bg-secondary bg-opacity-10 text-secondary" th:text="${item.product.category.name}">Category</span>
-                                        <span class="badge bg-primary bg-opacity-10 text-primary" th:if="${item.product.brand != null}" th:text="${item.product.brand}">Brand</span>
-                                    </div>
+                                <span class="small fw-bold text-primary text-uppercase"
+                                    style="font-size: 0.7rem; letter-spacing: 1px;">Cart</span>
+                            </div>
+
+                            <!-- Step 2: Shipping & Payment (Inactive) -->
+                            <div class="text-center position-relative" style="z-index: 1;">
+                                <div class="rounded-circle bg-white text-muted border d-flex align-items-center justify-content-center mx-auto mb-2 shadow-sm"
+                                    style="width: 35px; height: 35px;">
+                                    <i class="fas fa-credit-card small"></i>
                                 </div>
-                                <div class="col-4 col-md-2 mt-3 mt-md-0 text-md-center">
-                                    <div class="bg-light rounded-pill px-3 py-1 d-inline-block border">
-                                        <span class="text-muted small fw-bold me-1">Qty:</span>
-                                        <span class="fw-bold" th:text="${item.quantity}">1</span>
-                                    </div>
+                                <span class="small fw-bold text-muted text-uppercase"
+                                    style="font-size: 0.7rem; letter-spacing: 1px;">Checkout & Payment</span>
+                            </div>
+
+                            <!-- Step 3: Confirmation (Inactive) -->
+                            <div class="text-center position-relative" style="z-index: 1;">
+                                <div class="rounded-circle bg-white text-muted border d-flex align-items-center justify-content-center mx-auto mb-2 shadow-sm"
+                                    style="width: 35px; height: 35px;">
+                                    <i class="fas fa-check small"></i>
                                 </div>
-                                <div class="col-5 col-md-3 mt-3 mt-md-0 text-end">
-                                    <span class="text-muted small d-block">Price</span>
-                                    <span class="h5 fw-bold m-0 text-dark" th:text="'Rs. ' + ${item.product.price * item.quantity}">Price</span>
-                                </div>
-                                <div class="col-3 col-md-1 mt-3 mt-md-0 text-end">
-                                    <a th:href="@{/cart/removeItem/{id}(id=${item.product.id})}" class="btn btn-outline-danger rounded-circle p-2" title="Remove Item">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
-                                </div>
+                                <span class="small fw-bold text-muted text-uppercase"
+                                    style="font-size: 0.7rem; letter-spacing: 1px;">Confirmation</span>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4">
-                    <div class="card p-4 border-0 shadow-sm rounded-4">
-                        <h4 class="fw-bold mb-4">Order Summary</h4>
-                        
-                        <!-- Promo Messages -->
-                        <div th:if="${successMsg}" class="alert alert-success py-2 small" th:text="${successMsg}"></div>
-                        <div th:if="${errorMsg}" class="alert alert-danger py-2 small" th:text="${errorMsg}"></div>
-
-                        <div class="d-flex justify-content-between mb-2">
-                            <span class="text-muted">Subtotal</span>
-                            <span class="fw-bold" th:text="'Rs. ' + ${subtotal}">0.00</span>
-                        </div>
-                        <div class="d-flex justify-content-between mb-3 text-success" th:if="${discountAmount > 0}">
-                            <span>Discount (<span th:text="${appliedPromo}"></span>)</span>
-                            <span class="fw-bold">- Rs. <span th:text="${discountAmount}"></span></span>
-                        </div>
-                        <div class="d-flex justify-content-between mb-3">
-                            <span class="text-muted">Delivery Fee</span>
-                            <span class="fw-bold" th:if="${deliveryFee > 0}" th:text="'+ Rs. ' + ${deliveryFee}">0.00</span>
-                            <span class="fw-bold text-success" th:if="${deliveryFee == 0}">FREE</span>
-                        </div>
-                        
-                        <hr>
-                        <div class="d-flex justify-content-between mb-4">
-                            <span class="fw-bold">Total Amount</span>
-                            <span class="h4 fw-bold text-dark" th:text="'Rs. ' + ${total}">0.00</span>
-                        </div>
-
-                        <!-- Apply Promo Form -->
-                        <form th:action="@{/cart/applyPromo}" method="post" class="mb-4" th:if="${appliedPromo == null}">
-                            <label class="form-label small fw-bold text-muted text-uppercase">Have a promo code?</label>
-                            <div class="input-group">
-                                <input type="text" name="promoCode" class="form-control" placeholder="Enter code" required>
-                                <button type="submit" class="btn btn-dark">Apply</button>
+                <div class="row" th:if="${not #lists.isEmpty(cart)}">
+                    <div class="col-lg-8">
+                        <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
+                            <div
+                                class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+                                <h5 class="fw-bold m-0"><i class="fas fa-shopping-cart text-accent me-2"></i>Cart Items
+                                </h5>
+                                <span class="badge bg-dark rounded-pill px-3 py-2" th:text="${cart.size()} + ' Items'">0
+                                    Items</span>
                             </div>
-                        </form>
-                        
-                        <!-- Remove Promo btn -->
-                        <div class="mb-4" th:if="${appliedPromo != null}">
-                            <a th:href="@{/cart/removePromo}" class="btn btn-outline-danger btn-sm w-100 rounded-pill">Remove Promo Code</a>
+                            <div class="card-body p-0">
+                                <div class="row align-items-center p-4 border-bottom position-relative"
+                                    th:each="item : ${cart}">
+                                    <div class="col-3 col-md-2">
+                                        <div class="ratio ratio-1x1 rounded-3 overflow-hidden shadow-sm">
+                                            <img th:src="@{'/img/' + ${item.product.imageName}}"
+                                                class="object-fit-cover" alt="Product">
+                                        </div>
+                                    </div>
+                                    <div class="col-9 col-md-4">
+                                        <h5 class="mb-1 fw-bold cart-amount" th:text="${item.product.name}">Product Name
+                                        </h5>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <span class="badge bg-secondary bg-opacity-10 text-secondary"
+                                                th:text="${item.product.category.name}">Category</span>
+                                            <span class="badge bg-primary bg-opacity-10 text-primary"
+                                                th:if="${item.product.brand != null}"
+                                                th:text="${item.product.brand}">Brand</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 col-md-2 mt-3 mt-md-0 text-md-center">
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <div class="input-group input-group-sm" style="width: 110px;">
+                                                <a th:href="@{/cart/updateQuantity/{id}/-1(id=${item.product.id})}"
+                                                    class="btn btn-dark border-secondary border-opacity-25 d-flex align-items-center justify-content-center qty-update-btn"
+                                                    th:data-id="${item.product.id}" th:data-change="-1"
+                                                    th:classappend="${item.quantity <= 1} ? 'disabled' : ''"
+                                                    style="width: 32px;">
+                                                    <i class="fas fa-minus small"></i>
+                                                </a>
+                                                <span
+                                                    class="form-control text-center fw-bold bg-white border-secondary border-opacity-25 px-0 item-qty"
+                                                    th:text="${item.quantity}"
+                                                    style="cursor: default; min-width: 35px;">1</span>
+                                                <a th:href="@{/cart/updateQuantity/{id}/1(id=${item.product.id})}"
+                                                    class="btn btn-dark border-secondary border-opacity-25 d-flex align-items-center justify-content-center qty-update-btn"
+                                                    th:data-id="${item.product.id}" th:data-change="1"
+                                                    style="width: 32px;">
+                                                    <i class="fas fa-plus small"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-5 col-md-3 mt-3 mt-md-0 text-end">
+                                        <span class="text-muted small d-block">Price</span>
+                                        <span class="h5 fw-bold m-0 cart-amount item-total"
+                                            th:text="'Rs. ' + ${#numbers.formatDecimal(item.product.price * item.quantity, 1, 2)}">Price</span>
+                                    </div>
+                                    <div class="col-3 col-md-1 mt-3 mt-md-0 text-end">
+                                        <a th:href="@{/cart/removeItem/{id}(id=${item.product.id})}"
+                                            class="btn btn-outline-danger rounded-circle p-2" title="Remove Item">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card p-4 border-0 shadow-sm rounded-4">
+                            <h4 class="fw-bold mb-4">Order Summary</h4>
 
-                        <a th:href="@{/checkout}" class="btn btn-primary w-100 py-3 rounded-pill fw-bold shadow-sm">Proceed to Checkout</a>
+                            <!-- Promo Messages -->
+                            <div th:if="${successMsg}" class="alert alert-success py-2 small" th:text="${successMsg}">
+                            </div>
+                            <div th:if="${errorMsg}" class="alert alert-danger py-2 small" th:text="${errorMsg}"></div>
+
+                            <div class="d-flex justify-content-between mb-2" th:if="${isMember}">
+                                <span class="text-warning fw-bold"><i class="fas fa-crown me-1"></i>Elite Discount
+                                    (10%)</span>
+                                <span class="fw-bold text-success" id="membership-discount"
+                                    th:text="'- Rs. ' + ${#numbers.formatDecimal(membershipDiscount, 1, 2)}">0.00</span>
+                            </div>
+
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-muted cart-amount">Item Subtotal</span>
+                                <span class="fw-bold cart-amount" id="item-subtotal"
+                                    th:text="'Rs. ' + ${#numbers.formatDecimal(subtotal, 1, 2)}">0.00</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3 text-success"
+                                th:if="${appliedPromo != null}">
+                                <span>Promo Discount (<span th:text="${appliedPromo}"></span>)</span>
+                                <span class="fw-bold">- Rs. <span id="promo-discount"
+                                        th:text="${#numbers.formatDecimal(promoDiscountAmount, 1, 2)}"></span></span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="text-muted cart-amount">Delivery Fee</span>
+                                <span class="fw-bold" id="delivery-fee"
+                                    th:text="${deliveryFee > 0 ? '+ Rs. ' + #numbers.formatDecimal(deliveryFee, 1, 2) : 'FREE'}"
+                                    th:classappend="${deliveryFee == 0} ? 'text-success' : ''">0.00</span>
+                            </div>
+
+                            <hr>
+                            <div class="d-flex justify-content-between mb-4">
+                                <span class="fw-bold cart-amount">Total Amount</span>
+                                <span class="h4 fw-bold cart-amount" id="total-amount"
+                                    th:text="'Rs. ' + ${#numbers.formatDecimal(total, 1, 2)}">0.00</span>
+                            </div>
+
+                            <!-- Apply Promo Form -->
+                            <form th:action="@{/cart/applyPromo}" method="post" class="mb-4"
+                                th:if="${appliedPromo == null}">
+                                <label class="form-label small fw-bold text-muted text-uppercase">Have a promo
+                                    code?</label>
+                                <div class="input-group">
+                                    <input type="text" name="promoCode" class="form-control" placeholder="Enter code"
+                                        required>
+                                    <button type="submit" class="btn btn-dark">Apply</button>
+                                </div>
+                            </form>
+
+                            <!-- Remove Promo btn -->
+                            <div class="mb-4" th:if="${appliedPromo != null}">
+                                <a th:href="@{/cart/removePromo}"
+                                    class="btn btn-outline-danger btn-sm w-100 rounded-pill">Remove Promo Code</a>
+                            </div>
+
+                            <a th:href="@{/checkout}"
+                                class="btn btn-primary btn-checkout w-100 py-3 rounded-pill fw-bold shadow-sm mb-3">Proceed to
+                                Checkout</a>
+                            <a th:href="@{/shop}" class="btn btn-outline-secondary w-100 py-2 rounded-pill fw-medium">
+                                <i class="fas fa-arrow-left me-2"></i> Continue Shopping
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="text-center py-5" th:unless="${not #lists.isEmpty(cart)}">
-                <i class="fas fa-shopping-basket fa-4x text-light mb-3"></i>
-                <h3>Your cart is empty</h3>
-                <a th:href="@{/shop}" class="btn btn-primary mt-3">Start Shopping</a>
+                <div class="text-center py-5" th:unless="${not #lists.isEmpty(cart)}">
+                    <i class="fas fa-shopping-basket fa-4x text-light mb-3"></i>
+                    <h3>Your cart is empty</h3>
+                    <a th:href="@{/shop}" class="btn btn-primary mt-3">Start Shopping</a>
+                </div>
             </div>
         </div>
-    </div>
-
+    </main>
     <footer th:replace="~{layout :: footer}"></footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const qtyButtons = document.querySelectorAll('.qty-update-btn');
+
+            qtyButtons.forEach(btn => {
+                btn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const productId = this.getAttribute('data-id');
+                    const change = this.getAttribute('data-change');
+                    const url = `/api/cart/updateQuantity/${productId}/${change}`;
+
+                    const row = this.closest('.row');
+                    const qtySpan = row.querySelector('.item-qty');
+                    const itemTotalSpan = row.querySelector('.item-total');
+                    const minusBtn = row.querySelector('.qty-update-btn[data-change="-1"]');
+
+                    fetch(url)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'error') {
+                                showNotification(data.message, 'error');
+                                return;
+                            }
+                            // Update item quantity and total
+                            qtySpan.innerText = data.itemQty;
+                            itemTotalSpan.innerText = 'Rs. ' + data.itemTotal.toFixed(2);
+
+                            // Update minus button state
+                            if (data.itemQty <= 1) {
+                                minusBtn.classList.add('disabled');
+                            } else {
+                                minusBtn.classList.remove('disabled');
+                            }
+
+                            // Update cart summary
+                            document.getElementById('item-subtotal').innerText = 'Rs. ' + data.subtotal.toFixed(2);
+                            document.getElementById('total-amount').innerText = 'Rs. ' + data.total.toFixed(2);
+
+                            const memDiscount = document.getElementById('membership-discount');
+                            if (memDiscount) memDiscount.innerText = '- Rs. ' + data.membershipDiscount.toFixed(2);
+
+                            const promoDiscount = document.getElementById('promo-discount');
+                            if (promoDiscount) promoDiscount.innerText = '- Rs. ' + data.promoDiscount.toFixed(2);
+
+                            const delFee = document.getElementById('delivery-fee');
+                            if (delFee) {
+                                if (data.deliveryFee === 0) {
+                                    delFee.innerText = 'FREE';
+                                    delFee.classList.add('text-success');
+                                } else {
+                                    delFee.innerText = '+ Rs. ' + data.deliveryFee.toFixed(2);
+                                    delFee.classList.remove('text-success');
+                                }
+                            }
+
+                            // Update navbar cart badge
+                            const badge = document.getElementById('cart-count-badge');
+                            if (badge) {
+                                badge.innerText = data.cartCount;
+                                badge.classList.add('animate__animated', 'animate__rubberBand');
+                                setTimeout(() => badge.classList.remove('animate__animated', 'animate__rubberBand'), 1000);
+                            }
+                        })
+                        .catch(err => {
+                            console.error('Error updating quantity:', err);
+                            // window.location.reload(); // Optional fallback
+                        });
+                });
+            });
+        });
+    </script>
 </body>
+
 </html>

@@ -15,15 +15,38 @@
                     class="badge bg-accent text-white rounded-pill px-3 py-2 mb-3 fw-bold text-uppercase tracking-wider">Limited
                     Time Deals</span>
                 <h1 class="display-3 fw-bold mb-4">Unbeatable Offers</h1>
-                <p class="lead text-white-50 mx-auto" style="max-width: 600px;">Save big on premium quality items. Use
+                <p class="lead text-white-50 mx-auto mb-5" style="max-width: 600px;">Save big on premium quality items. Use
                     our exclusive coupons and partner bank discounts before they expire.</p>
+                
+            <!-- Countdown Timer (Only shows if there's an upcoming expiry) -->
+            <div th:if="${nearestExpiry != null}" class="d-flex justify-content-center gap-4 mt-4 text-white" id="promo-timer" th:data-expiry="${nearestExpiry}">
+                <div class="bg-white bg-opacity-10 rounded-4 p-3 shadow-sm" style="min-width: 80px; backdrop-filter: blur(5px);">
+                    <h2 class="fw-bold mb-0" id="days">00</h2>
+                    <small class="text-uppercase text-white-50" style="font-size: 0.7rem;">Days</small>
+                </div>
+                <div class="bg-white bg-opacity-10 rounded-4 p-3 shadow-sm" style="min-width: 80px; backdrop-filter: blur(5px);">
+                    <h2 class="fw-bold mb-0" id="hours">00</h2>
+                    <small class="text-uppercase text-white-50" style="font-size: 0.7rem;">Hours</small>
+                </div>
+                <div class="bg-white bg-opacity-10 rounded-4 p-3 shadow-sm" style="min-width: 80px; backdrop-filter: blur(5px);">
+                    <h2 class="fw-bold mb-0" id="minutes">00</h2>
+                    <small class="text-uppercase text-white-50" style="font-size: 0.7rem;">Mins</small>
+                </div>
+                <div class="bg-white bg-opacity-10 rounded-4 p-3 shadow-sm" style="min-width: 80px; backdrop-filter: blur(5px);">
+                    <h2 class="fw-bold mb-0" id="seconds">00</h2>
+                    <small class="text-uppercase text-white-50" style="font-size: 0.7rem;">Secs</small>
+                </div>
             </div>
+            <div th:if="${nearestExpiry == null}" class="mt-4">
+                <span class="badge bg-white bg-opacity-10 text-white rounded-pill px-4 py-2 border border-white border-opacity-10">Fresh Deals Everyday</span>
+            </div>
+        </div>
 
             <!-- Decorative blobs -->
-            <div class="position-absolute rounded-circle bg-accent opacity-25"
-                style="width: 400px; height: 400px; top: -100px; right: -100px; filter: blur(60px);"></div>
-            <div class="position-absolute rounded-circle bg-primary opacity-10"
-                style="width: 300px; height: 300px; bottom: -50px; left: -50px; filter: blur(40px);"></div>
+            <div class="position-absolute rounded-circle bg-accent opacity-40"
+                style="width: 400px; height: 400px; top: -100px; right: -100px; filter: blur(40px);"></div>
+            <div class="position-absolute rounded-circle bg-primary opacity-20"
+                style="width: 300px; height: 300px; bottom: -50px; left: -50px; filter: blur(30px);"></div>
         </section>
 
         <div class="container py-5 position-relative z-2 mt-5">
@@ -68,47 +91,32 @@
             </div>
 
             <div class="row g-4 mb-5">
-                <!-- Promo 1 -->
-                <div class="col-lg-6">
-                    <div class="card bg-white border-0 rounded-4 overflow-hidden shadow-sm d-flex flex-row">
-                        <div class="bg-dark text-white p-4 d-flex flex-column justify-content-center align-items-center"
+                <!-- Dynamic Offers from Database -->
+                <div class="col-lg-6" th:each="offer : ${offers}">
+                    <div class="card bg-white border-0 rounded-4 overflow-hidden shadow-sm d-flex flex-row transition-scale">
+                        <div class="bg-dark text-white p-4 d-flex flex-column justify-content-center align-items-center text-center"
                             style="min-width: 140px;">
-                            <h2 class="fw-bold mb-0">50%</h2>
+                            <h2 class="fw-bold mb-0" th:text="${offer.discountPercentage} + '%'">0%</h2>
                             <span class="text-uppercase tracking-wider small">OFF</span>
                         </div>
                         <div class="p-4 flex-grow-1 d-flex flex-column justify-content-between">
                             <div>
-                                <h5 class="fw-bold mb-1">Grand Summer Sale</h5>
-                                <p class="text-muted small mb-3">Valid on Fashion & Electronics over Rs. 2,999.</p>
+                                <h5 class="fw-bold mb-1" th:text="${offer.title}">Campaign Title</h5>
+                                <p class="text-muted small mb-3" th:text="${offer.description}">Campaign Description</p>
                             </div>
                             <div
                                 class="d-flex align-items-center justify-content-between bg-light rounded-pill p-1 ps-3 border border-secondary border-opacity-25">
-                                <span class="fw-bold text-dark code-text font-monospace">SUMMER50</span>
+                                <span class="fw-bold text-dark code-text font-monospace" th:text="${offer.promoCode}">CODE</span>
                                 <button class="btn btn-dark rounded-pill btn-sm px-4 copy-btn">Copy Code</button>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- Promo 2 -->
-                <div class="col-lg-6">
-                    <div class="card bg-white border-0 rounded-4 overflow-hidden shadow-sm d-flex flex-row">
-                        <div class="bg-dark text-white p-4 d-flex flex-column justify-content-center align-items-center"
-                            style="min-width: 140px;">
-                            <h2 class="fw-bold mb-0">20%</h2>
-                            <span class="text-uppercase tracking-wider small">OFF</span>
-                        </div>
-                        <div class="p-4 flex-grow-1 d-flex flex-column justify-content-between">
-                            <div>
-                                <h5 class="fw-bold mb-1">Welcome Discount</h5>
-                                <p class="text-muted small mb-3">Exclusive discount for your very first purchase.</p>
-                            </div>
-                            <div
-                                class="d-flex align-items-center justify-content-between bg-light rounded-pill p-1 ps-3 border border-secondary border-opacity-25">
-                                <span class="fw-bold text-dark code-text font-monospace">WELCOME20</span>
-                                <button class="btn btn-dark rounded-pill btn-sm px-4 copy-btn">Copy Code</button>
-                            </div>
-                        </div>
-                    </div>
+                
+                <!-- Fallback if no offers exist -->
+                <div class="col-12 text-center py-5" th:if="${offers.empty}">
+                    <i class="fas fa-percent fa-3x text-muted opacity-25 mb-3"></i>
+                    <h5 class="text-muted">Stay tuned for exciting new offers!</h5>
                 </div>
             </div>
 
@@ -161,6 +169,41 @@
                     });
                 });
             });
+
+            // Countdown Logic
+            const timerContainer = document.getElementById('promo-timer');
+            if (!timerContainer) return;
+
+            const expiryStr = timerContainer.getAttribute('data-expiry'); // YYYY-MM-DD
+            const countDate = new Date(expiryStr + " 23:59:59").getTime();
+
+            const updateTimer = () => {
+                const now = new Date().getTime();
+                const gap = countDate - now;
+
+                if (gap <= 0) {
+                    timerContainer.innerHTML = '<span class="badge bg-danger rounded-pill px-4 py-2">Offer Expired</span>';
+                    return;
+                }
+
+                const second = 1000;
+                const minute = second * 60;
+                const hour = minute * 60;
+                const day = hour * 24;
+
+                const d = Math.floor(gap / day);
+                const h = Math.floor((gap % day) / hour);
+                const m = Math.floor((gap % hour) / minute);
+                const s = Math.floor((gap % minute) / second);
+
+                document.getElementById("days").innerText = d < 10 ? '0' + d : d;
+                document.getElementById("hours").innerText = h < 10 ? '0' + h : h;
+                document.getElementById("minutes").innerText = m < 10 ? '0' + m : m;
+                document.getElementById("seconds").innerText = s < 10 ? '0' + s : s;
+            };
+            
+            setInterval(updateTimer, 1000);
+            updateTimer();
         });
     </script>
 </body>

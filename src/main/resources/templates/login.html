@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,9 +8,24 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        (function () {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        })();
+    </script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; min-height: 100vh; display: flex; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+        }
 
         /* Left Panel */
         .auth-panel-left {
@@ -23,37 +39,55 @@
             overflow: hidden;
             min-height: 100vh;
         }
+
         .auth-panel-left::before {
             content: '';
             position: absolute;
-            width: 500px; height: 500px;
-            background: radial-gradient(circle, rgba(46,204,113,0.15) 0%, transparent 70%);
-            bottom: -150px; left: -150px;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(46, 204, 113, 0.15) 0%, transparent 70%);
+            bottom: -150px;
+            left: -150px;
             border-radius: 50%;
         }
+
         .auth-panel-left::after {
             content: '';
             position: absolute;
-            width: 350px; height: 350px;
-            background: radial-gradient(circle, rgba(52,152,219,0.12) 0%, transparent 70%);
-            top: -80px; right: -60px;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(52, 152, 219, 0.12) 0%, transparent 70%);
+            top: -80px;
+            right: -60px;
             border-radius: 50%;
         }
-        .auth-brand img { height: 52px; width: auto; }
+
+        .auth-brand img {
+            height: 52px;
+            width: auto;
+        }
+
         .auth-feature-item {
             display: flex;
             align-items: flex-start;
             gap: 14px;
             padding: 16px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.06);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
         }
-        .auth-feature-item:last-child { border-bottom: none; }
+
+        .auth-feature-item:last-child {
+            border-bottom: none;
+        }
+
         .auth-feature-icon {
-            background: rgba(46,204,113,0.15);
+            background: rgba(46, 204, 113, 0.15);
             color: #2ecc71;
             border-radius: 10px;
-            width: 40px; height: 40px;
-            display: flex; align-items: center; justify-content: center;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             flex-shrink: 0;
         }
 
@@ -68,10 +102,12 @@
             min-height: 100vh;
             overflow-y: auto;
         }
+
         .auth-form-card {
             width: 100%;
             max-width: 420px;
         }
+
         .form-control-auth {
             border: 1.5px solid #e8e8e8;
             border-radius: 12px;
@@ -80,11 +116,13 @@
             background: #fff;
             transition: all 0.25s;
         }
+
         .form-control-auth:focus {
             border-color: #2ecc71;
-            box-shadow: 0 0 0 3px rgba(46,204,113,0.12);
+            box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.12);
             background: #fff;
         }
+
         .btn-auth-primary {
             background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
             color: #fff;
@@ -95,13 +133,15 @@
             font-size: 0.95rem;
             letter-spacing: 0.3px;
             transition: all 0.25s;
-            box-shadow: 0 4px 15px rgba(46,204,113,0.35);
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.35);
         }
+
         .btn-auth-primary:hover {
             transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(46,204,113,0.45);
+            box-shadow: 0 6px 20px rgba(46, 204, 113, 0.45);
             color: #fff;
         }
+
         .btn-back {
             border: 1.5px solid #e8e8e8;
             border-radius: 10px;
@@ -116,66 +156,177 @@
             align-items: center;
             gap: 6px;
         }
+
         .btn-back:hover {
             border-color: #2ecc71;
             color: #2ecc71;
         }
-        .divider-text {
-            display: flex; align-items: center; gap: 12px;
-            color: #aaa; font-size: 0.82rem; margin: 20px 0;
-        }
-        .divider-text::before, .divider-text::after {
-            content: ''; flex: 1; height: 1px; background: #e8e8e8;
-        }
-        .input-icon-wrapper { position: relative; }
-        .input-icon {
-            position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
-            color: #bbb; font-size: 0.9rem;
-        }
-        .form-control-auth.with-icon { padding-left: 40px; }
 
-        @media (max-width: 991px) {
-            .auth-panel-left { display: none !important; }
-            .auth-panel-right { padding: 40px 24px; }
+        .divider-text {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #aaa;
+            font-size: 0.82rem;
+            margin: 20px 0;
         }
-    </style>
+
+        .divider-text::before,
+        .divider-text::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #e8e8e8;
+        }
+
+        .input-icon-wrapper {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 0;
+            width: 42px; /* Matches the padding-left */
+            top: 50%;
+            transform: translateY(-50%);
+            color: #bbb;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #bbb;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: color 0.2s;
+            z-index: 10;
+        }
+
+        .password-toggle:hover {
+            color: #2ecc71;
+        }
+
+        .form-control-auth.with-icon {
+            padding-left: 42px !important;
+        }
+
+        .form-control-auth.with-toggle {
+            padding-right: 42px !important;
+        }
+
+            @media (max-width: 991px) {
+                .auth-panel-left {
+                    display: none !important;
+                }
+
+                .auth-panel-right {
+                    padding: 40px 24px;
+                }
+            }
+
+            /* Dark Mode Overrides */
+            [data-theme="dark"] .auth-panel-right {
+                background: #0f172a;
+                color: #f1f5f9;
+            }
+
+            [data-theme="dark"] .form-control-auth {
+                background: rgba(255, 255, 255, 0.05);
+                border-color: rgba(255, 255, 255, 0.1);
+                color: #ffffff;
+            }
+
+            [data-theme="dark"] .form-control-auth:focus {
+                background: rgba(255, 255, 255, 0.08);
+                border-color: #2ecc71;
+            }
+
+            [data-theme="dark"] .text-dark {
+                color: #f1f5f9 !important;
+            }
+
+            [data-theme="dark"] .text-muted {
+                color: #94a3b8 !important;
+            }
+
+            [data-theme="dark"] .btn-back {
+                background: rgba(255, 255, 255, 0.05);
+                border-color: rgba(255, 255, 255, 0.1);
+                color: #cbd5e1;
+            }
+
+            [data-theme="dark"] .form-control-auth::placeholder {
+                color: #64748b !important;
+            }
+
+            [data-theme="dark"] .divider-text {
+                color: #475569;
+            }
+
+            [data-theme="dark"] .divider-text::before,
+            [data-theme="dark"] .divider-text::after {
+                background: rgba(255, 255, 255, 0.08);
+            }
+
+            [data-theme="dark"] .alert-info {
+                background-color: rgba(52, 152, 219, 0.1);
+                border-color: rgba(52, 152, 219, 0.2);
+                color: #3498db;
+            }
+
+            /* Theme-aware Logos */
+            [data-theme="light"] .logo-dark-mode { display: none !important; }
+            [data-theme="dark"] .logo-light-mode { display: none !important; }
+        </style>
 </head>
+
 <body>
     <div class="row g-0 w-100">
 
         <!-- ── Left Brand Panel ───────────────────────────── -->
         <div class="col-lg-6 auth-panel-left">
             <div class="auth-brand mb-5 z-1 position-relative">
-                <img th:src="@{/img/Logo.png}" alt="ShopEase Logo">
+                <img th:src="@{/img/Light_Theme_Logo.png}" alt="ShopEase Logo" style="height:128px; width:auto;">
             </div>
 
             <div class="z-1 position-relative">
                 <h2 class="text-white fw-bold mb-2" style="font-size: 2.2rem; line-height:1.2;">
-                    Welcome back<br>to <span style="color:#2ecc71;">ShopEase</span>
+                    Welcome back to <span style="color:#2ecc71;">ShopEase</span>
                 </h2>
-                <p class="text-white-50 mb-5" style="font-size:1rem; max-width: 380px;">
-                    Your premium destination for curated products at unbeatable prices. Sign in to continue where you left off.
+                <p class="text-white-50 mb-5" style="font-size:1rem; max-width: 550px;">
+                    Your premium destination for curated products at unbeatable prices. Sign in to continue where you
+                    left off.
                 </p>
 
                 <div class="auth-feature-item">
                     <div class="auth-feature-icon"><i class="fas fa-shield-alt"></i></div>
                     <div>
                         <div class="text-white fw-semibold" style="font-size:0.95rem;">Secure & Encrypted</div>
-                        <div class="text-white-50 small">Your data is always protected with industry-standard encryption.</div>
+                        <div class="text-white-50 small">Your data is always protected with industry-standard
+                            encryption.</div>
                     </div>
                 </div>
                 <div class="auth-feature-item">
                     <div class="auth-feature-icon"><i class="fas fa-bolt"></i></div>
                     <div>
                         <div class="text-white fw-semibold" style="font-size:0.95rem;">Instant Order Tracking</div>
-                        <div class="text-white-50 small">Track your purchases in real time from your personal dashboard.</div>
+                        <div class="text-white-50 small">Track your purchases in real time from your personal dashboard.
+                        </div>
                     </div>
                 </div>
                 <div class="auth-feature-item">
                     <div class="auth-feature-icon"><i class="fas fa-heart"></i></div>
                     <div>
                         <div class="text-white fw-semibold" style="font-size:0.95rem;">Personalised Wishlist</div>
-                        <div class="text-white-50 small">Save your favourite products and never lose track of what you love.</div>
+                        <div class="text-white-50 small">Save your favourite products and never lose track of what you
+                            love.</div>
                     </div>
                 </div>
             </div>
@@ -189,7 +340,7 @@
                     <a href="/" class="btn-back">
                         <i class="fas fa-arrow-left"></i> Back to Home
                     </a>
-                    <img th:src="@{/img/Logo.png}" alt="ShopEase" style="height:36px; display:none;" class="d-lg-none">
+                    <img th:src="@{/img/Light_Theme_Logo.png}" alt="ShopEase" class="d-lg-none" style="height:36px; display:none;">
                 </div>
 
                 <h3 class="fw-bold mb-1" style="font-size:1.75rem;">Sign in</h3>
@@ -202,6 +353,12 @@
                 <div th:if="${param.logout}" class="alert alert-info rounded-3 border-0 small py-2 mb-3">
                     <i class="fas fa-info-circle me-2"></i>You've been signed out successfully.
                 </div>
+                <div th:if="${successMsg}" class="alert alert-success rounded-3 border-0 small py-2 mb-3">
+                    <i class="fas fa-check-circle me-2"></i><span th:text="${successMsg}"></span>
+                </div>
+                <div th:if="${errorMsg}" class="alert alert-danger rounded-3 border-0 small py-2 mb-3">
+                    <i class="fas fa-exclamation-circle me-2"></i><span th:text="${errorMsg}"></span>
+                </div>
 
                 <!-- Login Form -->
                 <form th:action="@{/login}" method="post">
@@ -209,18 +366,22 @@
                         <label class="form-label fw-semibold small text-dark">Email Address</label>
                         <div class="input-icon-wrapper">
                             <i class="fas fa-envelope input-icon"></i>
-                            <input type="email" name="username"
-                                   class="form-control form-control-auth with-icon"
-                                   placeholder="you@example.com" required>
+                            <input type="email" name="username" class="form-control form-control-auth with-icon"
+                                placeholder="you@example.com" required>
                         </div>
                     </div>
                     <div class="mb-5">
-                        <label class="form-label fw-semibold small text-dark">Password</label>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <label class="form-label fw-semibold small text-dark mb-1">Password</label>
+                            <a th:href="@{/forgot_password}" class="text-decoration-none small fw-bold"
+                                style="color:#2ecc71;">Forgot?</a>
+                        </div>
                         <div class="input-icon-wrapper">
                             <i class="fas fa-lock input-icon"></i>
-                            <input type="password" name="password"
-                                   class="form-control form-control-auth with-icon"
-                                   placeholder="••••••••" required>
+                            <input type="password" name="password" id="password"
+                                class="form-control form-control-auth with-icon with-toggle" placeholder="••••••••"
+                                required>
+                            <i class="fas fa-eye password-toggle" id="togglePassword"></i>
                         </div>
                     </div>
 
@@ -247,5 +408,18 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const togglePassword = document.querySelector('#togglePassword');
+        const password = document.querySelector('#password');
+
+        togglePassword.addEventListener('click', function (e) {
+            // toggle the type attribute
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            // toggle the eye slash icon
+            this.classList.toggle('fa-eye-slash');
+        });
+    </script>
 </body>
+
 </html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{layout :: head}"></head>
+
+<body>
+    <nav th:replace="~{layout :: nav}"></nav>
+
+    <div class="content-wrapper bg-light py-5">
+        <div class="container text-center">
+            <!-- Checkout Steps Indicator -->
+            <div class="row mb-5 justify-content-center">
+                <div class="col-md-10 col-lg-8">
+                    <div class="d-flex justify-content-between position-relative px-2">
+                        <!-- Progress Line Background -->
+                        <div class="position-absolute top-50 start-0 end-0 translate-middle-y bg-secondary bg-opacity-20"
+                            style="height: 2px; z-index: 0; margin-top: -12px;"></div>
+                        <!-- Progress Line Fill (Full) -->
+                        <div class="position-absolute top-50 start-0 translate-middle-y bg-success"
+                            style="height: 2px; z-index: 0; margin-top: -12px; width: 100%;"></div>
+
+                        <!-- Step 1: Cart (Done) -->
+                        <div class="text-center position-relative" style="z-index: 1;">
+                            <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center mx-auto mb-2 shadow-sm"
+                                style="width: 35px; height: 35px;">
+                                <i class="fas fa-check small"></i>
+                            </div>
+                            <span class="small fw-bold text-success text-uppercase"
+                                style="font-size: 0.7rem; letter-spacing: 1px;">Cart</span>
+                        </div>
+
+                        <!-- Step 2: Shipping & Payment (Done) -->
+                        <div class="text-center position-relative" style="z-index: 1;">
+                            <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center mx-auto mb-2 shadow-sm"
+                                style="width: 35px; height: 35px;">
+                                <i class="fas fa-check small"></i>
+                            </div>
+                            <span class="small fw-bold text-success text-uppercase"
+                                style="font-size: 0.7rem; letter-spacing: 1px;">Checkout & Payment</span>
+                        </div>
+
+                        <!-- Step 3: Confirmation (Active) -->
+                        <div class="text-center position-relative" style="z-index: 1;">
+                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto mb-2 shadow-lg"
+                                style="width: 45px; height: 45px; border: 4px solid #fff;">
+                                <i class="fas fa-check small"></i>
+                            </div>
+                            <span class="small fw-bold text-primary text-uppercase"
+                                style="font-size: 0.7rem; letter-spacing: 1px;">Confirmation</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6">
+                    <!-- Success Card -->
+                    <div class="card theme-card border-0 shadow-lg rounded-5 overflow-hidden">
+                        <div class="card-body p-5">
+                            <!-- Animated Checkmark -->
+                            <div class="mb-4 d-flex justify-content-center">
+                                <div class="rounded-circle bg-success bg-opacity-10 d-flex align-items-center justify-content-center shadow-sm"
+                                    style="width: 100px; height: 100px; border: 4px solid #fff;">
+                                    <i class="fas fa-check text-success display-3"></i>
+                                </div>
+                            </div>
+
+                            <h1 class="display-5 fw-bold cart-amount mb-2">Order Confirmed!</h1>
+                            <p class="lead text-muted mb-5">Thank you for your purchase. Your order has been received
+                                and is being processed.</p>
+
+                            <!-- Order Brief -->
+                            <div class="order-brief-box bg-dark bg-opacity-10 rounded-4 p-4 mb-5 text-start">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-muted small fw-bold text-uppercase">Order ID</span>
+                                    <span class="cart-amount fw-bold" th:text="${order.orderId}">#ORDER-123</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-muted small fw-bold text-uppercase">Payment ID</span>
+                                    <span class="cart-amount fw-bold" th:text="${order.paymentId}">#PAY-123</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-muted small fw-bold text-uppercase">Total Paid</span>
+                                    <span class="text-accent h5 fw-bold m-0" th:text="'Rs. ' + ${order.amount}">Rs.
+                                        0.00</span>
+                                </div>
+                                <hr class="my-3">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="rounded-circle bg-white shadow-sm d-flex align-items-center justify-content-center"
+                                        style="width: 40px; height: 40px;">
+                                        <i class="fas fa-envelope text-primary"></i>
+                                    </div>
+                                    <p class="small text-muted m-0">A confirmation email with the invoice has been sent
+                                        to <br><strong class="cart-amount"
+                                            th:text="${order.user.email}">user@example.com</strong></p>
+                                </div>
+                            </div>
+
+                            <!-- Actions -->
+                            <div class="d-grid gap-3">
+                                <a th:href="@{/profile}"
+                                    class="btn btn-dark btn-lg rounded-pill py-3 fw-bold shadow-sm">
+                                    <i class="fas fa-box-open me-2"></i> Track My Order
+                                </a>
+                                <a th:href="@{/shop}"
+                                    class="btn btn-outline-secondary btn-lg rounded-pill py-3 fw-medium">
+                                    <i class="fas fa-shopping-bag me-2"></i> Continue Shopping
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional Info -->
+                    <p class="mt-5 text-muted small">
+                        Having trouble? <a href="/support" class="text-accent text-decoration-none fw-bold">Contact our
+                            support team</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="~{layout :: footer}"></footer>
+</body>
+
+</html>

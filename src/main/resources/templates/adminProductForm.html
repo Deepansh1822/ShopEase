@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="~{layout :: head}"></head>
+
 <body>
     <nav th:replace="~{layout :: nav}"></nav>
 
@@ -8,14 +10,17 @@
         <!-- Hero -->
         <section class="py-4 bg-dark text-white position-relative overflow-hidden"
             style="background: linear-gradient(135deg, #1a1a1a 0%, #000 100%);">
-            <div class="container py-4 z-1 position-relative d-flex flex-wrap justify-content-between align-items-center gap-3">
+            <div
+                class="container py-4 z-1 position-relative d-flex flex-wrap justify-content-between align-items-center gap-3">
                 <div>
-                    <span class="badge bg-accent text-white rounded-pill px-3 py-1 mb-2 fw-bold text-uppercase" style="font-size:0.7rem;">Admin Panel</span>
+                    <span class="badge bg-accent text-white rounded-pill px-3 py-1 mb-2 fw-bold text-uppercase"
+                        style="font-size:0.7rem;">Admin Panel</span>
                     <h1 class="display-6 fw-bold mb-1 text-white">
                         <i class="fas fa-edit me-2 text-accent"></i>
                         <span th:text="${product.id == null ? 'Add New Product' : 'Edit Product'}">Product Form</span>
                     </h1>
-                    <p class="text-white-50 mb-0 small">Fill in the details below to add a new product to the catalogue.</p>
+                    <p class="text-white-50 mb-0 small">Fill in the details below to add a new product to the catalogue.
+                    </p>
                 </div>
                 <div class="d-flex gap-2">
                     <a th:href="@{/admin/products}" class="btn btn-outline-light rounded-pill px-4">
@@ -23,6 +28,8 @@
                     </a>
                 </div>
             </div>
+            <div class="position-absolute rounded-circle bg-primary opacity-10"
+                style="width: 300px; height: 300px; bottom: -150px; left: -100px; filter: blur(70px);"></div>
             <div class="position-absolute rounded-circle bg-accent opacity-15"
                 style="width: 350px; height: 350px; top: -100px; right: -80px; filter: blur(60px);"></div>
         </section>
@@ -34,103 +41,321 @@
                         <!-- Form Header -->
                         <div class="card-header bg-white border-0 py-4 px-5 d-flex align-items-center gap-3">
                             <div class="rounded-circle bg-accent bg-opacity-10 d-flex align-items-center justify-content-center"
-                                 style="width:48px; height:48px; flex-shrink:0;">
-                                <i class="fas fa-box text-accent"></i>
+                                style="width:48px; height:48px; flex-shrink:0;">
+                                <i class="fas fa-box"></i>
                             </div>
                             <div>
-                                <h5 class="fw-bold m-0" th:text="${product.id == null ? 'New Product Details' : 'Edit Product Details'}">Product Details</h5>
-                                <small class="text-muted">All fields marked with * are required</small>
+                                <h5 class="fw-bold m-0"
+                                    th:text="${product.id == null ? 'New Product Details' : 'Edit Product Details'}">
+                                    Product Details</h5>
+                                <small class="text-muted">All fields marked with <span style="color: #2ecc71;">*</span>
+                                    are required</small>
                             </div>
                         </div>
 
-                        <div class="card-body px-5 py-4">
-                            <form th:action="@{/admin/products/save}" th:object="${product}" method="post">
+                        <div class="card-body p-0">
+                            <form th:action="@{/admin/products/save}" th:object="${product}" method="post"
+                                enctype="multipart/form-data">
                                 <input type="hidden" th:field="*{id}">
+                                <input type="hidden" th:field="*{imageName}">
+                                <input type="hidden" th:field="*{imageName2}">
+                                <input type="hidden" th:field="*{imageName3}">
+                                <input type="hidden" th:field="*{imageName4}">
 
-                                <!-- Row 1: Name + Brand -->
-                                <div class="row g-4 mb-4">
-                                    <div class="col-md-6">
-                                        <label class="form-label fw-bold small text-uppercase text-muted mb-2">Product Name *</label>
-                                        <input type="text" class="form-control form-control-lg rounded-3 border-light-subtle"
-                                               th:field="*{name}" placeholder="e.g. Wireless Headphones" required>
+                                <!-- Section 1: Basic Information -->
+                                <div class="px-5 py-4 border-bottom bg-light bg-opacity-10">
+                                    <div class="d-flex align-items-center gap-2 mb-4">
+                                        <div class="bg-primary bg-opacity-10 p-2 rounded-3 text-primary">
+                                            <i class="fas fa-info-circle"></i>
+                                        </div>
+                                        <h6 class="fw-bold mb-0 text-uppercase tracking-wider small text-muted">Basic
+                                            Information</h6>
                                     </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label fw-bold small text-uppercase text-muted mb-2">Brand Name</label>
-                                        <input type="text" class="form-control form-control-lg rounded-3 border-light-subtle"
-                                               th:field="*{brand}" placeholder="e.g. Sony, Apple, Nike">
-                                    </div>
-                                </div>
-
-                                <!-- Row 2: Category + Price -->
-                                <div class="row g-4 mb-4">
-                                    <div class="col-md-7">
-                                        <label class="form-label fw-bold small text-uppercase text-muted mb-2">Category *</label>
-                                        <div class="d-flex gap-2 align-items-center">
-                                            <select class="form-select form-select-lg rounded-3 border-light-subtle"
+                                    <div class="row g-4">
+                                        <div class="col-md-8">
+                                            <label
+                                                class="form-label fw-bold small text-uppercase text-muted mb-2">Product
+                                                Name *</label>
+                                            <input type="text"
+                                                class="form-control form-control-lg rounded-3 border-light-subtle shadow-sm"
+                                                th:field="*{name}" placeholder="e.g. Wireless Headphones" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label fw-bold small text-uppercase text-muted mb-2">Brand
+                                                Name</label>
+                                            <input type="text"
+                                                class="form-control form-control-lg rounded-3 border-light-subtle shadow-sm"
+                                                th:field="*{brand}" placeholder="e.g. Sony, Apple, Nike">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label
+                                                class="form-label fw-bold small text-uppercase text-muted mb-2">Category
+                                                *</label>
+                                            <div class="d-flex gap-2 align-items-center">
+                                                <select
+                                                    class="form-select form-select-lg rounded-3 border-light-subtle shadow-sm"
                                                     id="categorySelect" name="category.id" required>
-                                                <option value="" disabled th:selected="${product.category == null}">— Select Category —</option>
-                                                <option th:each="cat : ${categories}"
-                                                        th:value="${cat.id}"
+                                                    <option value="" disabled th:selected="${product.category == null}">
+                                                        — Select Category —</option>
+                                                    <option th:each="cat : ${categories}" th:value="${cat.id}"
                                                         th:text="${cat.name}"
                                                         th:selected="${product.category != null and product.category.id == cat.id}">
-                                                </option>
-                                            </select>
-                                            <button type="button" class="btn btn-outline-accent rounded-3 flex-shrink-0 fw-bold px-3"
+                                                    </option>
+                                                </select>
+                                                <button type="button"
+                                                    class="btn btn-outline-accent rounded-3 flex-shrink-0 fw-bold px-3 shadow-sm"
                                                     style="height:50px; border-color:#2ecc71; color:#2ecc71; white-space:nowrap;"
                                                     data-bs-toggle="modal" data-bs-target="#addCategoryModal">
-                                                <i class="fas fa-plus me-1"></i> New
-                                            </button>
+                                                    <i class="fas fa-plus"></i>
+                                                </button>
+                                            </div>
                                         </div>
-                                        <small class="text-muted mt-1 d-block">Don't see your category? Click "New" to add one.</small>
+                                        <div class="col-md-6">
+                                            <label
+                                                class="form-label fw-bold small text-uppercase text-muted mb-2">Warranty
+                                                Information</label>
+                                            <input type="text"
+                                                class="form-control form-control-lg rounded-3 border-light-subtle shadow-sm"
+                                                th:field="*{warranty}" placeholder="e.g. 1 Year Brand Warranty">
+                                        </div>
                                     </div>
-                                    <div class="col-md-5">
-                                        <label class="form-label fw-bold small text-uppercase text-muted mb-2">Price (Rs.) *</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text bg-light border-light-subtle fw-bold text-muted">Rs.</span>
-                                            <input type="number" step="0.01" min="0"
-                                                   class="form-control form-control-lg border-light-subtle rounded-end-3"
-                                                   th:field="*{price}" placeholder="0.00" required>
+                                </div>
+
+                                <!-- Section 2: Pricing & Inventory -->
+                                <div class="px-5 py-4 border-bottom">
+                                    <div class="d-flex align-items-center gap-2 mb-4">
+                                        <div class="bg-success bg-opacity-10 p-2 rounded-3 text-success">
+                                            <i class="fas fa-tags"></i>
+                                        </div>
+                                        <h6 class="fw-bold mb-0 text-uppercase tracking-wider small text-muted">Pricing
+                                            & Inventory</h6>
+                                    </div>
+                                    <div class="row g-4">
+                                        <div class="col-md-4">
+                                            <label class="form-label fw-bold small text-uppercase text-muted mb-2">Sale
+                                                Price (Rs.) *</label>
+                                            <div class="input-group input-group-lg shadow-sm">
+                                                <span
+                                                    class="input-group-text bg-light border-light-subtle fw-bold text-muted">Rs.</span>
+                                                <input type="number" step="0.01" min="0"
+                                                    class="form-control border-light-subtle" th:field="*{price}"
+                                                    placeholder="0.00" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label
+                                                class="form-label fw-bold small text-uppercase text-muted mb-2">Original
+                                                Price (Rs.)</label>
+                                            <div class="input-group input-group-lg shadow-sm">
+                                                <span
+                                                    class="input-group-text bg-light border-light-subtle fw-bold text-muted">Rs.</span>
+                                                <input type="number" step="0.01" min="0"
+                                                    class="form-control border-light-subtle" th:field="*{originalPrice}"
+                                                    placeholder="0.00">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label
+                                                class="form-label fw-bold small text-uppercase text-muted mb-2">Current
+                                                Stock *</label>
+                                            <div class="input-group input-group-lg shadow-sm">
+                                                <span
+                                                    class="input-group-text bg-light border-light-subtle fw-bold text-muted"><i
+                                                        class="fas fa-cubes"></i></span>
+                                                <input type="number" min="0" class="form-control border-light-subtle"
+                                                    th:field="*{stockQuantity}" placeholder="0" required>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Row 3: Image filename -->
-                                <div class="row g-4 mb-4">
-                                    <div class="col-12">
-                                        <label class="form-label fw-bold small text-uppercase text-muted mb-2">Image Filename</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text bg-light border-light-subtle text-muted"><i class="fas fa-image"></i></span>
-                                            <input type="text" class="form-control form-control-lg border-light-subtle"
-                                                   th:field="*{imageName}" placeholder="e.g. laptop.png">
+                                <!-- Section 3: Product Specifications -->
+                                <div class="px-5 py-4 border-bottom bg-light bg-opacity-10">
+                                    <div class="d-flex align-items-center gap-2 mb-4">
+                                        <div class="bg-warning bg-opacity-10 p-2 rounded-3 text-warning">
+                                            <i class="fas fa-list-ul"></i>
                                         </div>
-                                        <small class="text-muted mt-1 d-block">
-                                            <i class="fas fa-folder-open me-1"></i>
-                                            Place images in <code>src/main/resources/static/img/</code>
-                                        </small>
+                                        <h6 class="fw-bold mb-0 text-uppercase tracking-wider small text-muted">
+                                            Additional Attributes</h6>
+                                    </div>
+                                    <div class="row g-4">
+                                        <div class="col-md-3">
+                                            <label
+                                                class="form-label fw-bold small text-uppercase text-muted mb-2">Material
+                                                / Fabric</label>
+                                            <input type="text"
+                                                class="form-control form-control-lg rounded-3 border-light-subtle shadow-sm"
+                                                th:field="*{material}" placeholder="e.g. Cotton">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label fw-bold small text-uppercase text-muted mb-2">Size
+                                                / Fit</label>
+                                            <input type="text"
+                                                class="form-control form-control-lg rounded-3 border-light-subtle shadow-sm"
+                                                th:field="*{size}" placeholder="e.g. XL, 42">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label
+                                                class="form-label fw-bold small text-uppercase text-muted mb-2">Weight</label>
+                                            <input type="text"
+                                                class="form-control form-control-lg rounded-3 border-light-subtle shadow-sm"
+                                                th:field="*{weight}" placeholder="e.g. 500g">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label
+                                                class="form-label fw-bold small text-uppercase text-muted mb-2">Capacity</label>
+                                            <input type="text"
+                                                class="form-control form-control-lg rounded-3 border-light-subtle shadow-sm"
+                                                th:field="*{capacity}" placeholder="e.g. 2L">
+                                        </div>
                                     </div>
                                 </div>
 
-                                <!-- Row 4: Description -->
-                                <div class="mb-5">
-                                    <label class="form-label fw-bold small text-uppercase text-muted mb-2">Description *</label>
-                                    <textarea class="form-control border-light-subtle rounded-3"
-                                              th:field="*{description}" rows="4"
-                                              placeholder="Write a clear, detailed product description..." required></textarea>
+                                <!-- Section 4: Product Media -->
+                                <div class="px-5 py-4 border-bottom">
+                                    <div class="d-flex align-items-center gap-2 mb-4">
+                                        <div class="bg-info bg-opacity-10 p-2 rounded-3 text-info">
+                                            <i class="fas fa-images"></i>
+                                        </div>
+                                        <h6 class="fw-bold mb-0 text-uppercase tracking-wider small text-muted">Product
+                                            Images</h6>
+                                    </div>
+                                    <div class="row g-4">
+                                        <div class="col-md-3">
+                                            <div class="p-3 border rounded-4 bg-light bg-opacity-50 text-center">
+                                                <label
+                                                    class="form-label fw-bold small text-uppercase text-muted mb-3 d-block">Main
+                                                    Thumbnail</label>
+                                                <div class="mb-3 mx-auto rounded-3 overflow-hidden bg-white shadow-sm d-flex align-items-center justify-content-center"
+                                                    style="width: 100px; height: 100px;">
+                                                    <img th:if="${product.imageName != null}"
+                                                        th:src="@{'/img/' + ${product.imageName}}" class="img-fluid"
+                                                        alt="Main">
+                                                    <i th:unless="${product.imageName != null}"
+                                                        class="fas fa-image fa-2x text-light-emphasis"></i>
+                                                </div>
+                                                <input type="file"
+                                                    class="form-control form-control-sm border-light-subtle"
+                                                    name="imgFile1" accept="image/*">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="p-3 border rounded-4 bg-light bg-opacity-50 text-center">
+                                                <label
+                                                    class="form-label fw-bold small text-uppercase text-muted mb-3 d-block">Gallery
+                                                    2</label>
+                                                <div class="mb-3 mx-auto rounded-3 overflow-hidden bg-white shadow-sm d-flex align-items-center justify-content-center"
+                                                    style="width: 100px; height: 100px;">
+                                                    <img th:if="${product.imageName2 != null}"
+                                                        th:src="@{'/img/' + ${product.imageName2}}" class="img-fluid"
+                                                        alt="G2">
+                                                    <i th:unless="${product.imageName2 != null}"
+                                                        class="fas fa-image fa-2x text-light-emphasis"></i>
+                                                </div>
+                                                <input type="file"
+                                                    class="form-control form-control-sm border-light-subtle"
+                                                    name="imgFile2" accept="image/*">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="p-3 border rounded-4 bg-light bg-opacity-50 text-center">
+                                                <label
+                                                    class="form-label fw-bold small text-uppercase text-muted mb-3 d-block">Gallery
+                                                    3</label>
+                                                <div class="mb-3 mx-auto rounded-3 overflow-hidden bg-white shadow-sm d-flex align-items-center justify-content-center"
+                                                    style="width: 100px; height: 100px;">
+                                                    <img th:if="${product.imageName3 != null}"
+                                                        th:src="@{'/img/' + ${product.imageName3}}" class="img-fluid"
+                                                        alt="G3">
+                                                    <i th:unless="${product.imageName3 != null}"
+                                                        class="fas fa-image fa-2x text-light-emphasis"></i>
+                                                </div>
+                                                <input type="file"
+                                                    class="form-control form-control-sm border-light-subtle"
+                                                    name="imgFile3" accept="image/*">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="p-3 border rounded-4 bg-light bg-opacity-50 text-center">
+                                                <label
+                                                    class="form-label fw-bold small text-uppercase text-muted mb-3 d-block">Gallery
+                                                    4</label>
+                                                <div class="mb-3 mx-auto rounded-3 overflow-hidden bg-white shadow-sm d-flex align-items-center justify-content-center"
+                                                    style="width: 100px; height: 100px;">
+                                                    <img th:if="${product.imageName4 != null}"
+                                                        th:src="@{'/img/' + ${product.imageName4}}" class="img-fluid"
+                                                        alt="G4">
+                                                    <i th:unless="${product.imageName4 != null}"
+                                                        class="fas fa-image fa-2x text-light-emphasis"></i>
+                                                </div>
+                                                <input type="file"
+                                                    class="form-control form-control-sm border-light-subtle"
+                                                    name="imgFile4" accept="image/*">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 text-center mt-3">
+                                            <span class="badge bg-light text-muted fw-normal p-2 border">
+                                                <i class="fas fa-info-circle me-1"></i> Max 2MB per image. Leave empty
+                                                to keep existing.
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Section 5: Descriptions -->
+                                <div class="px-5 py-4 bg-white">
+                                    <div class="d-flex align-items-center gap-2 mb-4">
+                                        <div class="bg-dark bg-opacity-10 p-2 rounded-3 text-dark">
+                                            <i class="fas fa-pen-nib"></i>
+                                        </div>
+                                        <h6 class="fw-bold mb-0 text-uppercase tracking-wider small text-muted">Detailed
+                                            Content</h6>
+                                    </div>
+                                    <div class="row g-4">
+                                        <div class="col-md-6">
+                                            <label
+                                                class="form-label fw-bold small text-uppercase text-muted mb-2">Product
+                                                Description *</label>
+                                            <textarea class="form-control border-light-subtle rounded-4 shadow-sm"
+                                                th:field="*{description}" rows="6"
+                                                placeholder="Describe the product's key features and benefits..."
+                                                required></textarea>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label
+                                                class="form-label fw-bold small text-uppercase text-muted mb-2">Technical
+                                                Specifications</label>
+                                            <i class="fas fa-lightbulb me-1 text-warning"></i> <small>Tip: Use one line
+                                                for
+                                                each feature.</small>
+
+                                            <textarea class="form-control border-light-subtle rounded-4 shadow-sm"
+                                                th:field="*{specifications}" rows="6"
+                                                placeholder="Feature 1&#10;Feature 2&#10;Feature 3..."></textarea>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <!-- Action Buttons -->
-                                <div class="d-flex align-items-center gap-3 pt-3 border-top">
-                                    <button type="submit" class="btn btn-accent rounded-pill px-5 py-2 fw-bold shadow-sm"
-                                            style="background:#2ecc71; border:none; color:#fff;">
-                                        <i class="fas fa-save me-2"></i>
-                                        <span th:text="${product.id == null ? 'Save Product' : 'Update Product'}">Save</span>
-                                    </button>
-                                    <a th:href="@{/admin/products}" class="btn btn-outline-secondary rounded-pill px-5 py-2">
-                                        <i class="fas fa-times me-2"></i>Cancel
-                                    </a>
-                                    <span class="text-muted small ms-auto">
-                                        <i class="fas fa-info-circle me-1"></i>Changes are saved immediately to the database.
-                                    </span>
+                                <div
+                                    class="px-5 py-4 bg-light border-top d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <button type="submit"
+                                            class="btn btn-accent rounded-pill px-5 py-3 fw-bold shadow-sm"
+                                            style="background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%); border:none; color:#fff; min-width: 200px;">
+                                            <i class="fas fa-save me-2"></i>
+                                            <span
+                                                th:text="${product.id == null ? 'Launch Product' : 'Save Changes'}">Save</span>
+                                        </button>
+                                        <a th:href="@{/admin/products}"
+                                            class="btn btn-outline-secondary rounded-pill px-4 py-3 fw-bold btn-cancel-custom">
+                                            Cancel
+                                        </a>
+                                    </div>
+                                    <div class="text-end d-none d-md-block">
+                                        <p class="small text-muted mb-0">Review all details before saving.</p>
+                                        <p class="small text-muted mb-0">Changes will be live instantly.</p>
+                                    </div>
                                 </div>
                             </form>
                         </div>
@@ -143,19 +368,21 @@
     <!-- ═══════════════════════════════════════════════════════
          Add New Category Modal
     ═══════════════════════════════════════════════════════ -->
-    <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+    <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content rounded-4 border-0 shadow-lg overflow-hidden">
                 <!-- Modal Header -->
                 <div class="modal-header border-0 px-5 pt-4 pb-2"
-                     style="background: linear-gradient(135deg, #111 0%, #1a1a1a 100%);">
+                    style="background: linear-gradient(135deg, #111 0%, #1a1a1a 100%);">
                     <div class="d-flex align-items-center gap-3">
                         <div class="rounded-circle bg-accent bg-opacity-15 d-flex align-items-center justify-content-center"
-                             style="width:40px; height:40px;">
+                            style="width:40px; height:40px;">
                             <i class="fas fa-folder-plus text-accent"></i>
                         </div>
                         <div>
-                            <h5 class="modal-title fw-bold text-white m-0" id="addCategoryModalLabel">Add New Category</h5>
+                            <h5 class="modal-title fw-bold text-white m-0" id="addCategoryModalLabel">Add New Category
+                            </h5>
                             <small class="text-white-50">It will appear in the dropdown immediately.</small>
                         </div>
                     </div>
@@ -168,22 +395,21 @@
 
                     <div class="mb-3">
                         <label class="form-label fw-bold small text-uppercase text-muted mb-2">Category Name *</label>
-                        <input type="text" id="catName" class="form-control form-control-lg rounded-3 border-light-subtle"
-                               placeholder="e.g. Electronics, Books, Sports">
+                        <input type="text" id="catName"
+                            class="form-control form-control-lg rounded-3 border-light-subtle"
+                            placeholder="e.g. Electronics, Books, Sports">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label fw-bold small text-uppercase text-muted mb-2">Image Filename</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-light border-light-subtle text-muted"><i class="fas fa-image"></i></span>
-                            <input type="text" id="catImage" class="form-control form-control-lg border-light-subtle"
-                                   placeholder="e.g. electronics.png">
-                        </div>
-                        <small class="text-muted mt-1 d-block">Optional — place image in <code>/static/img/</code></small>
+                        <label class="form-label fw-bold small text-uppercase text-muted mb-2">Category Image</label>
+                        <input type="file" id="catImageFile"
+                            class="form-control form-control-lg border-light-subtle rounded-3" accept="image/*">
+                        <small class="text-muted mt-1 d-block">This image will represent the category across the
+                            store.</small>
                     </div>
                     <div class="mb-2">
                         <label class="form-label fw-bold small text-uppercase text-muted mb-2">Description</label>
                         <textarea id="catDescription" class="form-control border-light-subtle rounded-3" rows="3"
-                                  placeholder="Brief description of this category..."></textarea>
+                            placeholder="Brief description of this category..."></textarea>
                     </div>
                 </div>
 
@@ -193,7 +419,7 @@
                         Cancel
                     </button>
                     <button type="button" class="btn rounded-pill px-5 fw-bold" id="saveCategoryBtn"
-                            style="background:#2ecc71; color:#fff; border:none;">
+                        style="background:#2ecc71; color:#fff; border:none;">
                         <i class="fas fa-plus me-2"></i>Create Category
                     </button>
                 </div>
@@ -206,7 +432,7 @@
     <script>
         document.getElementById('saveCategoryBtn').addEventListener('click', function () {
             const name = document.getElementById('catName').value.trim();
-            const imageName = document.getElementById('catImage').value.trim();
+            const imageFile = document.getElementById('catImageFile').files[0];
             const description = document.getElementById('catDescription').value.trim();
             const feedback = document.getElementById('categoryFeedback');
 
@@ -219,45 +445,65 @@
             this.disabled = true;
             this.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Saving...';
 
+            const formData = new FormData();
+            formData.append('name', name);
+            formData.append('description', description);
+            if (imageFile) {
+                formData.append('imageFile', imageFile);
+            }
+
             fetch('/admin/categories/save', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, imageName, description })
+                body: formData
             })
-            .then(res => res.json())
-            .then(data => {
-                // Add new option to category dropdown
-                const select = document.getElementById('categorySelect');
-                const option = document.createElement('option');
-                option.value = data.id;
-                option.text = data.name;
-                option.selected = true;
-                select.add(option);
+                .then(res => res.json())
+                .then(data => {
+                    // Add new option to category dropdown
+                    const select = document.getElementById('categorySelect');
+                    const option = document.createElement('option');
+                    option.value = data.id;
+                    option.text = data.name;
+                    option.selected = true;
+                    select.add(option);
 
-                // Success feedback
-                feedback.className = 'alert alert-success rounded-3 small py-2 mb-4';
-                feedback.textContent = '✓ Category "' + data.name + '" created successfully!';
+                    // Success feedback
+                    feedback.className = 'alert alert-success rounded-3 small py-2 mb-4';
+                    feedback.textContent = '✓ Category "' + data.name + '" created successfully!';
 
-                // Reset fields
-                document.getElementById('catName').value = '';
-                document.getElementById('catImage').value = '';
-                document.getElementById('catDescription').value = '';
+                    // Reset fields
+                    document.getElementById('catName').value = '';
+                    document.getElementById('catImageFile').value = '';
+                    document.getElementById('catDescription').value = '';
 
-                // Close modal after brief delay
-                setTimeout(() => {
-                    bootstrap.Modal.getInstance(document.getElementById('addCategoryModal')).hide();
-                    feedback.className = 'alert d-none';
-                }, 1200);
-            })
-            .catch(() => {
-                feedback.className = 'alert alert-danger rounded-3 small py-2 mb-4';
-                feedback.textContent = 'Error saving category. Please try again.';
-            })
-            .finally(() => {
-                this.disabled = false;
-                this.innerHTML = '<i class="fas fa-plus me-2"></i>Create Category';
-            });
+                    // Close modal after brief delay
+                    setTimeout(() => {
+                        bootstrap.Modal.getInstance(document.getElementById('addCategoryModal')).hide();
+                        feedback.className = 'alert d-none';
+                    }, 1200);
+                })
+                .catch(() => {
+                    feedback.className = 'alert alert-danger rounded-3 small py-2 mb-4';
+                    feedback.textContent = 'Error saving category. Please try again.';
+                })
+                .finally(() => {
+                    this.disabled = false;
+                    this.innerHTML = '<i class="fas fa-plus me-2"></i>Create Category';
+                });
         });
     </script>
+    <style>
+        .btn-cancel-custom {
+            color: #6c757d;
+            border: 1px solid #6c757d;
+            transition: all 0.3s ease;
+        }
+
+        .btn-cancel-custom:hover {
+            background-color: #6c757d;
+            color: #f8f9fa !important;
+            border-color: #6c757d;
+        }
+    </style>
 </body>
+
 </html>

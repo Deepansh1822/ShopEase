@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{layout :: head}"></head>
+
+<body>
+    <nav th:replace="~{layout :: nav}"></nav>
+
+    <div class="content-wrapper bg-light pt-0">
+        <!-- Hero -->
+        <section class="py-4 bg-dark text-white position-relative overflow-hidden"
+            style="background: linear-gradient(135deg, #2c3e50 0%, #000 100%);">
+            <div
+                class="container py-4 z-1 position-relative d-flex flex-wrap justify-content-between align-items-center gap-3">
+                <div>
+                    <span class="badge bg-warning text-dark rounded-pill px-3 py-1 mb-2 fw-bold text-uppercase"
+                        style="font-size:0.7rem;">Offer Creation</span>
+                    <h1 class="display-6 fw-bold mb-1 text-white">
+                        <i class="fas fa-tag me-2 text-warning"></i>
+                        <span th:text="${offer.id == null ? 'Launch New Offer' : 'Edit Campaign'}">Offer Form</span>
+                    </h1>
+                </div>
+                <div class="d-flex gap-2">
+                    <a th:href="@{/admin/offers}" class="btn btn-outline-light rounded-pill px-4">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Offers
+                    </a>
+                </div>
+            </div>
+            <div class="position-absolute rounded-circle bg-primary opacity-10"
+                style="width: 300px; height: 300px; bottom: -150px; left: -100px; filter: blur(70px);"></div>
+            <div class="position-absolute rounded-circle bg-warning opacity-10"
+                style="width: 350px; height: 350px; top: -100px; right: -80px; filter: blur(60px);"></div>
+        </section>
+
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-xl-10 col-lg-11">
+                    <div class="card border-0 shadow rounded-4 overflow-hidden">
+                        <!-- Form Header -->
+                        <div class="card-header bg-white border-0 py-4 px-5 d-flex align-items-center gap-3">
+                            <div class="rounded-circle bg-warning bg-opacity-10 d-flex align-items-center justify-content-center"
+                                style="width:48px; height:48px; flex-shrink:0;">
+                                <i class="fas fa-gift text-warning"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold m-0"
+                                    th:text="${offer.id == null ? 'New Campaign Details' : 'Edit Campaign Details'}">
+                                    Offer Details</h5>
+                                <small class="text-muted">Fill in the details to launch your promotional
+                                    campaign.</small>
+                            </div>
+                        </div>
+                        <div class="card-body p-5 pt-4">
+                            <form th:action="@{/admin/offers/save}" th:object="${offer}" method="post"
+                                enctype="multipart/form-data">
+                                <input type="hidden" th:field="*{id}">
+                                <input type="hidden" th:field="*{imageName}">
+
+                                <div class="row g-4 mb-4">
+                                    <div class="col-md-8">
+                                        <label class="form-label fw-bold small text-uppercase text-muted mb-2">Campaign
+                                            Title *</label>
+                                        <input type="text"
+                                            class="form-control form-control-lg rounded-3 border-light-subtle"
+                                            th:field="*{title}" placeholder="e.g. Summer Sale 2026" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label fw-bold small text-uppercase text-muted mb-2">Discount
+                                            (%) *</label>
+                                        <div class="input-group input-group-lg">
+                                            <input type="number"
+                                                class="form-control border-light-subtle rounded-start-3"
+                                                th:field="*{discountPercentage}" placeholder="20" required min="1"
+                                                max="100">
+                                            <span class="input-group-text bg-light border-light-subtle fw-bold">%</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label class="form-label fw-bold small text-uppercase text-muted mb-2">Description
+                                        *</label>
+                                    <textarea class="form-control border-light-subtle rounded-3"
+                                        th:field="*{description}" rows="3" placeholder="Catchy tagline for the offer..."
+                                        required></textarea>
+                                </div>
+
+                                <div class="row g-4 mb-4">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold small text-uppercase text-muted mb-2">Promo
+                                            Code</label>
+                                        <input type="text"
+                                            class="form-control form-control-lg rounded-3 border-light-subtle fw-bold"
+                                            th:field="*{promoCode}" placeholder="e.g. SUMMER50">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold small text-uppercase text-muted mb-2">Expiry
+                                            Date *</label>
+                                        <input type="date"
+                                            class="form-control form-control-lg rounded-3 border-light-subtle"
+                                            th:field="*{expiryDate}" required>
+                                    </div>
+                                </div>
+
+                                <div class="mb-5">
+                                    <label class="form-label fw-bold small text-uppercase text-muted mb-2">Banner Image
+                                        Upload</label>
+                                    <div class="card bg-light border-dashed p-3 text-center mb-3">
+                                        <div th:if="${offer.imageName != null}" class="mb-3">
+                                            <img th:src="@{'/img/' + ${offer.imageName}}"
+                                                class="img-fluid rounded-3 shadow-sm" style="max-height: 150px;"
+                                                id="imagePreview">
+                                        </div>
+                                        <div class="input-group">
+                                            <input type="file" class="form-control" name="imageFile" id="imageFile"
+                                                accept="image/*">
+                                        </div>
+                                        <small class="text-muted mt-2 d-block">Recommended size: 1200x400px</small>
+                                    </div>
+                                </div>
+
+                                <!-- Action Buttons -->
+                                <div
+                                    class="px-5 py-4 bg-light border-top d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <button type="submit" class="btn rounded-pill px-5 py-3 fw-bold shadow-sm"
+                                            style="background: linear-gradient(135deg, #f1c40f 0%, #f39c12 100%); border:none; color:#fff; min-width: 200px;">
+                                            <i class="fas fa-rocket me-2"></i>
+                                            <span
+                                                th:text="${offer.id == null ? 'Launch Campaign' : 'Update Campaign'}">Save</span>
+                                        </button>
+                                        <a th:href="@{/admin/offers}"
+                                            class="btn btn-outline-secondary rounded-pill px-4 py-3 fw-bold btn-cancel-custom">
+                                            Cancel
+                                        </a>
+                                    </div>
+                                    <div class="text-end d-none d-md-block">
+                                        <p class="small text-muted mb-0">Review campaign details before launching.</p>
+                                        <p class="small text-muted mb-0">Offer will be visible to all customers.</p>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .btn-cancel-custom {
+            color: #6c757d;
+            border: 1px solid #6c757d;
+            transition: all 0.3s ease;
+        }
+
+        .btn-cancel-custom:hover {
+            background-color: #6c757d;
+            color: #f8f9fa !important;
+            border-color: #6c757d;
+        }
+    </style>
+    <footer th:replace="~{layout :: footer}"></footer>
+</body>
+
+</html>

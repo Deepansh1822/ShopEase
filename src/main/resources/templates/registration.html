@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,9 +8,24 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        (function () {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        })();
+    </script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; min-height: 100vh; display: flex; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+        }
 
         /* Left Panel */
         .auth-panel-left {
@@ -23,29 +39,36 @@
             overflow: hidden;
             min-height: 100vh;
         }
+
         .auth-panel-left::before {
             content: '';
             position: absolute;
-            width: 500px; height: 500px;
-            background: radial-gradient(circle, rgba(46,204,113,0.12) 0%, transparent 70%);
-            bottom: -150px; right: -100px;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(46, 204, 113, 0.12) 0%, transparent 70%);
+            bottom: -150px;
+            right: -100px;
             border-radius: 50%;
         }
+
         .auth-panel-left::after {
             content: '';
             position: absolute;
-            width: 300px; height: 300px;
-            background: radial-gradient(circle, rgba(52,152,219,0.15) 0%, transparent 70%);
-            top: -80px; left: -60px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(52, 152, 219, 0.15) 0%, transparent 70%);
+            top: -80px;
+            left: -60px;
             border-radius: 50%;
         }
+
         .stat-chip {
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 50px;
             padding: 8px 18px;
             font-size: 0.82rem;
-            color: rgba(255,255,255,0.8);
+            color: rgba(255, 255, 255, 0.8);
             display: inline-flex;
             align-items: center;
             gap: 8px;
@@ -62,10 +85,12 @@
             min-height: 100vh;
             overflow-y: auto;
         }
+
         .auth-form-card {
             width: 100%;
             max-width: 440px;
         }
+
         .form-control-auth {
             border: 1.5px solid #e8e8e8;
             border-radius: 12px;
@@ -74,11 +99,13 @@
             background: #fff;
             transition: all 0.25s;
         }
+
         .form-control-auth:focus {
             border-color: #2ecc71;
-            box-shadow: 0 0 0 3px rgba(46,204,113,0.12);
+            box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.12);
             background: #fff;
         }
+
         .btn-auth-primary {
             background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
             color: #fff;
@@ -89,13 +116,15 @@
             font-size: 0.95rem;
             letter-spacing: 0.3px;
             transition: all 0.25s;
-            box-shadow: 0 4px 15px rgba(46,204,113,0.35);
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.35);
         }
+
         .btn-auth-primary:hover {
             transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(46,204,113,0.45);
+            box-shadow: 0 6px 20px rgba(46, 204, 113, 0.45);
             color: #fff;
         }
+
         .btn-back {
             border: 1.5px solid #e8e8e8;
             border-radius: 10px;
@@ -110,37 +139,138 @@
             align-items: center;
             gap: 6px;
         }
+
         .btn-back:hover {
             border-color: #2ecc71;
             color: #2ecc71;
         }
-        .divider-text {
-            display: flex; align-items: center; gap: 12px;
-            color: #aaa; font-size: 0.82rem; margin: 20px 0;
-        }
-        .divider-text::before, .divider-text::after {
-            content: ''; flex: 1; height: 1px; background: #e8e8e8;
-        }
-        .input-icon-wrapper { position: relative; }
-        .input-icon {
-            position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
-            color: #bbb; font-size: 0.9rem;
-        }
-        .form-control-auth.with-icon { padding-left: 40px; }
 
-        @media (max-width: 991px) {
-            .auth-panel-left { display: none !important; }
-            .auth-panel-right { padding: 40px 24px; }
+        .divider-text {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #aaa;
+            font-size: 0.82rem;
+            margin: 20px 0;
         }
-    </style>
+
+        .divider-text::before,
+        .divider-text::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #e8e8e8;
+        }
+
+        .input-icon-wrapper {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 0;
+            width: 42px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #bbb;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #bbb;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: color 0.2s;
+            z-index: 10;
+        }
+
+        .password-toggle:hover {
+            color: #2ecc71;
+        }
+
+        .form-control-auth.with-icon {
+            padding-left: 40px;
+        }
+
+        .form-control-auth.with-toggle {
+            padding-right: 40px;
+        }
+
+            @media (max-width: 991px) {
+                .auth-panel-left {
+                    display: none !important;
+                }
+
+                .auth-panel-right {
+                    padding: 40px 24px;
+                }
+            }
+
+            /* Dark Mode Overrides */
+            [data-theme="dark"] .auth-panel-right {
+                background: #0f172a;
+                color: #f1f5f9;
+            }
+
+            [data-theme="dark"] .form-control-auth {
+                background: rgba(255, 255, 255, 0.05);
+                border-color: rgba(255, 255, 255, 0.1);
+                color: #ffffff;
+            }
+
+            [data-theme="dark"] .form-control-auth:focus {
+                background: rgba(255, 255, 255, 0.08);
+                border-color: #2ecc71;
+            }
+
+            [data-theme="dark"] .text-dark {
+                color: #f1f5f9 !important;
+            }
+
+            [data-theme="dark"] .text-muted {
+                color: #94a3b8 !important;
+            }
+
+            [data-theme="dark"] .btn-back {
+                background: rgba(255, 255, 255, 0.05);
+                border-color: rgba(255, 255, 255, 0.1);
+                color: #cbd5e1;
+            }
+
+            [data-theme="dark"] .form-control-auth::placeholder {
+                color: #64748b !important;
+            }
+
+            [data-theme="dark"] .divider-text {
+                color: #475569;
+            }
+
+            [data-theme="dark"] .divider-text::before,
+            [data-theme="dark"] .divider-text::after {
+                background: rgba(255, 255, 255, 0.08);
+            }
+
+            /* Theme-aware Logos */
+            [data-theme="light"] .logo-dark-mode { display: none !important; }
+            [data-theme="dark"] .logo-light-mode { display: none !important; }
+        </style>
 </head>
+
 <body>
     <div class="row g-0 w-100">
 
         <!-- ── Left Brand Panel ───────────────────────────── -->
         <div class="col-lg-5 auth-panel-left">
             <div class="auth-brand mb-5 z-1 position-relative">
-                <img th:src="@{/img/Logo.png}" alt="ShopEase Logo" style="height:52px; width:auto;">
+                <img th:src="@{/img/Light_Theme_Logo.png}" alt="ShopEase Logo" style="height:128px; width:auto;">
             </div>
 
             <div class="z-1 position-relative">
@@ -150,14 +280,17 @@
                 </div>
 
                 <h2 class="text-white fw-bold mb-2" style="font-size: 2rem; line-height:1.25;">
-                    Join <span style="color:#2ecc71;">ShopEase</span><br>today. It's free.
+                    Join <span style="color:#2ecc71;">ShopEase</span> today. It's free.
                 </h2>
-                <p class="text-white-50 mb-5" style="font-size:0.95rem; max-width: 360px; line-height:1.6;">
-                    Sign up and unlock exclusive deals, a personalised wishlist, order tracking, and much more — all in one place.
+                <p class="text-white-50 mb-5"
+                    style="font-size:0.95rem; text-align: justify; max-width: 550px; line-height:1.6;">
+                    Sign up and unlock exclusive deals, a personalised wishlist, order tracking, and much more — all in
+                    one place.
                 </p>
 
                 <!-- Testimonial card -->
-                <div style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius:16px; padding: 20px 22px;">
+                <div
+                    style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius:16px; padding: 20px 22px;">
                     <div class="d-flex gap-1 mb-2">
                         <i class="fas fa-star text-warning small"></i>
                         <i class="fas fa-star text-warning small"></i>
@@ -166,10 +299,12 @@
                         <i class="fas fa-star text-warning small"></i>
                     </div>
                     <p class="text-white-50 small mb-3" style="line-height:1.6;">
-                        "ShopEase completely changed how I shop online. The UI is gorgeous and the delivery is incredibly fast!"
+                        "ShopEase completely changed how I shop online. The UI is gorgeous and the delivery is
+                        incredibly fast!"
                     </p>
                     <div class="d-flex align-items-center gap-2">
-                        <div style="background:#2ecc71; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center;">
+                        <div
+                            style="background:#2ecc71; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center;">
                             <span class="text-white fw-bold small">S</span>
                         </div>
                         <div>
@@ -189,17 +324,16 @@
                     <a href="/" class="btn-back">
                         <i class="fas fa-arrow-left"></i> Back to Home
                     </a>
-                    <a th:href="@{/login}" class="btn-back" style="border-color:transparent; background:transparent;">
-                        Sign in instead →
-                    </a>
                 </div>
 
                 <h3 class="fw-bold mb-1" style="font-size:1.7rem;">Create your account</h3>
-                <p class="text-muted mb-4" style="font-size:0.9rem;">Fill in your details below to get started for free.</p>
+                <p class="text-muted mb-4" style="font-size:0.9rem;">Fill in your details below to get started for free.
+                </p>
 
                 <!-- Success Alert -->
                 <div th:if="${param.success}" class="alert alert-success rounded-3 border-0 small py-2 mb-3">
-                    <i class="fas fa-check-circle me-2"></i>Account created! <a th:href="@{/login}" class="alert-link fw-bold">Sign in now →</a>
+                    <i class="fas fa-check-circle me-2"></i>Account created! <a th:href="@{/login}"
+                        class="alert-link fw-bold">Sign in now →</a>
                 </div>
 
                 <!-- Registration Form -->
@@ -210,8 +344,7 @@
                             <div class="input-icon-wrapper">
                                 <i class="fas fa-user input-icon"></i>
                                 <input type="text" th:field="*{firstName}"
-                                       class="form-control form-control-auth with-icon"
-                                       placeholder="John" required>
+                                    class="form-control form-control-auth with-icon" placeholder="John" required>
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -219,8 +352,7 @@
                             <div class="input-icon-wrapper">
                                 <i class="fas fa-user input-icon"></i>
                                 <input type="text" th:field="*{lastName}"
-                                       class="form-control form-control-auth with-icon"
-                                       placeholder="Doe" required>
+                                    class="form-control form-control-auth with-icon" placeholder="Doe" required>
                             </div>
                         </div>
                     </div>
@@ -229,9 +361,8 @@
                         <label class="form-label fw-semibold small text-dark">Email Address</label>
                         <div class="input-icon-wrapper">
                             <i class="fas fa-envelope input-icon"></i>
-                            <input type="email" th:field="*{email}"
-                                   class="form-control form-control-auth with-icon"
-                                   placeholder="you@example.com" required>
+                            <input type="email" th:field="*{email}" class="form-control form-control-auth with-icon"
+                                placeholder="you@example.com" required>
                         </div>
                     </div>
 
@@ -239,11 +370,13 @@
                         <label class="form-label fw-semibold small text-dark">Password</label>
                         <div class="input-icon-wrapper">
                             <i class="fas fa-lock input-icon"></i>
-                            <input type="password" th:field="*{password}"
-                                   class="form-control form-control-auth with-icon"
-                                   placeholder="Create a strong password" required>
+                            <input type="password" th:field="*{password}" id="password"
+                                class="form-control form-control-auth with-icon with-toggle"
+                                placeholder="Create a strong password" required>
+                            <i class="fas fa-eye password-toggle" id="togglePassword"></i>
                         </div>
-                        <small class="text-muted mt-1 d-block">Use at least 8 characters with letters and numbers.</small>
+                        <small class="text-muted mt-1 d-block">Use at least 8 characters with letters and
+                            numbers.</small>
                     </div>
 
                     <button type="submit" class="btn btn-auth-primary w-100 mb-3">
@@ -259,7 +392,8 @@
 
                 <div class="divider-text">already a member?</div>
 
-                <a th:href="@{/login}" class="d-block text-center fw-bold text-decoration-none py-2" style="color:#2ecc71;">
+                <a th:href="@{/login}" class="d-block text-center fw-bold text-decoration-none py-2"
+                    style="color:#2ecc71;">
                     Sign in to your account →
                 </a>
 
@@ -272,5 +406,16 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const togglePassword = document.querySelector('#togglePassword');
+        const password = document.querySelector('#password');
+
+        togglePassword.addEventListener('click', function (e) {
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            this.classList.toggle('fa-eye-slash');
+        });
+    </script>
 </body>
+
 </html>
