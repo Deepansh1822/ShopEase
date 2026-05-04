@@ -2,7 +2,7 @@
 
 <div align="center">
    <br/>
-    <img alt="ShopEase Logo" src="images/ShopEase_Logo.png" width="350">
+    <img alt="ShopEase Logo" src="images/ShopEase-Logo.png" width="350">
   <br/>
   <br/>
 </div>
