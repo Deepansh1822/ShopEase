@@ -18,17 +18,21 @@ A modern, premium e-commerce web application built with Spring Boot, Thymeleaf, 
 
 > *Note: Add your application screenshots in the `images` folder and update the links below.*
 
-| Home Page | Product Details |
+| Home Page | Shop Products |
 | :---: | :---: |
-| ![Home Page](images/home-placeholder.jpg) | ![Product Details](images/product-placeholder.jpg) |
+| ![Home Page](images/Home.png) | ![Shop Products](images/Shop.png) |
 
-| Shopping Cart | Checkout Flow |
+| Product Details | Shopping Cart |
 | :---: | :---: |
-| ![Shopping Cart](images/cart-placeholder.jpg) | ![Checkout](images/checkout-placeholder.jpg) |
+| ![Product Details](images/Product-Details.png) | ![Shopping Cart](images/Shopping-Cart.png) |
 
-| Admin Dashboard | Dark Mode UI |
+| Checkout Page | Elite Membership |
 | :---: | :---: |
-| ![Admin Dashboard](images/admin-placeholder.jpg) | ![Dark Mode](images/darkmode-placeholder.jpg) |
+| ![Checkout Page](images/Checkout.png) | ![Elite Membership](images/Membership.png) |
+
+| Admin Dashboard | Dark Theme Dashboard |
+| :---: | :---: |
+| ![Admin Dashboard](images/Admin-Dashboard.png) | ![Dark Theme Dashboard](images/Dark-Theme-Dashboard.png) |
 
 ## 🛠️ Technology Stack
 

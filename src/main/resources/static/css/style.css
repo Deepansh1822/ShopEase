@@ -1253,9 +1253,8 @@ footer {
     background-color: var(--primary) !important;
 }
 
-[data-theme="dark"] #backToTop:hover {
-    background-color: var(--accent) !important;
-    filter: brightness(1.2);
+[data-theme="dark"] #backToTop:hover i {
+    color: var(--background) !important;
 }
 
 /* List View Layout for Products */
