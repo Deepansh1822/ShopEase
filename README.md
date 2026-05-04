@@ -1,5 +1,12 @@
 # ShopEase 🛍️
 
+<div align="center">
+   <br/>
+    <img alt="ShopEase Logo" src="images/ShopEase_Logo.png" width="350">
+  <br/>
+  <br/>
+</div>
+
 A modern, premium e-commerce web application built with Spring Boot, Thymeleaf, and Bootstrap. ShopEase provides a seamless shopping experience with a beautifully designed, responsive interface that supports both light and dark themes.
 
 ## ✨ Features
