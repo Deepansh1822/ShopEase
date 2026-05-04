@@ -47,4 +47,11 @@ public class User {
         this.roles = roles;
         this.member = member;
     }
+
+    public boolean isMember() {
+        if (member && membershipExpiryDate != null && membershipExpiryDate.isBefore(java.time.LocalDateTime.now())) {
+            return false;
+        }
+        return member;
+    }
 }
