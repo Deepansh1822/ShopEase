@@ -8,11 +8,20 @@
     <main class="flex-grow-1">
 
         <!-- Hero Section -->
-        <section class="hero-section bg-dark text-white py-5 position-relative overflow-hidden">
-            <div class="container py-5 text-center">
-                <h1 class="display-3 fw-bold mb-3">Elevate Your Lifestyle</h1>
-                <p class="lead mb-4">Discover premium products curated just for you. Quality meets elegance.</p>
-                <a th:href="@{/shop}" class="btn btn-primary btn-lg rounded-pill px-5 py-3">Explore Collection</a>
+        <section id="hero-section" class="hero-section text-white position-relative overflow-hidden" style="min-height: 500px; display: flex; align-items: center;">
+            <!-- Dynamic Background Layers -->
+            <div id="hero-bg-layer" class="position-absolute top-0 start-0 w-100 h-100 z-0"></div>
+            <!-- Premium Overlay for Contrast -->
+            <div class="position-absolute top-0 start-0 w-100 h-100 z-0" style="background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.8));"></div>
+            
+            <div class="container py-5 text-center position-relative z-1">
+                <h1 class="display-3 fw-bold mb-3">Elevate Your 
+                    <span class="text-warning d-inline-block position-relative overflow-hidden" style="height: 1.2em; vertical-align: bottom;">
+                        <span id="rotating-text" class="d-inline-block w-100" style="transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); transform: translateY(0); opacity: 1;">Lifestyle</span>
+                    </span>
+                </h1>
+                <p class="lead mb-4 text-light">Discover premium products curated just for you. Quality meets elegance.</p>
+                <a th:href="@{/shop}" class="btn btn-primary btn-lg rounded-pill px-5 py-3 shadow hover-scale">Explore Collection</a>
             </div>
         </section>
 
@@ -651,6 +660,78 @@
                     qvModal.show();
                 }
             });
+
+            // Premium Hero Section Rotating Text & Background
+            const heroData = [
+                { text: 'Lifestyle', image: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80' },
+                { text: 'Wardrobe', image: 'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80' },
+                { text: 'Electronics', image: 'https://images.unsplash.com/photo-1498049794561-7780e7231661?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80' },
+                { text: 'Sports Gear', image: 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80' },
+                { text: 'Home Decor', image: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80' }
+            ];
+            
+            let currentHeroIndex = 0;
+            const rotatingText = document.getElementById('rotating-text');
+            const bgLayer = document.getElementById('hero-bg-layer');
+            
+            // Initialize Background Layers
+            if (bgLayer) {
+                bgLayer.innerHTML = '';
+                heroData.forEach((data, index) => {
+                    const div = document.createElement('div');
+                    div.className = 'position-absolute top-0 start-0 w-100 h-100 bg-layer-item';
+                    div.style.backgroundImage = `url("${data.image}")`;
+                    div.style.backgroundSize = 'cover';
+                    div.style.backgroundPosition = 'center';
+                    div.style.opacity = index === 0 ? '1' : '0';
+                    div.style.transform = index === 0 ? 'scale(1)' : 'scale(1.05)';
+                    // 1.5s fade and 5s slow zoom for a Ken Burns effect
+                    div.style.transition = 'opacity 1.5s ease-in-out, transform 5s linear';
+                    div.id = `hero-bg-${index}`;
+                    bgLayer.appendChild(div);
+                });
+            }
+            
+            setInterval(() => {
+                if (rotatingText && bgLayer) {
+                    // Animate Text Out (slide up and fade out)
+                    rotatingText.style.transform = 'translateY(-100%)';
+                    rotatingText.style.opacity = '0';
+                    
+                    // Transition Background Images
+                    const oldIndex = currentHeroIndex;
+                    currentHeroIndex = (currentHeroIndex + 1) % heroData.length;
+                    
+                    const oldBg = document.getElementById(`hero-bg-${oldIndex}`);
+                    const newBg = document.getElementById(`hero-bg-${currentHeroIndex}`);
+                    
+                    if (newBg && oldBg) {
+                        newBg.style.opacity = '1';
+                        newBg.style.transform = 'scale(1)'; // starts to slowly zoom to normal
+                        
+                        setTimeout(() => {
+                            oldBg.style.opacity = '0';
+                            oldBg.style.transform = 'scale(1.05)'; // reset for next time
+                        }, 1500); 
+                    }
+                    
+                    // Animate Text In
+                    setTimeout(() => {
+                        // Move to bottom invisibly
+                        rotatingText.style.transition = 'none';
+                        rotatingText.style.transform = 'translateY(100%)';
+                        rotatingText.innerText = heroData[currentHeroIndex].text;
+                        
+                        // Force reflow
+                        void rotatingText.offsetWidth;
+                        
+                        // Slide up and fade in with bounce (cubic-bezier)
+                        rotatingText.style.transition = 'all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+                        rotatingText.style.transform = 'translateY(0)';
+                        rotatingText.style.opacity = '1';
+                    }, 500);
+                }
+            }, 4500);
         });
     </script>
 </body>

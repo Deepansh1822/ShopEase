@@ -21,6 +21,9 @@ public class CartController {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private in.ds.ShopEase.repository.OfferRepository offerRepository;
+
     @GetMapping("/cart")
     public String cartGet(Model model, java.security.Principal principal) {
         if (principal != null) {
@@ -86,7 +89,22 @@ public class CartController {
     @org.springframework.web.bind.annotation.PostMapping("/cart/applyPromo")
     public String applyPromo(@org.springframework.web.bind.annotation.RequestParam("promoCode") String promoCode, org.springframework.web.servlet.mvc.support.RedirectAttributes redirectAttributes) {
         try {
-            cartService.applyPromo(promoCode);
+            in.ds.ShopEase.model.Offer offer = offerRepository.findByActiveTrue().stream()
+                .filter(o -> promoCode.equalsIgnoreCase(o.getPromoCode()))
+                .findFirst()
+                .orElse(null);
+                
+            if (offer == null) {
+                redirectAttributes.addFlashAttribute("errorMsg", "Invalid promo code.");
+                return "redirect:/cart";
+            }
+            
+            if (offer.getExpiryDate() != null && offer.getExpiryDate().isBefore(java.time.LocalDate.now())) {
+                redirectAttributes.addFlashAttribute("errorMsg", "This promo code has expired.");
+                return "redirect:/cart";
+            }
+
+            cartService.applyPromo(offer.getPromoCode(), offer.getDiscountPercentage());
             redirectAttributes.addFlashAttribute("successMsg", "Promo code applied successfully!");
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("errorMsg", e.getMessage());

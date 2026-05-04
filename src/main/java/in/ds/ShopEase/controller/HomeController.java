@@ -81,17 +81,21 @@ public class HomeController {
 
     @GetMapping("/offers")
     public String offersPage(Model model) {
-        java.util.List<in.ds.ShopEase.model.Offer> activeOffers = offerRepository.findByActiveTrue();
+        java.util.List<in.ds.ShopEase.model.Offer> activeOffers = offerRepository.findByActiveTrue().stream()
+                .filter(o -> o.getExpiryDate() == null || !o.getExpiryDate().isBefore(java.time.LocalDate.now()))
+                .collect(java.util.stream.Collectors.toList());
         
-        // Find the nearest expiry date
-        java.time.LocalDate nearestExpiry = activeOffers.stream()
-                .map(in.ds.ShopEase.model.Offer::getExpiryDate)
-                .filter(java.util.Objects::nonNull)
-                .min(java.time.LocalDate::compareTo)
+        // Find the offer with the nearest expiry date
+        in.ds.ShopEase.model.Offer nearestOffer = activeOffers.stream()
+                .filter(o -> o.getExpiryDate() != null)
+                .min(java.util.Comparator.comparing(in.ds.ShopEase.model.Offer::getExpiryDate))
                 .orElse(null);
 
         model.addAttribute("offers", activeOffers);
-        model.addAttribute("nearestExpiry", nearestExpiry);
+        if (nearestOffer != null) {
+            model.addAttribute("nearestExpiry", nearestOffer.getExpiryDate());
+            model.addAttribute("nearestOfferTitle", nearestOffer.getTitle());
+        }
         return "offers";
     }
 

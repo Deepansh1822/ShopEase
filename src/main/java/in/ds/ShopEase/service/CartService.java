@@ -76,16 +76,9 @@ public class CartService {
         return getSubtotal() - getDiscountAmount() + getDeliveryFee();
     }
 
-    public void applyPromo(String code) {
-        if ("SUMMER50".equalsIgnoreCase(code) && getSubtotal() > 2999) {
-            this.appliedPromoCode = code.toUpperCase();
-            this.discountPercentage = 50.0;
-        } else if ("WELCOME20".equalsIgnoreCase(code)) {
-            this.appliedPromoCode = code.toUpperCase();
-            this.discountPercentage = 20.0;
-        } else {
-            throw new IllegalArgumentException("Invalid promo code or minimum conditions not met.");
-        }
+    public void applyPromo(String code, double discountPct) {
+        this.appliedPromoCode = code.toUpperCase();
+        this.discountPercentage = discountPct;
     }
 
     public void removePromo() {

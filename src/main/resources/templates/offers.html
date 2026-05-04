@@ -17,6 +17,9 @@
                 <h1 class="display-3 fw-bold mb-4">Unbeatable Offers</h1>
                 <p class="lead text-white-50 mx-auto mb-5" style="max-width: 600px;">Save big on premium quality items. Use
                     our exclusive coupons and partner bank discounts before they expire.</p>
+                <h6 class="text-uppercase tracking-wider text-warning mb-3" th:if="${nearestExpiry != null}">
+                    Hurry! "<span th:text="${nearestOfferTitle}">Next Deal</span>" Expires In:
+                </h6>
                 
             <!-- Countdown Timer (Only shows if there's an upcoming expiry) -->
             <div th:if="${nearestExpiry != null}" class="d-flex justify-content-center gap-4 mt-4 text-white" id="promo-timer" th:data-expiry="${nearestExpiry}">
@@ -101,7 +104,12 @@
                         </div>
                         <div class="p-4 flex-grow-1 d-flex flex-column justify-content-between">
                             <div>
-                                <h5 class="fw-bold mb-1" th:text="${offer.title}">Campaign Title</h5>
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h5 class="fw-bold mb-0" th:text="${offer.title}">Campaign Title</h5>
+                                    <span class="badge bg-light text-danger border border-danger border-opacity-25 individual-timer" th:data-expiry="${offer.expiryDate}" style="font-size: 0.75rem;">
+                                        <i class="fas fa-stopwatch me-1 animate__animated animate__flash animate__infinite animate__slower"></i><span class="timer-text fw-bold">Loading...</span>
+                                    </span>
+                                </div>
                                 <p class="text-muted small mb-3" th:text="${offer.description}">Campaign Description</p>
                             </div>
                             <div
@@ -204,6 +212,55 @@
             
             setInterval(updateTimer, 1000);
             updateTimer();
+
+            // Individual Timers Logic
+            const individualTimers = document.querySelectorAll('.individual-timer');
+            const updateIndividualTimers = () => {
+                const now = new Date().getTime();
+                individualTimers.forEach(timer => {
+                    const expiryStr = timer.getAttribute('data-expiry');
+                    if (!expiryStr) return;
+                    
+                    const countDate = new Date(expiryStr + " 23:59:59").getTime();
+                    const gap = countDate - now;
+                    
+                    const textSpan = timer.querySelector('.timer-text');
+                    
+                    if (gap <= 0) {
+                        textSpan.innerText = 'Expired';
+                        timer.classList.replace('text-danger', 'text-muted');
+                        timer.classList.replace('border-danger', 'border-secondary');
+                        const icon = timer.querySelector('i');
+                        if(icon) {
+                            icon.classList.remove('animate__animated', 'animate__flash', 'animate__infinite', 'animate__slower', 'fa-stopwatch');
+                            icon.classList.add('fa-times-circle');
+                        }
+                        return;
+                    }
+                    
+                    const day = 1000 * 60 * 60 * 24;
+                    const hour = 1000 * 60 * 60;
+                    const minute = 1000 * 60;
+                    
+                    const d = Math.floor(gap / day);
+                    const h = Math.floor((gap % day) / hour);
+                    const m = Math.floor((gap % hour) / minute);
+                    
+                    if (d > 0) {
+                        textSpan.innerText = d + "d " + h + "h left";
+                    } else if (h > 0) {
+                        textSpan.innerText = h + "h " + m + "m left";
+                    } else {
+                        const s = Math.floor((gap % minute) / 1000);
+                        textSpan.innerText = m + "m " + s + "s left";
+                    }
+                });
+            };
+            
+            if (individualTimers.length > 0) {
+                setInterval(updateIndividualTimers, 1000);
+                updateIndividualTimers();
+            }
         });
     </script>
 </body>
